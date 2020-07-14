@@ -2,23 +2,26 @@ const express = require('express');
 const router = express.Router();
 const {Client} = require('pg');
 
-const client = new Client({
+const client = {
     user: "postgres",
     password: "axSIFux9",
     host: "localhost",
     port: 5432,
     database: "Quiz_Users"
-})
+}
+
+var result;
 
 async function userTryToLogIn(userName,userPassword)
 {
+    const db = new Client(client)
     try
     {
-        await client.connect()
+        await db.connect()
         console.log("Connection successfully.")
-        const {rows} = await client.query("Select id_user from users where user_name=($1) AND user_password=($2)", [userName,userPassword])
+        const {rows} = await db.query("Select id_user from users where user_name=($1) AND user_password=($2)", [userName,userPassword])
         results = (rows)
-        client.end()
+        return JSON.stringify(result)
     }
     catch(error)
     {
@@ -26,19 +29,15 @@ async function userTryToLogIn(userName,userPassword)
     }
     finally
     {
-        client.end()
+        db.end()
         console.log("Client disconnected successfully.")
     }
 }
 
 router.get('/loginUserInApplication', (req,res) => {
-    client
-    .connect()
-    .then(() => console.log('Connected'))
-    .catch(err => console.error('error',err.stack))
-    
-    //userTryToLogIn(req.body.username,req.body.userpassword);
-    res.send(results)
+    userTryToLogIn(req.body.username,req.body.userpassword);
+    console.log(result)
+    res.send(result);
 })
 
 module.exports = router;
