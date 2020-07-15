@@ -38,6 +38,10 @@ router.get('/loginUserInApplication', (req,res) => {
     userTryToLogIn(req.body.username,req.body.userpassword);
     console.log(result)
     res.send(result);
-})
+});
+
+router.post('/addNewUserToDatabase', (req,res) => {
+
+});
 
 module.exports = router;
