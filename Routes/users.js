@@ -42,7 +42,8 @@ router.post('/addNewUserToDatabase', async (req,res) => {
         await db.connect()
         console.log("Connection successfully.")
 
-        const resultsFromAddDataToDatabase = await db.query(checkUserData.addUserToDatabase(),checkUserData.takeDataForRegister(req.body.userName,req.body.userPassword,req.body.userEmail))
+        const resultsFromAddDataToDatabase = await db.query(checkUserData.addUserToDatabase(),
+        checkUserData.takeDataForRegister(req.body.userName,req.body.userPassword,req.body.userEmail))
         res.json("Użytkownik został dodany do bazy danych.");
     }
     catch(error)
