@@ -64,7 +64,7 @@ router.delete('/deleteUserFromDatabase', async (req,res) =>{
         await db.connect()
         console.log("Connection successfully.")
 
-        const resultsFromDeleteDataToDatabase = await db.query()
+        const resultsFromDeleteDataToDatabase = await db.query(checkUserData.deleteUserFromDatabase(),checkUserData.takeDataFroDeleteUserFromDatabase(req.body.idUser,req.body.userPassword))
         res.json("Użytkownik został usunięty do bazy danych.");
     }
     catch(error)
