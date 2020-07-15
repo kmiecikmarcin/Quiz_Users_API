@@ -57,4 +57,25 @@ router.post('/addNewUserToDatabase', async (req,res) => {
     }
 });
 
+router.delete('/deleteUserFromDatabase', async (req,res) =>{
+    const db = new Client(client)
+    try
+    {
+        await db.connect()
+        console.log("Connection successfully.")
+
+        const resultsFromDeleteDataToDatabase = await db.query()
+        res.json("Użytkownik został usunięty do bazy danych.");
+    }
+    catch(error)
+    {
+        console.log(`Something wrong happend ${error}`)
+    }
+    finally
+    {
+        db.end()
+        console.log("Client disconnected successfully.")
+    }
+});
+
 module.exports = router;
