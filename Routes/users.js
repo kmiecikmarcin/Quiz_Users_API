@@ -10,7 +10,7 @@ const client = {
     database: "Quiz_Users"
 }
 
-router.get('/loginUserInApplication', async (req,res) => {   
+router.get('/loginUserInApplication', async (req,res) => {  
         const db = new Client(client)
         try
         {
