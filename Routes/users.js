@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const {Client} = require('pg');
-require('dotenv/config')
+require('dotenv').config()
+const checkUserData = require('../Function/checkUserInDatabase')
 
 const client = {
     user: process.env.DATABASE_USER,
@@ -17,10 +18,11 @@ router.get('/loginUserInApplication', async (req,res) => {
         {
             await db.connect()
             console.log("Connection successfully.")
-    
-            const results = await db.query("Select id_user,id_role from users where user_name=($1) AND user_password=($2)", [req.body.userName,req.body.userPassword])
-            var response = (results.rows)
-            res.json(response) 
+
+            const resultsFromDatabase = await db.query(checkUserData.userLogIn(),checkUserData.takeData(req.body.userName, req.body.userPassword))
+            var dataAboutUser = (resultsFromDatabase.rows)
+
+            res.json(dataAboutUser) 
         }
         catch(error)
         {
@@ -33,8 +35,20 @@ router.get('/loginUserInApplication', async (req,res) => {
         }
 });
 
-router.post('/addNewUserToDatabase', (req,res) => {
+router.post('/addNewUserToDatabase', async (req,res) => {
+    const db = new Client(client)
+    try
+    {
 
+    }
+    catch(error)
+    {
+
+    }
+    finally
+    {
+
+    }
 });
 
 module.exports = router;
