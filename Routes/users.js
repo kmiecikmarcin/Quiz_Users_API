@@ -1,19 +1,18 @@
 const express = require('express');
 const router = express.Router();
 
-require('dotenv').config()
+require('dotenv').config();
 
-const { body , validationResult } = require('express-validator')
+const { body , validationResult } = require('express-validator');
 
-const db = require('../bin/database')
-const Users = require('../Models/UserLogin')
+const UsersLogin = require('../Models/UserLogin');
+const AddNewUser = require('../Models/AddNewUser');
 
 router.get('/loginUserInApplication',
 [
 body('userName').isLength({min:4, max:20}),
 body('userPassword').isLength({min:6}),
 ],
-
 (req,res) => 
 {
     const error = validationResult(req);
@@ -23,7 +22,7 @@ body('userPassword').isLength({min:6}),
     }
     else
     {
-        Users.findOne({where: {user_name: req.body.userName, user_password: req.body.userPassword}})
+        UsersLogin.findOne({where: {user_name: req.body.userName, user_password: req.body.userPassword}})
         .then(users => {
             if(users == null)
             {
@@ -38,47 +37,43 @@ body('userPassword').isLength({min:6}),
     }
 });
 
-/*(router.post('/addNewUserToDatabase', async (req,res) => {
-    const db = new Client(client)
-    try
-    {
-        await db.connect()
-        console.log("Connection successfully.")
+router.post('/addNewUser', 
+[
+body('userName').isLength({min:4,max:20}),
+body('userPassword').isLength({min:4}),
+//body('checkUserPassword').exists(),
+body('userEmail').isEmail(),
+]
+,(req,res) => {
+    const error = validationResult(req);
+    const data = {
+        id_role: 1,
+        user_name: req.body.userName,
+        user_password: req.body.userPassword,
+        email: req.body.userEmail
+    }
 
-        const resultsFromAddDataToDatabase = await db.query(checkUserData.addUserToDatabase(),
-        checkUserData.takeDataForRegister(req.body.userName,req.body.userPassword,req.body.userEmail))
-        res.json("Użytkownik został dodany do bazy danych.");
-    }
-    catch(error)
+    let = {id_role,user_name,user_password,email} = data;
+
+    if(!error.isEmpty())
     {
-        console.log(`Something wrong happend ${error}`)
+        return res.json({Błąd: "Podany login lub hasło jest za krótkie!"});
     }
-    finally
+    else
     {
-        db.end()
-        console.log("Client disconnected successfully.")
+        AddNewUser.create({id_role: 1,user_name: req.body.userName, user_password: req.body.userPassword,email: req.body.userEmail})
+        .then(users => {
+            if(users == null)
+            {
+                return res.json({Błąd: "Użytkownik nie istnieje!"});
+            }
+            else
+            {
+                return res.json(users);
+            }   
+        })
+        .catch(err => console.log(err));
     }
 });
-
-router.delete('/deleteUserFromDatabase', async (req,res) =>{
-    const db = new Client(client)
-    try
-    {
-        await db.connect()
-        console.log("Connection successfully.")
-
-        const resultsFromDeleteDataToDatabase = await db.query(checkUserData.deleteUserFromDatabase(),checkUserData.takeDataFroDeleteUserFromDatabase(req.body.idUser,req.body.userPassword))
-        res.json("Użytkownik został usunięty do bazy danych.");
-    }
-    catch(error)
-    {
-        console.log(`Something wrong happend ${error}`)
-    }
-    finally
-    {
-        db.end()
-        console.log("Client disconnected successfully.")
-    }
-});*/
 
 module.exports = router;
