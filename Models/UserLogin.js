@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const db = require('../bin/database');
 
-const UsersLogin = db.define('login', {
+const UsersLogin = db.define('users', {
     id_user: {
         type: Sequelize.DataTypes.INTEGER,
         primaryKey: true,
@@ -13,7 +13,8 @@ const UsersLogin = db.define('login', {
          field: 'id_role'
      },
 }, {
-    timestamps: false
+    timestamps: false,
+    freezeTableName: true,
 });
 
 module.exports = UsersLogin;

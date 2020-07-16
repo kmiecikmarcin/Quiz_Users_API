@@ -2,12 +2,6 @@ const Sequelize = require('sequelize');
 const db = require('../bin/database');
 
 const AddNewUser = db.define('users', {
-    id_user: {
-        type: Sequelize.DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-        field: 'id_user'
-    },
     id_role: {
          type: Sequelize.DataTypes.INTEGER,
          foreignKey: true,
@@ -16,6 +10,7 @@ const AddNewUser = db.define('users', {
     user_name: {
         type: Sequelize.DataTypes.STRING,
         field: 'user_name'
+
     },
     user_password: {
          type: Sequelize.DataTypes.STRING,
@@ -29,5 +24,5 @@ const AddNewUser = db.define('users', {
     timestamps: false,
     freezeTableName: true,
 });
-
+AddNewUser.removeAttribute('id');
 module.exports = AddNewUser;

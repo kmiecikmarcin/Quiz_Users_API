@@ -7,6 +7,9 @@ const { body , validationResult } = require('express-validator');
 
 const UsersLogin = require('../Models/UserLogin');
 const AddNewUser = require('../Models/AddNewUser');
+const ChceckUserName = require('../Models/CheckUserName');
+const ChceckUserEmail = require('../Models/CheckUserEmail');
+const { count } = require('console');
 
 router.get('/loginUserInApplication',
 [
@@ -41,7 +44,7 @@ router.post('/addNewUser',
 [
 body('userName').isLength({min:4,max:20}),
 body('userPassword').isLength({min:4}),
-//body('checkUserPassword').exists(),
+body('checkUserPassword').exists(),
 body('userEmail').isEmail(),
 ]
 ,(req,res) => {
@@ -57,23 +60,38 @@ body('userEmail').isEmail(),
 
     if(!error.isEmpty())
     {
-        return res.json({Błąd: "Podany login lub hasło jest za krótkie!"});
+        return res.json({Błąd: "Dane zostały wprowadzone błędnie!"});
     }
     else
     {
-        AddNewUser.create({id_role: 1,user_name: req.body.userName, user_password: req.body.userPassword,email: req.body.userEmail})
-        .then(users => {
+        ChceckUserName.findOne({where: {user_name: req.body.userName}})
+        .then((users) => 
+        {
             if(users == null)
-            {
-                return res.json({Błąd: "Użytkownik nie istnieje!"});
+            {      
+                users = null;         
+                ChceckUserEmail.findOne({where: {email: req.body.userEmail}})
+                .then((users) => 
+                {
+                    if(users == null)
+                    {
+                        AddNewUser.create({id_role,user_name,user_password,email})
+                        .then(() => res.json({Komunikat: "Rejestracja przebiegła pomyślnie!"}))
+                    }
+                    else
+                    {
+                        return res.json({Błąd: "Użytkownik z podanym emailem już istnieje!"});
+                    }
+            })
             }
             else
             {
-                return res.json(users);
-            }   
-        })
-        .catch(err => console.log(err));
+                return res.json({Błąd: "Użytkownik o podanym loginie już istnieje!"});
+            }
+        })              
     }
 });
+
+//router.delete('deleteUser')
 
 module.exports = router;
