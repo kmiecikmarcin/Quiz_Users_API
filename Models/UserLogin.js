@@ -1,6 +1,5 @@
 const Sequelize = require('sequelize');
 const db = require('../bin/database');
-const { timeStamp } = require('console');
 
 const Users = db.define('users', {
     id_user: {
@@ -12,18 +11,6 @@ const Users = db.define('users', {
          type: Sequelize.DataTypes.INTEGER,
          foreignKey: true,
          field: 'id_role'
-     },
-     user_name: {
-         type: Sequelize.DataTypes.STRING,
-         field: 'user_name'
-     },
-     user_password: {
-         type: Sequelize.DataTypes.STRING,
-         field: 'user_password'
-     },
-     email: {
-         type: Sequelize.DataTypes.STRING,
-         field: 'email'
      },
 }, {
     timestamps: false
