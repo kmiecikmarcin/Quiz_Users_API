@@ -1,19 +1,23 @@
 const express = require('express');
 const router = express.Router();
-const {Client} = require('pg');
+//env
 require('dotenv').config()
+//walidacja
 const checkUserData = require('../Function/checkUserInDatabase')
 const { body , validationResult } = require('express-validator')
+//pobieranie plikow
+const db = require('../bin/database')
+const Users = require('../Models/Users')
 
-const client = {
-    user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD,
-    host: process.env.DATABASE_HOST,
-    port: process.env.PORT || 5432,
-    database: process.env.DATABASE_NAME
-}
+router.get('/loginUserInApplication', (req,res) => 
+    Users.findOne({where: {id_user: 1}})
+    .then(users => {
+        console.log(users)
+        res.sendStatus(200);
+    })
+    .catch(err => console.log(err)));
 
-router.get('/loginUserInApplication', [
+/*router.get('/loginUserInApplication', [
     body('userName').isLength({min:4}),
     body('userName').isLength({max:20}),
     body('userPassword').isLength({min:4}),
@@ -26,8 +30,7 @@ async (req,res) => {
             return res.json("Podany login lub hasło jest za krótkie!");
         }
         else
-        {
-            const db = new Client(client)
+        {           
             try
             {
                 await db.connect()
@@ -48,9 +51,9 @@ async (req,res) => {
                 console.log("Client disconnected successfully.")
             }
         }
-});
+});*/
 
-router.post('/addNewUserToDatabase', async (req,res) => {
+/*(router.post('/addNewUserToDatabase', async (req,res) => {
     const db = new Client(client)
     try
     {
@@ -91,6 +94,6 @@ router.delete('/deleteUserFromDatabase', async (req,res) =>{
         db.end()
         console.log("Client disconnected successfully.")
     }
-});
+});*/
 
 module.exports = router;
