@@ -9,12 +9,17 @@ const UsersLogin = require('../Models/UserLogin');
 const AddNewUser = require('../Models/AddNewUser');
 const ChceckUserName = require('../Models/CheckUserName');
 const ChceckUserEmail = require('../Models/CheckUserEmail');
-const { count } = require('console');
+const DeleteUser = require('../Models/DeleteUser');
 
 router.get('/loginUserInApplication',
 [
+//check userName - validation
 body('userName').isLength({min:4, max:20}),
+body('userName').isAlphanumeric(),
+body('userName').custom(value => !/\s/.test(value)),
+//check userPassword - validation
 body('userPassword').isLength({min:6}),
+body('userPassword').custom(value => !/\s/.test(value)),
 ],
 (req,res) => 
 {
@@ -36,16 +41,25 @@ body('userPassword').isLength({min:6}),
                 return res.json(users);
             }         
         })
-        .catch(err => console.log(err));      
+        .catch(err => res.json({err}));      
     }
 });
 
 router.post('/addNewUser', 
 [
+//check userName - validation
 body('userName').isLength({min:4,max:20}),
+body('userName').isAlphanumeric(),
+body('userName').custom(value => !/\s/.test(value)),
+//check userPassword - validation
 body('userPassword').isLength({min:4}),
+body('userPassword').custom(value => !/\s/.test(value)),
+// check repeated password - validation 
 body('checkUserPassword').exists(),
+body('checkUserPassword').custom(value => !/\s/.test(value)),
+// check userEmail - validation
 body('userEmail').isEmail(),
+body('userEmail').custom(value => !/\s/.test(value)),
 ]
 ,(req,res) => {
     const error = validationResult(req);
@@ -92,6 +106,27 @@ body('userEmail').isEmail(),
     }
 });
 
-//router.delete('deleteUser')
+router.delete('deleteUser',
+[
+    body('idUser').isNumeric(),
+    body('idUser').custom(value => !/\s/.test(value)),
+    body('userPassword').isLength({min:4}),
+    body('userPassword').custom(value => !/\s/.test(value)),
+],
+(req,res) => {
+    if(!error.isEmpty())
+    {
+        return res.json({Błąd: "Dane zostały wprowadzone błędnie!"});
+    }
+    else
+    {
+        DeleteUser.destroy({where: {user_password: req.body.userPassword}})
+        .then(() => 
+        {
+            return res.json(users)
+        })
+        .catch((err) => res.json({err}));
+    }
+});
 
 module.exports = router;
