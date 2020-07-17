@@ -106,7 +106,7 @@ body('userEmail').custom(value => !/\s/.test(value)),
     }
 });
 
-router.delete('deleteUser',
+router.delete('/deleteUser',
 [
     body('idUser').isNumeric(),
     body('idUser').custom(value => !/\s/.test(value)),
@@ -114,19 +114,40 @@ router.delete('deleteUser',
     body('userPassword').custom(value => !/\s/.test(value)),
 ],
 (req,res) => {
+    const error = validationResult(req);
     if(!error.isEmpty())
     {
         return res.json({Błąd: "Dane zostały wprowadzone błędnie!"});
     }
     else
     {
-        DeleteUser.destroy({where: {user_password: req.body.userPassword}})
-        .then(() => 
+        DeleteUser.findOne({where: {id_user: req.body.idUser, id_role: req.body.idRole, user_password: req.body.userPassword}})
+        .then(users => 
         {
-            return res.json(users)
-        })
-        .catch((err) => res.json({err}));
+            if(users != null)
+            {
+                if(req.body.idRole != 2)
+                {
+                    return res.json({Komunikat: "Administatora nie można usunąć z systemu!"});
+                }
+                else if(req.body.idRole == 2)
+                {
+                    DeleteUser.destroy({where: {id_user: req.body.idUser, id_role: req.body.idRole, user_password: req.body.userPassword}})
+                    .then(() =>  
+                    {
+                        return res.json({Komunikat: "Użytkownik został usunięty z systemu!"});       
+                    })
+                    .catch((err) => res.json({err}));
+                }
+            }
+            else
+            {
+                return res.json({Komunikat: "Użytkownik o wprowadzonych danych nie istnieje!"});
+            }
+        })       
     }
 });
+
+//router.update('/updateUserData')
 
 module.exports = router;
