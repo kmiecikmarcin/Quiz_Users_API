@@ -11,8 +11,6 @@ const ChceckUserName = require('../Models/CheckUserName');
 const ChceckUserEmail = require('../Models/CheckUserEmail');
 const DeleteUser = require('../Models/DeleteUser');
 
-const atomaticAdressEmail = process.env['AUTOMATIC_MAIL_ADRESS'];
-
 router.get('/loginUserInApplication',
 [
 //check userName - validation
@@ -160,31 +158,29 @@ router.put('/changeUserName',
 
 router.put('/changeUserPassword',
 [
-
-],
-(req,res) => {
-
-});
-
-router.put('/changeUserEmail',
-[
 // check userEmail - validation
 body('userEmail').isEmail(),
 body('userEmail').custom(value => !/\s/.test(value)),
 ],
 (req,res) => {
     let transporter = nodemailer.createTransport({
-        service: 'gmail',
+        service: process.env.AUTOMATIC_SERVICE_NAME,
+        secure: true,
         auth: {
-            user: atomaticAdressEmail,
-            pass: '2c6q@dt#'
+            type: 'OAuth2',
+            clientId: '1059038017030-un200fns5c280pphkvbs4muitevn5rj7.apps.googleusercontent.com',
+            clientSecret: 'cgXeWEeXI9PDGZvQJgCi79cr',
+            user: process.env.AUTOMATIC_EMAIL_ADRESS,
+            pass: process.env.AUTOMATIC_EMAIL_PASSWORD,
+            refreshToken: '1//04l5j4ox14rT_CgYIARAAGAQSNwF-L9Ir12lmHRQR27-gLzyUpByJED01T7i8tyJ_jzJYTKoYtn7cB6Xy_dl2GwJB0cPSJKSQugQ',
+            
         }
     });
 
     let mailOptions = {
-        from: '"Quiz - Technikum kretywne" <atomatic.quiz.api@gmail.com>',
-        to: 'sggp.kmiecik@gmail.com',
-        subject: 'Request about add new email to account',
+        from: '"Quiz - Technikum kretywne" <automatic.quiz.api@gmail.com>',
+        to: req.body.userEmail,
+        subject: 'Reset your password!',
         text: 'Hi, You send request!',
         html: '<b>Hello world</b>'
     };
@@ -198,6 +194,14 @@ body('userEmail').custom(value => !/\s/.test(value)),
     });
 
     return res.send();
+});
+
+router.put('/changeUserEmail',
+[
+
+],
+(req,res) => {
+
 });
 
 module.exports = router;
