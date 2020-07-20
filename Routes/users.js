@@ -5,6 +5,9 @@ require('dotenv').config();
 
 const { body , validationResult } = require('express-validator');
 
+const secret = require('../Function/generateSecret');
+const token = require('../Function/generateToken');
+
 const UsersLogin = require('../Models/UserLogin');
 const AddNewUser = require('../Models/AddNewUser');
 const ChceckUserName = require('../Models/CheckUserName');
@@ -60,6 +63,7 @@ body('checkUserPassword').custom(value => !/\s/.test(value)),
 // check userEmail - validation
 body('userEmail').isEmail(),
 body('userEmail').custom(value => !/\s/.test(value)),
+body('userEmail').isLength({min:4}),
 ]
 ,(req,res) => {
     const error = validationResult(req);
@@ -72,7 +76,7 @@ body('userEmail').custom(value => !/\s/.test(value)),
 
     let = {id_role,user_name,user_password,email} = data;
 
-    if(!error.isEmpty())
+    if(!error.isEmpty() || req.body.checkUserPassword != req.body.userPassword)
     {
         return res.json({Błąd: "Dane zostały wprowadzone błędnie!"});
     }
@@ -102,7 +106,8 @@ body('userEmail').custom(value => !/\s/.test(value)),
             {
                 return res.json({Błąd: "Użytkownik o podanym loginie już istnieje!"});
             }
-        })              
+        }) 
+        .catch(err => res.json({err}));              
     }
 });
 
@@ -144,56 +149,81 @@ router.delete('/deleteUser',
             {
                 return res.json({Komunikat: "Użytkownik o wprowadzonych danych nie istnieje!"});
             }
-        })       
+        }) 
+        .catch(err => res.json({err}));       
     }
 });
 
 router.put('/changeUserName',
 [
-
+//check userPassword - validation
+body('userPassword').isLength({min:6}),
+body('userPassword').custom(value => !/\s/.test(value)),
+// check repeated password - validation 
+body('checkUserPassword').exists(),
+body('checkUserPassword').custom(value => !/\s/.test(value)),
 ],
 (req,res) => {
 
 });
 
-router.put('/changeUserPassword',
+router.put('/forgotUserPassword',
 [
 // check userEmail - validation
 body('userEmail').isEmail(),
 body('userEmail').custom(value => !/\s/.test(value)),
+body('userEmail').isLength({min:4}),
 ],
 (req,res) => {
-    let transporter = nodemailer.createTransport({
-        service: process.env.AUTOMATIC_SERVICE_NAME,
-        secure: true,
-        auth: {
-            type: 'OAuth2',
-            clientId: '1059038017030-un200fns5c280pphkvbs4muitevn5rj7.apps.googleusercontent.com',
-            clientSecret: 'cgXeWEeXI9PDGZvQJgCi79cr',
-            user: process.env.AUTOMATIC_EMAIL_ADRESS,
-            pass: process.env.AUTOMATIC_EMAIL_PASSWORD,
-            refreshToken: '1//04l5j4ox14rT_CgYIARAAGAQSNwF-L9Ir12lmHRQR27-gLzyUpByJED01T7i8tyJ_jzJYTKoYtn7cB6Xy_dl2GwJB0cPSJKSQugQ',
+    const error = validationResult(req);
+    if(!error.isEmpty())
+    {
+        return res.json({Błąd: "Dane zostały wprowadzone błędnie!"});
+    }
+    else
+    {
+        ChceckUserEmail.findOne({where: {email: req.body.userEmail}})
+        .then((users) => 
+        {
+            if(users != null)
+            {
+                var secretKey = secret.secretKey()  
+                let transporter = nodemailer.createTransport({
+                    service: process.env.AUTOMATIC_SERVICE_NAME,
+                    secure: true,
+                    auth: {
+                        type: process.env.AUTOMATIC_TYPE,
+                        clientId: process.env.AUTOMATIC_CLIENTID,
+                        clientSecret: process.env.AUTOMATIC_CLIENTSECRET,
+                        user: process.env.AUTOMATIC_EMAIL_ADRESS,
+                        pass: process.env.AUTOMATIC_EMAIL_PASSWORD,
+                        refreshToken: process.env.AUTOMATIC_REFRESHTOKEN,         
+                    }
+                });
+                var newToken = token.generateToken(secretKey)
+                let mailOptions = {
+                    from: '"Quiz - Technikum kretywne" <automatic.quiz.api@gmail.com>',
+                    to: req.body.userEmail,
+                    subject: 'Reset your password!',
+                    text: `${newToken.token}`,
+                };
             
-        }
-    });
-
-    let mailOptions = {
-        from: '"Quiz - Technikum kretywne" <automatic.quiz.api@gmail.com>',
-        to: req.body.userEmail,
-        subject: 'Reset your password!',
-        text: 'Hi, You send request!',
-        html: '<b>Hello world</b>'
-    };
-
-    transporter.sendMail(mailOptions, (error,info) => {
-        if(error){
-            return console.log(error);
-        }
-        console.log('Message sent: %s', info.messageId);
-        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-    });
-
-    return res.send();
+                transporter.sendMail(mailOptions, (error,info) => {
+                    if(error){
+                        return console.log(error);
+                    }
+                    console.log('Message sent: %s', info.messageId);
+                    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+                });
+            
+                return res.json({Komunikat: "Mail z linkiem został wysłany!"});
+            }
+            else
+            {
+                return res.json({Komunikat: "Użytkownik o takim emailu nie istnieje!"});
+            }
+        })
+    }
 });
 
 router.put('/changeUserEmail',
