@@ -181,14 +181,14 @@ body('userEmail').custom(value => !/\s/.test(value)),
     let transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: '',
-            pass: '',
+            user: process.env.AUTOMATIC_MAIL_ADRESS,
+            pass: rocess.env.AUTOMATIC_MAIL_PASSWORD,
         }
     });
 
     let mailOptions = {
-        from: '"Quiz - Technikum kretywne" <>',
-        to: '',
+        from: '"Quiz - Technikum kretywne" <atomatic.quiz.api@gmail.com>',
+        to: 'sggp.kmiecik@gmail.com',
         subject: 'Change email',
         text: 'Hi, You send request!',
         html: '<b>Hello world</b>'
