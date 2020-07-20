@@ -52,7 +52,7 @@ body('userName').isLength({min:4,max:20}),
 body('userName').isAlphanumeric(),
 body('userName').custom(value => !/\s/.test(value)),
 //check userPassword - validation
-body('userPassword').isLength({min:4}),
+body('userPassword').isLength({min:6}),
 body('userPassword').custom(value => !/\s/.test(value)),
 // check repeated password - validation 
 body('checkUserPassword').exists(),
@@ -148,6 +148,28 @@ router.delete('/deleteUser',
     }
 });
 
-//router.update('/updateUserData')
+router.put('/changeUserName',
+[
+
+],
+(req,res) => {
+
+});
+
+router.put('/changeUserPassword',
+[
+
+],
+(req,res) => {
+
+});
+
+router.put('/changeUserEmail',
+[
+
+],
+(req,res) => {
+
+});
 
 module.exports = router;
