@@ -11,6 +11,8 @@ const ChceckUserName = require('../Models/CheckUserName');
 const ChceckUserEmail = require('../Models/CheckUserEmail');
 const DeleteUser = require('../Models/DeleteUser');
 
+const atomaticAdressEmail = process.env['AUTOMATIC_MAIL_ADRESS'];
+
 router.get('/loginUserInApplication',
 [
 //check userName - validation
@@ -171,25 +173,18 @@ body('userEmail').isEmail(),
 body('userEmail').custom(value => !/\s/.test(value)),
 ],
 (req,res) => {
-    const output = `
-    <p>You send a request for change your password</p>
-    <h3>${req.body.userEmail}</h3>
-    <h3>Message</h3>
-    <p>${req.body.message}</p>
-    `;
-
     let transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: process.env.AUTOMATIC_MAIL_ADRESS,
-            pass: rocess.env.AUTOMATIC_MAIL_PASSWORD,
+            user: atomaticAdressEmail,
+            pass: '2c6q@dt#'
         }
     });
 
     let mailOptions = {
         from: '"Quiz - Technikum kretywne" <atomatic.quiz.api@gmail.com>',
         to: 'sggp.kmiecik@gmail.com',
-        subject: 'Change email',
+        subject: 'Request about add new email to account',
         text: 'Hi, You send request!',
         html: '<b>Hello world</b>'
     };
@@ -201,6 +196,8 @@ body('userEmail').custom(value => !/\s/.test(value)),
         console.log('Message sent: %s', info.messageId);
         console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
     });
+
+    return res.send();
 });
 
 module.exports = router;
