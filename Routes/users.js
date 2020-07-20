@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
+var nodemailer = require('nodemailer');
 require('dotenv').config();
 
 const { body , validationResult } = require('express-validator');
@@ -166,10 +166,41 @@ router.put('/changeUserPassword',
 
 router.put('/changeUserEmail',
 [
-
+// check userEmail - validation
+body('userEmail').isEmail(),
+body('userEmail').custom(value => !/\s/.test(value)),
 ],
 (req,res) => {
+    const output = `
+    <p>You send a request for change your password</p>
+    <h3>${req.body.userEmail}</h3>
+    <h3>Message</h3>
+    <p>${req.body.message}</p>
+    `;
 
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: '',
+            pass: '',
+        }
+    });
+
+    let mailOptions = {
+        from: '"Quiz - Technikum kretywne" <>',
+        to: '',
+        subject: 'Change email',
+        text: 'Hi, You send request!',
+        html: '<b>Hello world</b>'
+    };
+
+    transporter.sendMail(mailOptions, (error,info) => {
+        if(error){
+            return console.log(error);
+        }
+        console.log('Message sent: %s', info.messageId);
+        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+    });
 });
 
 module.exports = router;
