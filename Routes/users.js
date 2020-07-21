@@ -10,8 +10,8 @@ const token = require('../Function/generateToken');
 
 const UsersLogin = require('../Models/UserLogin');
 const AddNewUser = require('../Models/AddNewUser');
-const ChceckUserName = require('../Models/CheckUserName');
-const ChceckUserEmail = require('../Models/CheckUserEmail');
+const CheckUserName = require('../Models/CheckUserName');
+const CheckUserEmail = require('../Models/CheckUserEmail');
 const DeleteUser = require('../Models/DeleteUser');
 
 router.get('/loginUserInApplication',
@@ -82,13 +82,13 @@ body('userEmail').isLength({min:4}),
     }
     else
     {
-        ChceckUserName.findOne({where: {user_name: req.body.userName}})
+        CheckUserName.findOne({where: {user_name: req.body.userName}})
         .then((users) => 
         {
             if(users == null)
             {      
                 users = null;         
-                ChceckUserEmail.findOne({where: {email: req.body.userEmail}})
+                CheckUserEmail.findOne({where: {email: req.body.userEmail}})
                 .then((users) => 
                 {
                     if(users == null)
@@ -156,6 +156,59 @@ router.delete('/deleteUser',
 
 router.put('/changeUserName',
 [
+//check id - validation
+body('idUser').isNumeric(),
+body('idUser').custom(value => !/\s/.test(value)),
+//check userName - validation
+body('newUserName').isLength({min:4,max:20}),
+body('newUserName').isAlphanumeric(),
+body('newUserName').custom(value => !/\s/.test(value)),
+//check userPassword - validation
+body('userPassword').isLength({min:6}), 
+body('userPassword').custom(value => !/\s/.test(value)),
+// check repeated password - validation 
+body('checkUserPassword').exists(),
+body('checkUserPassword').custom(value => !/\s/.test(value)),
+],
+(req,res) => {
+    const error = validationResult(req);
+
+    if(!error.isEmpty() || req.body.checkUserPassword != req.body.userPassword)
+    {
+        return res.json({Błąd: "Podane hasła są różne!"});
+    }
+    else
+    {
+        CheckUserName.findOne({where: {id_user: req.body.idUser, user_password: req.body.userPassword}})
+        .then(users => {
+            if(users == null)
+            {
+                return res.json({Błąd: "Użytkownik nie istnieje!"})
+            }
+            else
+            {       
+                users = null;       
+                CheckUserName.findOne({where: {user_name: req.body.newUserName}})               
+                .then(users => {console.log(users)
+                    if(users != null)
+                    {
+                        return res.json({Błąd: "Użytkownik o podanej nazwie już istnieje!"});
+                    }
+                    else
+                    {
+                        CheckUserName.update({user_name: req.body.newUserName},{where:{id_user: req.body.idUser, user_password: req.body.userPassword}})
+                        .then(() => res.json({Komunikat: "Login zmieniono pomyślnie!"})); 
+                    }
+                })
+                .catch(err => res.json({err}));                
+            }         
+        })
+        .catch(err => res.json({err}));      
+    }
+});
+
+router.put('/forgotUserName',
+[
 //check userPassword - validation
 body('userPassword').isLength({min:6}),
 body('userPassword').custom(value => !/\s/.test(value)),
@@ -182,7 +235,7 @@ body('userEmail').isLength({min:4}),
     }
     else
     {
-        ChceckUserEmail.findOne({where: {email: req.body.userEmail}})
+        CheckUserEmail.findOne({where: {email: req.body.userEmail}})
         .then((users) => 
         {
             if(users != null)
