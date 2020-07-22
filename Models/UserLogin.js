@@ -12,6 +12,14 @@ const UserLogin = db.define('users', {
          foreignKey: true,
          field: 'id_role'
      },
+     user_name: {
+        type: Sequelize.DataTypes.INTEGER,
+        field: 'user_name'
+    },
+    user_password: {
+        type: Sequelize.DataTypes.INTEGER,
+        field: 'user_password'
+    },
 }, {
     timestamps: false,
     freezeTableName: true,

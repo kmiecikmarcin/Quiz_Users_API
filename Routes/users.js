@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-var nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer');
+const bcrypt = require('bcrypt');
 require('dotenv').config();
 
 const { body , validationResult } = require('express-validator');
@@ -9,10 +10,12 @@ const secret = require('../Function/generateSecret');
 const token = require('../Function/generateToken');
 
 const UserLogin = require('../Models/UserLogin');
-const Email = require('../Models/UserEmail');
-const UserName = require('../Models/UserName');
+const ChangeUserEmail = require('../Models/ChangeUserEmail');
+const ChangeUserName = require('../Models/ChangeUserName');
+const AddNewUser = require('../Models/AddNewUser');
+const ForgotUserName = require('../Models/ForgotUserName');
+const ForgotUserPassword = require('../Models/ForgotUserPassword');
 
-//skonczone
 router.get('/loginUserInApplication',
 [
 body('userName').isLength({min:4, max:20}),
@@ -30,23 +33,32 @@ body('userPassword').custom(value => !/\s/.test(value)),
     }
     else
     {
-        UserLogin.findOne({where: {user_name: req.body.userName, user_password: req.body.userPassword}})
+        UserLogin.findOne({where: {user_name: req.body.userName}})
         .then(users => {
             if(users == null)
             {
-                return res.json({Błąd: "Użytkownik nie istnieje!"})
+                return res.json({Błąd: "Użytkownik nie istnieje!"});
             }
             else
             {
-                return res.json(users);
-            }         
+                bcrypt.compare(req.body.userPassword, users.user_password, function(err,result)
+                {
+                    if(result == true)
+                    {
+                        return res.json({id_user: users.id_user, id_role: users.id_role});
+                    }
+                    else
+                    {
+                        return res.json({Komunikat: "Hasło jest niepoprawne!"});
+                    }
+                })        
+            }
         })
-        .catch(err => res.json({err}));      
+                
     }
 });
 
-//skonczone, dodac tylko hashowanie haseł
-router.post('/addNewUser', 
+router.post('/addNewUserToDatabase', 
 [
 body('userName').isLength({min:4,max:20}),
 body('userName').isAlphanumeric(),
@@ -61,18 +73,14 @@ body('userEmail').isLength({min:4}),
 ]
 ,(req,res) => {
     const error = validationResult(req);
-    const data = {
-        id_role: 2,
-        user_name: req.body.userName,
-        user_password: req.body.userPassword,
-        email: req.body.userEmail
-    }
 
-    let = {id_role,user_name,user_password,email} = data;
-
-    if(!error.isEmpty() || req.body.checkUserPassword != req.body.userPassword)
+    if(!error.isEmpty())
     {
         return res.json({Błąd: "Dane zostały wprowadzone błędnie!"});
+    }
+    else if(req.body.checkUserPassword != req.body.userPassword)
+    {
+        return res.json({Błąd: "Hasła nie są identyczne!"});
     }
     else
     {
@@ -87,8 +95,12 @@ body('userEmail').isLength({min:4}),
                 {
                     if(users == null)
                     {
-                        UserLogin.create({id_role,user_name,user_password,email})
-                        .then(() => res.json({Komunikat: "Rejestracja przebiegła pomyślnie!"}))
+                        bcrypt.hash(req.body.userPassword, 10, function (err,hash){
+                            console.log(hash);
+                            AddNewUser.create({id_role: 2, user_name: req.body.userName, user_password: hash, email: req.body.userEmail}, {returning: false})
+                            .then(() => res.json({Komunikat: "Rejestracja przebiegła pomyślnie!"}))
+                            .catch(err => res.json({err}));  
+                        });                                                          
                     }
                     else
                     {
@@ -101,11 +113,10 @@ body('userEmail').isLength({min:4}),
                 return res.json({Błąd: "Użytkownik o podanym loginie już istnieje!"});
             }
         }) 
-        .catch(err => res.json({err}));              
+        .catch(err => res.json({err}));      
     }
 });
 
-//skonczone
 router.delete('/deleteUser',
 [
 body('idUser').isNumeric(),
@@ -121,7 +132,7 @@ body('userPassword').custom(value => !/\s/.test(value)),
     }
     else
     {
-        UserLogin.findOne({where: {id_user: req.body.idUser, id_role: req.body.idRole, user_password: req.body.userPassword}})
+        UserLogin.findOne({where: {id_user: req.body.idUser, id_role: req.body.idRole}})
         .then(users => 
         {
             if(users != null)
@@ -132,12 +143,22 @@ body('userPassword').custom(value => !/\s/.test(value)),
                 }
                 else if(req.body.idRole == 2)
                 {
-                    UserLogin.destroy({where: {id_user: req.body.idUser, id_role: req.body.idRole, user_password: req.body.userPassword}})
-                    .then(() =>  
+                    bcrypt.compare(req.body.userPassword, users.user_password, function(err,result)
                     {
-                        return res.json({Komunikat: "Użytkownik został usunięty z systemu!"});       
-                    })
-                    .catch((err) => res.json({err}));
+                        if(result == true)
+                        {
+                            UserLogin.destroy({where: {id_user: req.body.idUser, id_role: req.body.idRole}})
+                            .then(() =>  
+                            {
+                                return res.json({Komunikat: "Użytkownik został usunięty z systemu!"});     
+                            })
+                            .catch((err) => res.json({err}));                            
+                        }
+                        else
+                        {
+                            return res.json({Komunikat: "Hasło jest niepoprawne!"});
+                        }
+                    })                                         
                 }
             }
             else
@@ -149,11 +170,11 @@ body('userPassword').custom(value => !/\s/.test(value)),
     }
 });
 
-//skonczone, mozliwość poprawki szukania nazwy uzytkownika, by po wyszukaniu po id i haśle zwóciło maila i na tej podstawie sprawdziło go z nowym mailem (zrób tak samo w changeuseremail)
 router.put('/changeUserName',
 [
-body('idUser').isNumeric(),
-body('idUser').custom(value => !/\s/.test(value)),
+body('userName').isLength({min:4,max:20}),
+body('userName').isAlphanumeric(),
+body('userName').custom(value => !/\s/.test(value)),
 body('newUserName').isLength({min:4,max:20}),
 body('newUserName').isAlphanumeric(),
 body('newUserName').custom(value => !/\s/.test(value)),
@@ -175,27 +196,39 @@ body('checkUserPassword').custom(value => !/\s/.test(value)),
     }
     else
     {
-        UserName.findOne({where: {id_user: req.body.idUser, user_password: req.body.userPassword}})
+        ChangeUserName.findOne({where: {user_name: req.body.newUserName}})      
         .then(users => {
-            if(users == null)
+            if(users != null)
             {
-                return res.json({Błąd: "Użytkownik nie istnieje!"});
+                return res.json({Błąd: "Użytkownik o podanym nowym loginie już istnieje!"});
             }
             else
-            {       
-                users = null;       
-                UserName.findOne({where: {user_name: req.body.newUserName}})               
+            {                        
+                ChangeUserName.findOne({where: {user_name: req.body.userName}})               
                 .then(users => {
-                    if(users != null)
+                    if(users == null)
                     {
-                        return res.json({Błąd: "Użytkownik o podanej nazwie już istnieje!"});
+                        return res.json({Błąd: "Użytkownik o podanym loginie nie istnieje!"});
                     }
                     else
                     {
-                        console.log(users)
-                        UserName.update({user_name: req.body.newUserName},{where:{id_user: req.body.idUser, user_password: req.body.userPassword}})
-                        .then(() => res.json({Komunikat: "Login zmieniono pomyślnie!"}))
-                        .catch(err => res.json({err})); 
+                        bcrypt.compare(req.body.userPassword, users.user_password, function(err,result)
+                        {
+                            if(result == true)
+                            {
+                                console.log(users)
+                                ChangeUserName.update({user_name: req.body.newUserName},{where:{user_name: req.body.userName}})
+                                .then(() =>  
+                                {
+                                    return res.json({Komunikat: "Nazwa użytkownika została zmieniona!"});     
+                                })
+                                .catch((err) => res.json({err}));                            
+                            }
+                            else
+                            {
+                                return res.json({Komunikat: "Hasło jest niepoprawne!"});
+                            }
+                        })                             
                     }
                 })
                 .catch(err => res.json({err}));                
@@ -205,7 +238,6 @@ body('checkUserPassword').custom(value => !/\s/.test(value)),
     }
 });
 
-//skonczone
 router.put('/forgotUserName',
 [
 body('userEmail').isEmail(),
@@ -221,7 +253,7 @@ body('userEmail').isLength({min:4}),
     }
     else
     {
-        CheckUserName.findOne({where: {email: req.body.userEmail}})
+        ForgotUserName.findOne({where: {email: req.body.userEmail}})
         .then(users => 
         {
             console.log(users);
@@ -280,7 +312,7 @@ body('userEmail').isLength({min:4}),
     }
     else
     {
-        CheckUserEmail.findOne({where: {email: req.body.userEmail}})
+        ForgotUserPassword.findOne({where: {email: req.body.userEmail}})
         .then((users) => 
         {
             if(users != null)
@@ -314,7 +346,7 @@ body('userEmail').isLength({min:4}),
                     console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
                 });
             
-                return res.json({Komunikat: "Mail z linkiem został wysłany!"});
+                return res.json({Komunikat: "Mail z kodem weryfikacyjnym został wysłany!"});
             }
             else
             {
@@ -325,11 +357,13 @@ body('userEmail').isLength({min:4}),
     }
 });
 
-//skonczone
 router.put('/changeUserEmail',
 [
 body('idUser').isNumeric(),
 body('idUser').custom(value => !/\s/.test(value)),
+body('userEmail').isEmail(),
+body('userEmail').custom(value => !/\s/.test(value)),
+body('userEmail').isLength({min:4}),
 body('newUserEmail').isEmail(),
 body('newUserEmail').custom(value => !/\s/.test(value)),
 body('newUserEmail').isLength({min:4}),
@@ -350,26 +384,36 @@ body('checkUserPassword').custom(value => !/\s/.test(value)),
     }
     else
     {
-        Email.findOne({where: {id_user: req.body.idUser, user_password: req.body.userPassword}})
+        ChangeUserEmail.findOne({where: {email: req.body.newUserEmail}})       
         .then(users => {
-            if(users == null)
+            if(users != null)
             {
-                return res.json({Błąd: "Użytkownik nie istnieje!"});
+                return res.json({Błąd: "Wprowadzony email już jest przypisany do konta!"});
             }
             else
             {
                 users = null;       
-                Email.findOne({where: {email: req.body.newUserEmail}})
+                ChangeUserEmail.findOne({where: {id_user: req.body.idUser, email: req.body.userEmail}})
                 .then(users => {
-                    if(users != null)
+                    if(users == null)
                     {
-                        return res.json({Błąd: "Użytkownik o podanym emailu już istnieje!"});
+                        return res.json({Błąd: "Użytkownik o podanym emailu nie istnieje!"});
                     }
                     else
-                    {                        
-                        Email.update({email: req.body.newUserEmail},{where:{id_user: req.body.idUser, user_password: req.body.userPassword}})
-                        .then(() => res.json({Komunikat: "Email został zmieniony pomyślnie!"}))
-                        .catch(err => res.json({err}));
+                    {             
+                        bcrypt.compare(req.body.userPassword, users.user_password, function(err,result)
+                        {
+                            if(result == true)
+                            {
+                                ChangeUserEmail.update({email: req.body.newUserEmail},{where:{id_user: req.body.idUser,email: req.body.userEmail}})
+                                .then(() => res.json({Komunikat: "Email został zmieniony pomyślnie!"}))
+                                .catch(err => res.json({err}));
+                            }
+                            else
+                            {
+                                return res.json({Komunikat: "Hasło jest niepoprawne!"});
+                            }
+                        })            
                     }
                 })
                 .catch(err => res.json({err}));           
