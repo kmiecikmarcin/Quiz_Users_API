@@ -9,7 +9,8 @@ const secret = require('../Function/generateSecret');
 const token = require('../Function/generateToken');
 
 const UserLogin = require('../Models/UserLogin');
-const CheckUserName = require('../Models/CheckUserName');
+const Email = require('../Models/UserEmail');
+const UserName = require('../Models/UserName');
 
 //skonczone
 router.get('/loginUserInApplication',
@@ -148,7 +149,7 @@ body('userPassword').custom(value => !/\s/.test(value)),
     }
 });
 
-//skonczone
+//skonczone, mozliwość poprawki szukania nazwy uzytkownika, by po wyszukaniu po id i haśle zwóciło maila i na tej podstawie sprawdziło go z nowym mailem (zrób tak samo w changeuseremail)
 router.put('/changeUserName',
 [
 body('idUser').isNumeric(),
@@ -174,25 +175,27 @@ body('checkUserPassword').custom(value => !/\s/.test(value)),
     }
     else
     {
-        UserLogin.findOne({where: {id_user: req.body.idUser, user_password: req.body.userPassword}})
+        UserName.findOne({where: {id_user: req.body.idUser, user_password: req.body.userPassword}})
         .then(users => {
             if(users == null)
             {
-                return res.json({Błąd: "Użytkownik nie istnieje!"})
+                return res.json({Błąd: "Użytkownik nie istnieje!"});
             }
             else
             {       
                 users = null;       
-                UserLogin.findOne({where: {user_name: req.body.newUserName}})               
-                .then(users => {console.log(users)
+                UserName.findOne({where: {user_name: req.body.newUserName}})               
+                .then(users => {
                     if(users != null)
                     {
                         return res.json({Błąd: "Użytkownik o podanej nazwie już istnieje!"});
                     }
                     else
                     {
-                        UserLogin.update({user_name: req.body.newUserName},{where:{id_user: req.body.idUser, user_password: req.body.userPassword}})
-                        .then(() => res.json({Komunikat: "Login zmieniono pomyślnie!"})); 
+                        console.log(users)
+                        UserName.update({user_name: req.body.newUserName},{where:{id_user: req.body.idUser, user_password: req.body.userPassword}})
+                        .then(() => res.json({Komunikat: "Login zmieniono pomyślnie!"}))
+                        .catch(err => res.json({err})); 
                     }
                 })
                 .catch(err => res.json({err}));                
@@ -322,6 +325,7 @@ body('userEmail').isLength({min:4}),
     }
 });
 
+//skonczone
 router.put('/changeUserEmail',
 [
 body('idUser').isNumeric(),
@@ -346,9 +350,30 @@ body('checkUserPassword').custom(value => !/\s/.test(value)),
     }
     else
     {
-        UserLogin.findOne({where: {id_user: req.body.idUser, user_password: req.body.userPassword}})
-        .then(() => {
-
+        Email.findOne({where: {id_user: req.body.idUser, user_password: req.body.userPassword}})
+        .then(users => {
+            if(users == null)
+            {
+                return res.json({Błąd: "Użytkownik nie istnieje!"});
+            }
+            else
+            {
+                users = null;       
+                Email.findOne({where: {email: req.body.newUserEmail}})
+                .then(users => {
+                    if(users != null)
+                    {
+                        return res.json({Błąd: "Użytkownik o podanym emailu już istnieje!"});
+                    }
+                    else
+                    {                        
+                        Email.update({email: req.body.newUserEmail},{where:{id_user: req.body.idUser, user_password: req.body.userPassword}})
+                        .then(() => res.json({Komunikat: "Email został zmieniony pomyślnie!"}))
+                        .catch(err => res.json({err}));
+                    }
+                })
+                .catch(err => res.json({err}));           
+            }
         })
         .catch(err => res.json({err}));
     }
