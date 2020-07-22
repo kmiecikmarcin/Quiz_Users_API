@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const db = require('../bin/database');
 
-const ChceckUserName = db.define('users', {
+const CheckUserName = db.define('users', {
     user_name: {
         type: Sequelize.DataTypes.STRING,
         field: 'user_name'
@@ -10,5 +10,5 @@ const ChceckUserName = db.define('users', {
     timestamps: false,
     freezeTableName: true,
 });
-ChceckUserName.removeAttribute('id');
-module.exports = ChceckUserName;
+CheckUserName.removeAttribute('id');
+module.exports = CheckUserName;
