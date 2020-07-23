@@ -1,7 +1,7 @@
 {
   "name": "main",
   "version": "1.0.0",
-  "description": "",
+  "description": "Quiz Api",
   "main": "app.js",
   "scripts": {
     "start": "node app.js"
@@ -15,10 +15,11 @@
     "express": "^4.17.1",
     "express-validator": "^6.6.0",
     "install": "^0.13.0",
-    "node-pre-gyp": "^0.15.0",
+    "node-pre-gyp": "0.12.0",
     "nodemailer": "^6.4.10",
     "pg": "^8.3.0",
     "router": "^1.3.5",
+    "sequelize": "^6.3.3",
     "speakeasy": "^2.0.0"
   }
 }
