@@ -1,7 +1,6 @@
 version: "3.7"
 services:
   app:
-    image: jetalone/sails
     build: .
     working_dir: /usr/src/app
     volumes:
