@@ -1,0 +1,37 @@
+version: "3.7"
+services:
+  app:
+    build: .
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      DATABASE_USER: username
+      DATABASE_PASSWORD: secretpassword
+      DATABASE_NAME: database
+    command: ["npm", "start"]
+    ports:
+      - 3000:3000
+    networks:
+      - frontend
+      - backend
+
+  db:
+    image: postgres
+    volumes:
+      - db-storage:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_DB: database
+      POSTGRES_PASSWORD: secretpassword
+    networks:
+      - backend
+
+volumes:
+  db-storage:
+  node_modules:
+
+networks:
+  backend:
+  frontend:
