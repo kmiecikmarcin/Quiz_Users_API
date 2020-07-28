@@ -54,28 +54,27 @@
 
 # Szczegółowy podział Endpointów:
     Endpointy związane z połączeniem się użytkownika z aplikacją:
-        - api/user/login
-        - api/user/register
-        - api/user/logout
-        - api/user/deleteAccount
+        - api/v1/user/login
+        - api/v1/user/register
+        - api/v1/user/logout
+        - api/v1/user/deleteAccount
     Endpointy związane z edycją danych przez użytkownika:
-        - api/user/changeUserName
-        - api/user/forgotUserName
-        - api/user/changeUserEmail
-        - api/user/forgotPassword
-        - api/user/changePassword
+        - api/v1/user/editData/login
+        - api/v1/user/editData/changeEmail
+        - api/v1/user/editData/changePassword
+        - api/v1/user/login/forgotPassword
+        - api/v1/user/login/forgotLogin
     Endpointy nawiązujące do działań użytkownik - repetytorium:
-        - api/user/takeTopicFromRepetitory
-        - api/user/addNewTopic
-        - api/user/addNewRepetitory
+        - api/v1/repetitory/takeSubtopicFromRepetitory
+        - api/v1/repetitory/addNewSubtopic
+        - api/v1/repetitory/addNewRepetitory
     Endpointy nazwiązujące do działań z quizem:
-        - api/user/addNewQuestionsToTopic
-        - api/user/createNewGames
-        - api/user/finishGame?
+        - api/v1/quiz/addNewTopic
+        - api/v1/quiz/addNewQuestion
+        - api/v1/quiz/takeQuestionsForQuiz
     Endpointy związane z zarządzaniem administracyjnym:
-        - api/administrator/acceptDeletedAccounts
-        - api/administrator/updateAgreements
-        - api/administrator/addNewAgreements
+        - api/v1/administrator/acceptDeletedAccounts
+        - api/v1/administrator/addNewTypeOfRole
 
 
 
