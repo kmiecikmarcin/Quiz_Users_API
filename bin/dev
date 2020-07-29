@@ -1,3 +1,0 @@
-require('dotenv/config')
-require('./../Main/app.js')
-require('./../Routes/users')
