@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../app');
 
-const Roles = sequelize.define('TypesOfRoles', {
+const TypesOfRoles = sequelize.define('TypesOfRoles', {
     id: {
         type: DataTypes.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -21,4 +21,4 @@ const Roles = sequelize.define('TypesOfRoles', {
     timestamps: true
 });
 
-module.exports = Roles;
+module.exports = TypesOfRoles;

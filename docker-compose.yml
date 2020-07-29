@@ -1,5 +1,16 @@
 version: "3.7"
 services:
+  
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: on-failure
+    ports: 
+      - 8080:8080
+    networks:
+      - tools
+      - backend
+
   app:
     build: .
     working_dir: /usr/src/app
@@ -7,9 +18,10 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     environment:
-      DATABASE_USER: username
-      DATABASE_PASSWORD: secretpassword
-      DATABASE_NAME: database
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: 2qazxsw
+      DATABASE_NAME: Quiz_Users
+      DATABASE_HOST: db
     command: ["npm", "start"]
     ports:
       - 3000:3000
@@ -22,9 +34,11 @@ services:
     volumes:
       - db-storage:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: username
-      POSTGRES_DB: database
-      POSTGRES_PASSWORD: secretpassword
+      POSTGRES_USER: postgres
+      POSTGRES_DB: Quiz_Users
+      POSTGRES_PASSWORD: 2qazxsw
+    ports:
+      - 4000:4000
     networks:
       - backend
 
@@ -35,3 +49,4 @@ volumes:
 networks:
   backend:
   frontend:
+  tools:
