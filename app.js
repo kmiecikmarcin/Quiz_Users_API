@@ -1,6 +1,5 @@
 const express = require('express');
 const bodyParser = require('body-parser')
-const Routes = require('./Routes/users');
 const Sequelize = require('sequelize');
 
 var app = express()
@@ -12,9 +11,14 @@ const sequelize = new Sequelize('database', 'username', 'secretpassword', {
     dialect: 'postgres' 
 });
 
+sequelize.sync({force: true})
+  .then(() => {
+    console.log(`Database & tables created!`);
+  });
+
 const port = process.env.PORT || 3000
 
-app.use('/users', Routes)
+//app.use('/users', Routes)
 
 app.listen(port)
 
