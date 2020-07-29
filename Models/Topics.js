@@ -1,12 +1,11 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../app');
+const sequelize = require('../bin/database');
 const Subjects = require('./Subjects');
 
 const Topics = sequelize.define('Topics', {
     id: {
         type: DataTypes.UUID,
         defaultValue: Sequelize.UUIDV4,
-        autoIncrement : true,
         primaryKey: true,
         unique: true,
         allowNull: false,
@@ -16,7 +15,8 @@ const Topics = sequelize.define('Topics', {
         type: DataTypes.UUID, 
         defaultValue: Sequelize.UUIDV4,
         model: 'Subjects',
-        key: 'id'
+        key: 'id',
+        field: 'id_subject'
     },
     name: {
         type: DataTypes.STRING,
