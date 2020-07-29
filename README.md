@@ -52,13 +52,30 @@
     - DELETE odpowiadający za usuwanie konta użytkownika;
     - PUT'y pozwalające na zmianę: nazwy użytkownika, emaila, hasła.
 
+# Szczegółowy podział Endpointów:
+    Endpointy związane z połączeniem się użytkownika z aplikacją:
+        - api/v1/user/login
+        - api/v1/user/register
+        - api/v1/user/logout
+        - api/v1/user/deleteAccount
+    Endpointy związane z edycją danych przez użytkownika:
+        - api/v1/user/editData/login
+        - api/v1/user/editData/changeEmail
+        - api/v1/user/editData/changePassword
+        - api/v1/user/login/forgotPassword
+        - api/v1/user/login/forgotLogin
+    Endpointy nawiązujące do działań użytkownik - repetytorium:
+        - api/v1/repetitory/takeSubtopicFromRepetitory
+        - api/v1/repetitory/addNewSubtopic
+        - api/v1/repetitory/addNewRepetitory
+    Endpointy nazwiązujące do działań z quizem:
+        - api/v1/quiz/addNewTopic
+        - api/v1/quiz/addNewQuestion
+        - api/v1/quiz/takeQuestionsForQuiz
+    Endpointy związane z zarządzaniem administracyjnym:
+        - api/v1/administrator/acceptDeletedAccounts
+        - api/v1/administrator/addNewTypeOfRole
 
-Folder Functions -> generateSecret.js oraz generateToken, pierwszy generuje "klucz" weryfikacyjny, drugi zamienia go na cyfry a nie "zahashowany?" kod
 
-Folder Models -> modele db działające dla poszczególnych endpointów przy ingenerncji zmiany danych z bazą 
 
-Folder Main -> źródło programu, tutaj następuję przejście i rozbicie do routingu
 
-Folder Routes -> endpointy oraz ich funkcjonalność
-
-Folder bin: -> database.js zawiera implementację połączenia z bazą danych 
