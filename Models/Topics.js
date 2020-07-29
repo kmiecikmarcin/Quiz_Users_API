@@ -11,13 +11,6 @@ const Topics = sequelize.define('Topics', {
         allowNull: false,
         field: 'id_topic'
     },
-    idSubject: {
-        type: DataTypes.UUID, 
-        defaultValue: Sequelize.UUIDV4,
-        model: 'Subjects',
-        key: 'id',
-        field: 'id_subject'
-    },
     name: {
         type: DataTypes.STRING,
         unique: true,
@@ -28,6 +21,11 @@ const Topics = sequelize.define('Topics', {
     timestamps: true
 });
 
-Subjects.hasMany(Topics);
+Subjects.hasMany(Topics, {
+    foreignKey: {
+        allowNull: false,
+        name: 'id_subject'
+    }
+});
 
 module.exports = Topics;

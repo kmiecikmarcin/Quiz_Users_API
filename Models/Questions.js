@@ -12,20 +12,6 @@ const Questions = sequelize.define('Questions', {
         allowNull: false,
         field: 'id_question'
     },
-    idTopic: {
-        type: DataTypes.UUID, 
-        defaultValue: Sequelize.UUIDV4,
-        model: 'Topics',
-        key: 'id',
-        field: 'id_topic'
-    },
-    publicId: {
-        type: DataTypes.UUID, 
-        defaultValue: Sequelize.UUIDV4,
-        model: 'Users',
-        key: 'publicId',
-        field: 'public_id'
-    },
     question: {
         type: DataTypes.STRING(100),
         unique: true,
@@ -60,7 +46,17 @@ const Questions = sequelize.define('Questions', {
     timestamps: true
 });
 
-Users.hasMany(Questions);
-Topics.hasMany(Questions);
+Users.hasMany(Questions, {
+    foreignKey: {
+        allowNull: false,
+        name: 'id_user'
+    }
+});
+Topics.hasMany(Questions, {
+    foreignKey: {
+        allowNull: false,
+        name: 'id_topic'
+    }
+});
 
 module.exports = Questions;

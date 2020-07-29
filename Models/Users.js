@@ -13,16 +13,10 @@ const Users = sequelize.define('Users', {
     },
     publicId: {
         type: DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV4,
         unique: true,
         allowNull: false,
         field: 'public_id'
-    },
-    idRole: {
-        type: DataTypes.UUID, 
-        defaultValue: Sequelize.UUIDV4,
-        model: 'TypesOfRoles',
-        key: 'id',
-        field: 'id_role'
     },
     name: {
         type: DataTypes.STRING(14),
@@ -45,6 +39,11 @@ const Users = sequelize.define('Users', {
         timestamps: true   
 });
 
-TypesOfRoles.hasMany(Users);
+TypesOfRoles.hasMany(Users, {
+    foreignKey: {
+        allowNull: false,
+        name: 'id_role'
+    }
+});
 
 module.exports = Users;

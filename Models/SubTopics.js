@@ -12,20 +12,6 @@ const SubTopics = sequelize.define('SubTopics', {
         allowNull: false,
         field: 'id_subtopic'
     },
-    idTopic: {
-        type: DataTypes.UUID, 
-        defaultValue: Sequelize.UUIDV4,
-        model: 'Topics',
-        key: 'id',
-        field: 'id_topic'
-    },
-    publicId: {
-        type: DataTypes.UUID, 
-        defaultValue: Sequelize.UUIDV4,
-        model: 'Users',
-        key: 'public_id',
-        field: 'public_id'
-    },
     name: {
         type: DataTypes.STRING(100),
         unique: true,
@@ -36,7 +22,17 @@ const SubTopics = sequelize.define('SubTopics', {
     timestamps: true
 });
 
-Users.hasMany(SubTopics);
-Topics.hasMany(SubTopics);
+Users.hasMany(SubTopics, {
+    foreignKey: {
+        allowNull: false,
+        name: 'id_user'
+    }
+});
+Topics.hasMany(SubTopics, {
+    foreignKey: {
+        allowNull: false,
+        name: 'id_topic'
+    }
+});
 
 module.exports = SubTopics;
