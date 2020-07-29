@@ -1,16 +1,6 @@
 version: "3.7"
 services:
   
-  adminer:
-    container_name: adminer
-    image: adminer
-    restart: on-failure
-    ports: 
-      - 8080:8080
-    networks:
-      - tools
-      - backend
-
   app:
     build: .
     working_dir: /usr/src/app
@@ -37,9 +27,17 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_DB: Quiz_Users
       POSTGRES_PASSWORD: 2qazxsw
-    ports:
-      - 4000:4000
     networks:
+      - tools
+      - backend
+
+  adminer:
+    image: adminer
+    restart: on-failure
+    ports: 
+      - 8080:8080
+    networks:
+      - tools
       - backend
 
 volumes:
