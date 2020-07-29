@@ -1,13 +1,12 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../app');
+const sequelize = require('../bin/database');
 const Users = require('./Users');
 const SubTopics = require('./SubTopics');
 
-const Repetitory = sequelize.define('', {
+const Repetitory = sequelize.define('Repetitory', {
     id: {
         type: DataTypes.UUID, 
         defaultValue: Sequelize.UUIDV4,
-        autoIncrement : true,
         primaryKey: true,
         unique: true,
         allowNull: false,
@@ -17,13 +16,15 @@ const Repetitory = sequelize.define('', {
         type: DataTypes.UUID, 
         defaultValue: Sequelize.UUIDV4,
         model: 'Users',
-        key: 'public_id'
+        key: 'public_id',
+        field: 'public_id'
     },
     idSubTopic: {
         type: DataTypes.UUID, 
         defaultValue: Sequelize.UUIDV4,
         model: 'SubTopics',
-        key: 'id'
+        key: 'id',
+        field: 'id_subtopic'
     },
     title: {
         type: DataTypes.STRING(40),

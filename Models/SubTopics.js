@@ -1,5 +1,5 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../app');
+const sequelize = require('../bin/database');
 const Topics = require('./Topics');
 const Users = require('./Users');
 
@@ -7,7 +7,6 @@ const SubTopics = sequelize.define('SubTopics', {
     id: {
         type: DataTypes.UUID,
         defaultValue: Sequelize.UUIDV4,
-        autoIncrement : true,
         primaryKey: true,
         unique: true,
         allowNull: false,
@@ -17,13 +16,15 @@ const SubTopics = sequelize.define('SubTopics', {
         type: DataTypes.UUID, 
         defaultValue: Sequelize.UUIDV4,
         model: 'Topics',
-        key: 'id'
+        key: 'id',
+        field: 'id_topic'
     },
     publicId: {
         type: DataTypes.UUID, 
         defaultValue: Sequelize.UUIDV4,
         model: 'Users',
-        key: 'public_id'
+        key: 'public_id',
+        field: 'public_id'
     },
     name: {
         type: DataTypes.STRING(100),

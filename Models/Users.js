@@ -1,18 +1,17 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../app');
+const sequelize = require('../bin/database');
 const TypesOfRoles = require('./TypesOfRoles');
 
 const Users = sequelize.define('Users', {
     id: {
         type: DataTypes.UUID, 
         defaultValue: Sequelize.UUIDV4,
-        autoIncrement : true,
         primaryKey: true,
         unique: true,
         allowNull: false,
         field: 'id_user'
     },
-    public_id: {
+    publicId: {
         type: DataTypes.UUID,
         unique: true,
         allowNull: false,
@@ -22,7 +21,8 @@ const Users = sequelize.define('Users', {
         type: DataTypes.UUID, 
         defaultValue: Sequelize.UUIDV4,
         model: 'TypesOfRoles',
-        key: 'id'
+        key: 'id',
+        field: 'id_role'
     },
     name: {
         type: DataTypes.STRING(14),
