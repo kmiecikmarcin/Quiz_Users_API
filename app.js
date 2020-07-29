@@ -1,6 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser')
 const sequelize = require('./bin/database');
+const TypesOfRoles = require('./Models/TypesOfRoles');
+const Users = require('./Models/Users');
+const Subjects = require('./Models/Subjects');
+const Topics = require('./Models/Topics');
+const SubTopics = require('./Models/SubTopics');
+const Questions = require('./Models/Questions');
+const Repetitory = require('./Models/Repetitory');
 
 var app = express();
 app.use(bodyParser.json());

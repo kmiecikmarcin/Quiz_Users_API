@@ -12,20 +12,6 @@ const Repetitory = sequelize.define('Repetitory', {
         allowNull: false,
         field: 'id_repetitory'
     },
-    publicId: {
-        type: DataTypes.UUID, 
-        defaultValue: Sequelize.UUIDV4,
-        model: 'Users',
-        key: 'public_id',
-        field: 'public_id'
-    },
-    idSubTopic: {
-        type: DataTypes.UUID, 
-        defaultValue: Sequelize.UUIDV4,
-        model: 'SubTopics',
-        key: 'id',
-        field: 'id_subtopic'
-    },
     title: {
         type: DataTypes.STRING(40),
         unique: true,
@@ -41,7 +27,17 @@ const Repetitory = sequelize.define('Repetitory', {
     timestamps: true 
 });
 
-Users.hasMany(Repetitory);
-SubTopics.hasMany(Repetitory);
+Users.hasMany(Repetitory, {
+    foreignKey: {
+        allowNull: false,
+        name: 'id_user'
+    }
+});
+SubTopics.hasMany(Repetitory, {
+    foreignKey: {
+        allowNull: false,
+        name: 'id_subtopic'
+    }
+});
 
 module.exports = Repetitory;
