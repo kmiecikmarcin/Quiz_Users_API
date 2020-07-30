@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "description": "Quiz Api",
   "main": "app.js",
-
   "nodemonConfig:": {
     "delay": 1000
   },
   "scripts": {
-    "nodemon-start": "nodemon app.js"
+    "nodemon-start": "nodemon app.js",
+    "lint": "eslint ./"
   },
   "author": "",
   "license": "ISC",
@@ -26,5 +26,10 @@
     "router": "^1.3.5",
     "sequelize": "^6.3.3",
     "speakeasy": "^2.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.5.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0"
   }
 }
