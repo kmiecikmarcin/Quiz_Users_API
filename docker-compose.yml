@@ -1,0 +1,50 @@
+version: "3.7"
+services:
+  
+  app:
+    build: .
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: 2qazxsw
+      DATABASE_NAME: Quiz_Users
+      DATABASE_HOST: db
+    command: ["npm", "start"]
+    ports:
+      - 3000:3000
+    networks:
+      - frontend
+      - backend
+
+  db:
+    image: postgres
+    volumes:
+      - db-storage:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: Quiz_Users
+      POSTGRES_PASSWORD: 2qazxsw
+    networks:
+      - tools
+      - backend
+
+  adminer:
+    image: adminer
+    restart: on-failure
+    ports: 
+      - 8080:8080
+    networks:
+      - tools
+      - backend
+
+volumes:
+  db-storage:
+  node_modules:
+
+networks:
+  backend:
+  frontend:
+  tools:
