@@ -3,12 +3,17 @@
   "version": "1.0.0",
   "description": "Quiz Api",
   "main": "app.js",
+
+  "nodemonConfig:": {
+    "delay": 1000
+  },
   "scripts": {
-    "start": "node app.js"
+    "nodemon-start": "nodemon app.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "nodemon": "^2.0.4",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",

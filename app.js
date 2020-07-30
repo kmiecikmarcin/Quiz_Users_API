@@ -13,9 +13,9 @@ var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-sequelize.sync({force: true})
+sequelize.sync({force: false})
 .then(() => {
-  console.log(`Database & tables created!`);
+  console.log(`Database & tables created. Probably!`);
 });
 
 const port = process.env.PORT || 3000
