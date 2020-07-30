@@ -12,7 +12,7 @@ services:
       DATABASE_PASSWORD: 2qazxsw
       DATABASE_NAME: Quiz_Users
       DATABASE_HOST: db
-    command: ["npm", "start"]
+    command: ["nodemon", "app.js"]
     ports:
       - 3000:3000
     networks:
