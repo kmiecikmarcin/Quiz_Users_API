@@ -8,6 +8,7 @@ const Topics = require('./Models/Topics');
 const SubTopics = require('./Models/SubTopics');
 const Questions = require('./Models/Questions');
 const Repetitory = require('./Models/Repetitory');
+const RoutesUsers = require('./Routes/users');
 
 var app = express();
 app.use(bodyParser.json());
@@ -20,7 +21,7 @@ sequelize.sync({force: false})
 
 const port = process.env.PORT || 3000
 
-//app.use('/users', Routes)
+app.use('api/v1/', RoutesUsers)
 
 app.listen(port)
 
