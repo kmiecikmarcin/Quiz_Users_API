@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser')
-const sequelize = require('./bin/database');
+const sequelize = require('./config/database');
 const TypesOfRoles = require('./Models/TypesOfRoles');
 const Users = require('./Models/Users');
 const Subjects = require('./Models/Subjects');
@@ -21,7 +21,7 @@ sequelize.sync({force: false})
 
 const port = process.env.PORT || 3000
 
-app.use('api/v1/', RoutesUsers)
+app.use('/api/v1', RoutesUsers);
 
 app.listen(port)
 
