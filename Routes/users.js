@@ -2,11 +2,50 @@ const express = require('express');
 const router = express.Router();
 require('dotenv').config();
 const { check , validationResult } = require('express-validator');
-const bcrypt = require('bcrypt');
 const Users = require('../Models/Users');
 const TypesOfRoles = require('../Models/TypesOfRoles');
+const register = require('../Controllers/register');
+const login = require('../Controllers/login');
 
-router.get('/login', (req,res) => {
+router.post('/login', 
+[
+check('userName').isLength({min:4,max:20})
+.isAlphanumeric()
+.trim(),
+
+check('userPassword','checkUserPassword')
+.isLength({min:6})
+.custom((value, {req}) => {
+    if (value != req.body.checkUserPassword) {
+        throw new Error("Hasła sa różne!");
+    } else {
+        return value;
+    }
+})
+.trim()
+],
+(req,res) => {
+    const error = validationResult(req);
+
+    if(!error.isEmpty())
+    {
+        res.send({Error: error});
+    }
+    else
+    {
+        Users.findOne({where: {name: req.body.userName}})
+        .then(users => {
+            if(users == null)
+            {
+                res.json({Komunikat: "Użytkownik nie istnieje!"});
+            }
+            else
+            {
+                login(res,req.body.userPassword,users.password);
+            }            
+        })
+        .catch()
+    }
 });
 
 router.post('/register',
@@ -18,7 +57,7 @@ check('userName').isLength({min:4,max:20})
 check('userPassword','checkUserPassword')
 .isLength({min:6})
 .custom((value, {req}) => {
-    if (value !== req.body.checkUserPassword) {
+    if (value != req.body.checkUserPassword) {
         throw new Error("Hasła sa różne!");
     } else {
         return value;
@@ -51,17 +90,8 @@ check('userEmail')
                     {
                         TypesOfRoles.findOne({where: {name: 'Uczeń'}})
                         .then(users => { 
-                            bcrypt.hash(req.body.userPassword, 8, function (err,hash){
-                                Users.create({
-                                    name: req.body.userName,
-                                    password: hash,
-                                    email: req.body.userEmail,
-                                    id_role: users.id
-                                })
-                                .then(() => res.json({Komunikat: "Rejestracja przebiegła pomyślnie!"}))
-                                .catch(err => res.json({err}) );
-                            });
-                        });
+                            register(res,Users,req.body.userName,req.body.userPassword,req.body.userEmail,users.id)
+                        })                       
                     }
                     else
                     {                       
