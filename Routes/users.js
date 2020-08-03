@@ -41,10 +41,10 @@ check('userPassword','checkUserPassword')
             }
             else
             {
-                login(res,req.body.userPassword,users.password);
+                login(res,req.body.userPassword,users.password,users.publicId,users.name,users.id_role);
             }            
         })
-        .catch()
+        .catch(err => res.json({err}) );
     }
 });
 
