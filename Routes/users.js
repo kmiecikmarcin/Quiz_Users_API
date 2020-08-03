@@ -6,12 +6,13 @@ const Users = require('../Models/Users');
 const TypesOfRoles = require('../Models/TypesOfRoles');
 const register = require('../Controllers/register');
 const login = require('../Controllers/login');
+const verifyToken = require('../Function/verifyJwtToken');
 const jwt = require('jsonwebtoken');
 
 router.get('/loginToken', verifyToken, (req,res) => {
     jwt.verify(req.token, 'secretKey', (err,authData) => {
         if(err){
-            res.sendStatus(403);
+            res.sendStatus(404);
         }
         else
         {
@@ -121,23 +122,6 @@ check('userEmail')
         .catch(err => res.json({err}) );
     }
 });
-
-function verifyToken(req,res,next)
-{
-    const bearerHeader = req.headers['authorization'];
-    console.log(bearerHeader)
-    if(typeof bearerHeader != 'undefined')
-    {
-        const bearer = bearerHeader.split(' ');
-        const bearerToken = bearer[1];
-        req.token = bearerToken;
-        next();
-    }
-    else
-    {
-        res.sendStatus(403);
-    }
-}
 
 module.exports = router;
 
