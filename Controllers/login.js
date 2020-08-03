@@ -7,7 +7,7 @@ function login(res,userPassword,user_password,userId,userName,userIdRole)
     {
         if(result == true)
         {
-            jwt.sign({publicId: userId, name: userName, id_role: userIdRole}, 'secretKey', (err,token) => 
+            jwt.sign({publicId: userId, name: userName, id_role: userIdRole}, 'secretKey', {expiresIn: '30s'}, (err,token) => 
             {
                 return res.json({token});
             });      
@@ -18,6 +18,5 @@ function login(res,userPassword,user_password,userId,userName,userIdRole)
         }
     });  
 }
-
 
 module.exports = login;
