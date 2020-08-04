@@ -68,6 +68,7 @@
         - api/v1/repetitory/takeSubtopicFromRepetitory
         - api/v1/repetitory/addNewSubtopic
         - api/v1/repetitory/addNewRepetitory
+        - api/v1/repetitory/updateRepetitory
     Endpointy nazwiązujące do działań z quizem:
         - api/v1/quiz/addNewTopic
         - api/v1/quiz/addNewQuestion
@@ -75,6 +76,7 @@
     Endpointy związane z zarządzaniem administracyjnym:
         - api/v1/administrator/acceptDeletedAccounts
         - api/v1/administrator/addNewTypeOfRole
+        - api/v1/administrator/deleteRepetitory
 
 
 
