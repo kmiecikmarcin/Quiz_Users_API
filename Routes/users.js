@@ -6,7 +6,6 @@ require('dotenv').config();
 const { check, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const Users = require('../Models/Users');
-const TypesOfRoles = require('../Models/TypesOfRoles');
 const register = require('../Controllers/register');
 const login = require('../Controllers/login');
 const verifyToken = require('../Function/verifyJwtToken');
@@ -24,6 +23,7 @@ router.get('/loginToken', verifyToken, (req, res) => {
 router.post('/login',
   [
     check('userName')
+      .isString()
       .isLength({ min: 4, max: 20 })
       .isAlphanumeric()
       .trim(),
@@ -81,6 +81,11 @@ router.post('/register',
       .trim()
       .isLength({ min: 4 })
       .isLowercase(),
+
+    check('userRole')
+      .trim()
+      .isAlphanumeric()
+      .equals('Uczeń'),
   ],
   (req, res) => {
     const error = validationResult(req);
@@ -94,11 +99,8 @@ router.post('/register',
             Users.findOne({ where: { email: req.body.userEmail } })
               .then((users) => {
                 if (users == null) {
-                  TypesOfRoles.findOne({ where: { name: 'Uczeń' } })
-                    .then((users) => {
-                      register(res, Users, req.body.userName, req.body.userPassword,
-                        req.body.userEmail, users.id);
-                    });
+                  register(res, Users, req.body.userName, req.body.userPassword,
+                    req.body.userEmail, req.body.userRole);
                 } else {
                   res.json({ Komunikat: 'Podanym e-mail jest już przypisany do użytkownika!' });
                 }

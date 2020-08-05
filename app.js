@@ -3,14 +3,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const sequelize = require('./config/database');
 const TypesOfRoles = require('./Models/TypesOfRoles');
-const Users = require('./Models/Users');
 const Subjects = require('./Models/Subjects');
-const Topics = require('./Models/Topics');
-const SubTopics = require('./Models/SubTopics');
-const Questions = require('./Models/Questions');
-const Repetitory = require('./Models/Repetitory');
 const RoutesUsers = require('./Routes/users');
 const fillTypesOfRoles = require('./Controllers/fillUsersRoles');
+const fillSubjects = require('./Controllers/fillSubjects');
 
 const app = express();
 app.use(bodyParser.json());
@@ -19,6 +15,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 sequelize.sync({ force: true })
   .then(() => {
     fillTypesOfRoles(TypesOfRoles);
+    fillSubjects(Subjects);
     console.log('Database & tables created. Probably!');
   });
 

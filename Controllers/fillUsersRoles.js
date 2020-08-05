@@ -3,10 +3,10 @@
 const array = ['Uczeń', 'Nauczyciel', 'Administrator'];
 
 function fillTypesOfRoles(TypesOfRoles) {
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < array.length; i++) {
     TypesOfRoles.findOne({ where: { name: array[i] } })
-      .then((users) => {
-        if (users === null) {
+      .then((roles) => {
+        if (roles === null) {
           TypesOfRoles.create({
             name: array[i],
           });

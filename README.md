@@ -77,6 +77,7 @@
         - api/v1/administrator/acceptDeletedAccounts
         - api/v1/administrator/addNewTypeOfRole
         - api/v1/administrator/deleteRepetitory
+        - api/v1/administrator/addNewSubject
 
 
 
