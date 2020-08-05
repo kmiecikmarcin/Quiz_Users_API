@@ -1,3 +1,5 @@
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable func-names */
 /* eslint-disable no-console */
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -5,14 +7,14 @@ const sequelize = require('./config/database');
 const TypesOfRoles = require('./Models/TypesOfRoles');
 const Subjects = require('./Models/Subjects');
 const RoutesUsers = require('./Routes/users');
-const fillTypesOfRoles = require('./Controllers/fillUsersRoles');
-const fillSubjects = require('./Controllers/fillSubjects');
+const fillTypesOfRoles = require('./Function/fillUsersRoles');
+const fillSubjects = require('./Function/fillSubjects');
 
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-sequelize.sync({ force: true })
+sequelize.sync({ force: false })
   .then(() => {
     fillTypesOfRoles(TypesOfRoles);
     fillSubjects(Subjects);
