@@ -9,9 +9,10 @@ const Users = require('../Models/Users');
 const register = require('../Controllers/register');
 const login = require('../Controllers/login');
 const verifyToken = require('../Function/verifyJwtToken');
+const TypesOfRoles = require('../Models/TypesOfRoles');
 
 router.get('/loginToken', verifyToken, (req, res) => {
-  jwt.verify(req.token, 'secretKey', (err, authData) => {
+  jwt.verify(req.token, process.env.secretKey, (err, authData) => {
     if (err) {
       res.sendStatus(403);
     } else {
@@ -62,7 +63,6 @@ router.post('/register',
   [
     check('userName')
       .isLength({ min: 4, max: 20 })
-      .isAlphanumeric()
       .trim(),
 
     check('userPassword', 'checkUserPassword')
@@ -84,7 +84,6 @@ router.post('/register',
 
     check('userRole')
       .trim()
-      .isAlphanumeric()
       .equals('Uczeń'),
   ],
   (req, res) => {
@@ -99,8 +98,11 @@ router.post('/register',
             Users.findOne({ where: { email: req.body.userEmail } })
               .then((users) => {
                 if (users == null) {
-                  register(res, Users, req.body.userName, req.body.userPassword,
-                    req.body.userEmail, req.body.userRole);
+                  TypesOfRoles.findOne({ where: { name: req.body.userRole } })
+                    .then((users) => {
+                      register(res, Users, req.body.userName, req.body.userPassword,
+                        req.body.userEmail, users.id);
+                    });
                 } else {
                   res.json({ Komunikat: 'Podanym e-mail jest już przypisany do użytkownika!' });
                 }
