@@ -14,16 +14,6 @@ const Subjects = require('../Models/Subjects');
 const Topics = require('../Models/Topics');
 const SubTopics = require('../Models/SubTopics');
 
-router.get('/loginToken', verifyToken, (req, res) => {
-  jwt.verify(req.token, process.env.secretKey, (err, authData) => {
-    if (err) {
-      res.sendStatus(403);
-    } else {
-      res.json({ Message: 'Create', authData });
-    }
-  });
-});
-
 router.post('/login',
   [
     check('userName')
@@ -181,5 +171,57 @@ router.get('/takeListOfSubTopics', verifyToken, (req, res) => {
     }
   });
 });
+
+router.post('/addNewTopic',
+  [
+    check('subject')
+      .isLength({ min: 4 })
+      .exists()
+      .isString()
+      .trim(),
+    check('topicName')
+      .isLength({ max: 30 })
+      .trim()
+      .exists()
+      .isString(),
+  ],
+  verifyToken, (req, res) => {
+    const error = validationResult(req);
+
+    if (!error.isEmpty()) {
+      res.send({ Error: error });
+    } else {
+      jwt.verify(req.token, process.env.secretKey, (err, authData) => {
+        if (err) {
+          res.sendStatus(403);
+        } else {
+          Users.findOne({ where: { publicId: authData.publicId, name: authData.name } })
+            .then((users) => {
+              if (users !== null) {
+                Subjects.findOne({ where: { name: req.body.subject } })
+                  .then((subjects) => {
+                    Topics.findOne({ where: { name: req.body.topicName } })
+                      .then((topic) => {
+                        if (topic !== null) {
+                          res.json({ Komunikat: 'Temat już istnieje!' });
+                        } else {
+                          Topics.create({
+                            name: req.body.topicName,
+                            id_subject: subjects.id,
+                          });
+                          res.json({ Komunikat: 'Pomyślnie dodano nowy temat!' });
+                        }
+                      })
+                      .catch((err) => res.json({ err }));
+                  })
+                  .catch((err) => res.json({ err }));
+              } else {
+                res.json({ Komunikat: 'Użytkownik nie istnieje!' });
+              }
+            });
+        }
+      });
+    }
+  });
 
 module.exports = router;
