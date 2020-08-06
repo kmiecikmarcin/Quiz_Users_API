@@ -208,11 +208,71 @@ router.post('/addNewTopic',
                           Topics.create({
                             name: req.body.topicName,
                             id_subject: subjects.id,
-                          });
-                          res.json({ Komunikat: 'Pomyślnie dodano nowy temat!' });
+                          })
+                            .then(() => {
+                              res.json({ Komunikat: 'Pomyślnie dodano nowy temat!' });
+                            })
+                            .catch((err) => res.json({ err }));
                         }
                       })
                       .catch((err) => res.json({ err }));
+                  })
+                  .catch((err) => res.json({ err }));
+              } else {
+                res.json({ Komunikat: 'Użytkownik nie istnieje!' });
+              }
+            });
+        }
+      });
+    }
+  });
+
+router.put('/updateTopic',
+  [
+    check('subject')
+      .isLength({ min: 4 })
+      .exists()
+      .isString()
+      .trim(),
+    check('oldTopicName')
+      .isLength({ min: 4 })
+      .exists()
+      .isString()
+      .trim(),
+    check('topicName')
+      .isLength({ max: 30 })
+      .trim()
+      .exists()
+      .isString(),
+  ],
+  verifyToken, (req, res) => {
+    const error = validationResult(req);
+
+    if (!error.isEmpty()) {
+      res.send({ Error: error });
+    } else {
+      jwt.verify(req.token, process.env.secretKey, (err, authData) => {
+        if (err) {
+          res.sendStatus(403);
+        } else {
+          Users.findOne({ where: { publicId: authData.publicId, name: authData.name } })
+            .then((users) => {
+              if (users !== null) {
+                Topics.findOne({ where: { name: req.body.oldTopicName } })
+                  .then((topic) => {
+                    if (topic !== null) {
+                      Topics.update({
+                        name: req.body.topicName,
+                      }, {
+                        where: { id_topic: topic.id },
+                      })
+                        .then(() => {
+                          res.json({ Komunikat: 'Pomyślnie zaktualizowano dane!' });
+                        })
+                        .catch((err) => res.json({ err }));
+                    } else {
+                      res.json({ Komunikat: 'Temat nie istnieje!' });
+                    }
                   })
                   .catch((err) => res.json({ err }));
               } else {
