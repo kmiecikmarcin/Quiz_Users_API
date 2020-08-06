@@ -10,6 +10,9 @@ const register = require('../Function/register');
 const login = require('../Function/login');
 const verifyToken = require('../Function/verifyJwtToken');
 const TypesOfRoles = require('../Models/TypesOfRoles');
+const Subjects = require('../Models/Subjects');
+const Topics = require('../Models/Topics');
+const SubTopics = require('../Models/SubTopics');
 
 router.get('/loginToken', verifyToken, (req, res) => {
   jwt.verify(req.token, process.env.secretKey, (err, authData) => {
@@ -115,5 +118,68 @@ router.post('/register',
         .catch((err) => res.json({ err }));
     }
   });
+
+router.get('/takeListOfSubject', verifyToken, (req, res) => {
+  jwt.verify(req.token, process.env.secretKey, (err, authData) => {
+    if (err) {
+      res.sendStatus(403);
+    } else {
+      Users.findOne({ where: { publicId: authData.publicId, name: authData.name } })
+        .then((users) => {
+          if (users !== null) {
+            Subjects.findAll({ attributes: ['name'] })
+              .then((subjects) => {
+                res.json(subjects);
+              })
+              .catch((err) => res.json({ err }));
+          } else {
+            res.json({ Komunikat: 'Użytkownik nie istnieje!' });
+          }
+        });
+    }
+  });
+});
+
+router.get('/takeListOfTopics', verifyToken, (req, res) => {
+  jwt.verify(req.token, process.env.secretKey, (err, authData) => {
+    if (err) {
+      res.sendStatus(403);
+    } else {
+      Users.findOne({ where: { publicId: authData.publicId, name: authData.name } })
+        .then((users) => {
+          if (users !== null) {
+            Topics.findAll({ attributes: ['name'] })
+              .then((topics) => {
+                res.json(topics);
+              })
+              .catch((err) => res.json({ err }));
+          } else {
+            res.json({ Komunikat: 'Użytkownik nie istnieje!' });
+          }
+        });
+    }
+  });
+});
+
+router.get('/takeListOfSubTopics', verifyToken, (req, res) => {
+  jwt.verify(req.token, process.env.secretKey, (err, authData) => {
+    if (err) {
+      res.sendStatus(403);
+    } else {
+      Users.findOne({ where: { publicId: authData.publicId, name: authData.name } })
+        .then((users) => {
+          if (users !== null) {
+            SubTopics.findAll({ attributes: ['name'] })
+              .then((subTopics) => {
+                res.json(subTopics);
+              })
+              .catch((err) => res.json({ err }));
+          } else {
+            res.json({ Komunikat: 'Użytkownik nie istnieje!' });
+          }
+        });
+    }
+  });
+});
 
 module.exports = router;
