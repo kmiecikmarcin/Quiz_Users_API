@@ -6,8 +6,8 @@ require('dotenv').config();
 const { check, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const Users = require('../Models/Users');
-const register = require('../Controllers/register');
-const login = require('../Controllers/login');
+const register = require('../Function/register');
+const login = require('../Function/login');
 const verifyToken = require('../Function/verifyJwtToken');
 const TypesOfRoles = require('../Models/TypesOfRoles');
 

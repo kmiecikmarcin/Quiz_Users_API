@@ -65,12 +65,14 @@
         - api/v1/user/login/forgotPassword
         - api/v1/user/login/forgotLogin
     Endpointy nawiązujące do działań użytkownik - repetytorium:
-        - api/v1/repetitory/takeSubtopicFromRepetitory
-        - api/v1/repetitory/addNewSubtopic
+        - api/v1/repetitory/takeListOfSubject
+        - api/v1/repetitory/addNewSubTopic
+        - api/v1/repetitory/updateSubTopic
+        - api/v1/repetitory/addNewTopic
+        - api/v1/repetitory/updateTopic
         - api/v1/repetitory/addNewRepetitory
         - api/v1/repetitory/updateRepetitory
     Endpointy nazwiązujące do działań z quizem:
-        - api/v1/quiz/addNewTopic
         - api/v1/quiz/addNewQuestion
         - api/v1/quiz/takeQuestionsForQuiz
     Endpointy związane z zarządzaniem administracyjnym:
