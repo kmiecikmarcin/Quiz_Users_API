@@ -284,4 +284,113 @@ router.put('/updateTopic',
     }
   });
 
+router.post('/addNewSubTopic',
+  [
+    check('topicName')
+      .isLength({ max: 30 })
+      .trim()
+      .exists()
+      .isString(),
+    check('subTopicName')
+      .isLength({ max: 30 })
+      .trim()
+      .exists()
+      .isString(),
+  ],
+  verifyToken, (req, res) => {
+    const error = validationResult(req);
+
+    if (!error.isEmpty()) {
+      res.send({ Error: error });
+    } else {
+      jwt.verify(req.token, process.env.secretKey, (err, authData) => {
+        if (err) {
+          res.sendStatus(403);
+        } else {
+          Users.findOne({ where: { publicId: authData.publicId, name: authData.name } })
+            .then((users) => {
+              if (users !== null) {
+                Topics.findOne({ where: { name: req.body.topicName } })
+                  .then((topics) => {
+                    if (topics !== null) {
+                      SubTopics.create({
+                        name: req.body.subTopicName,
+                        id_user: users.id,
+                        id_topic: topics.id,
+                      })
+                        .then(() => {
+                          res.json({ Komunikat: 'Pomyślnie dodano nowy rozdział!' });
+                        })
+                        .catch((err) => res.json({ err }));
+                    } else {
+                      res.json({ Komunikat: 'Rozdział nie istnieje!' });
+                    }
+                  })
+                  .catch((err) => res.json({ err }));
+              } else {
+                res.json({ Komunikat: 'Użytkownik nie istnieje!' });
+              }
+            });
+        }
+      });
+    }
+  });
+
+router.put('/updateSubTopic',
+  [
+    check('topicName')
+      .isLength({ max: 30 })
+      .trim()
+      .exists()
+      .isString(),
+    check('oldSubTopicName')
+      .isLength({ max: 30 })
+      .trim()
+      .exists()
+      .isString(),
+    check('newSubTopicName')
+      .isLength({ max: 30 })
+      .trim()
+      .exists()
+      .isString(),
+  ],
+  verifyToken, (req, res) => {
+    const error = validationResult(req);
+
+    if (!error.isEmpty()) {
+      res.send({ Error: error });
+    } else {
+      jwt.verify(req.token, process.env.secretKey, (err, authData) => {
+        if (err) {
+          res.sendStatus(403);
+        } else {
+          Users.findOne({ where: { publicId: authData.publicId, name: authData.name } })
+            .then((users) => {
+              if (users !== null) {
+                SubTopics.findOne({ where: { name: req.body.oldSubTopicName } })
+                  .then((subTopics) => {
+                    if (subTopics !== null) {
+                      SubTopics.update({
+                        name: req.body.newSubTopicName,
+                      }, {
+                        where: { id_subtopic: subTopics.id },
+                      })
+                        .then(() => {
+                          res.json({ Komunikat: 'Pomyślnie zaktualizowano dane!' });
+                        })
+                        .catch((err) => res.json({ err }));
+                    } else {
+                      res.json({ Komunikat: 'Rozdział nie istnieje!' });
+                    }
+                  })
+                  .catch((err) => res.json({ err }));
+              } else {
+                res.json({ Komunikat: 'Użytkownik nie istnieje!' });
+              }
+            });
+        }
+      });
+    }
+  });
+
 module.exports = router;
