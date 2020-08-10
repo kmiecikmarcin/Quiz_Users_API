@@ -16,6 +16,7 @@ const TypesOfRoles = require('../Models/TypesOfRoles');
 const Subjects = require('../Models/Subjects');
 const Topics = require('../Models/Topics');
 const SubTopics = require('../Models/SubTopics');
+const Repetitory = require('../Models/Repetitory');
 const login = require('../Function/login');
 const checkTypeOfRole = require('../Function/checkUserRole');
 
@@ -176,7 +177,7 @@ router.post('/addNewTopic',
         if (err) {
           res.sendStatus(403);
         } else {
-          Users.findOne({ where: { publicId: authData.publicId, name: authData.name } })
+          Users.findOne({ where: { id: authData.id, name: authData.name } })
             .then((users) => {
               if (users !== null) {
                 Subjects.findOne({ where: { name: req.body.subject } })
@@ -236,7 +237,7 @@ router.put('/updateTopic',
         if (err) {
           res.sendStatus(403);
         } else {
-          Users.findOne({ where: { publicId: authData.publicId, name: authData.name } })
+          Users.findOne({ where: { id: authData.id, name: authData.name } })
             .then((users) => {
               if (users !== null) {
                 Topics.findOne({ where: { name: req.body.oldTopicName } })
@@ -288,7 +289,7 @@ router.post('/addNewSubTopic',
         if (err) {
           res.sendStatus(403);
         } else {
-          Users.findOne({ where: { publicId: authData.publicId, name: authData.name } })
+          Users.findOne({ where: { id: authData.id, name: authData.name } })
             .then((users) => {
               if (users !== null) {
                 Topics.findOne({ where: { name: req.body.topicName } })
@@ -345,7 +346,7 @@ router.put('/updateSubTopic',
         if (err) {
           res.sendStatus(403);
         } else {
-          Users.findOne({ where: { publicId: authData.publicId, name: authData.name } })
+          Users.findOne({ where: { id: authData.id, name: authData.name } })
             .then((users) => {
               if (users !== null) {
                 SubTopics.findOne({ where: { name: req.body.oldSubTopicName } })
@@ -369,6 +370,105 @@ router.put('/updateSubTopic',
                 res.json({ Komunikat: 'Użytkownik nie istnieje!' });
               }
             });
+        }
+      });
+    }
+  });
+
+router.post('/addNewRepetitory',
+  [
+    check('subTopicName')
+      .isLength({ max: 30 })
+      .trim()
+      .exists()
+      .isString(),
+    check('titleOfRepetitory')
+      .isLength({ max: 30 })
+      .trim()
+      .exists()
+      .isString(),
+    check('data')
+      .isLength({ max: 300 })
+      .trim()
+      .exists()
+      .isString(),
+  ],
+  verifyToken, (req, res) => {
+    const error = validationResult(req);
+
+    if (!error.isEmpty()) {
+      res.send({ Error: error });
+    } else {
+      jwt.verify(req.token, process.env.secretKey, (err, authData) => {
+        if (err) {
+          res.sendStatus(403);
+        } else {
+          SubTopics.findOne({ where: { name: req.body.subTopicName } })
+            .then((subTopic) => {
+              if (subTopic !== null) {
+                Repetitory.findOne({ where: { title: req.body.titleOfRepetitory } })
+                  .then((title) => {
+                    if (title === null) {
+                      TypesOfRoles.findOne({ where: { id: authData.id_role } })
+                        .then((roles) => {
+                          if (roles.name === 'Nauczyciel') {
+                            Repetitory.create({
+                              title: req.body.titleOfRepetitory,
+                              data: req.body.data,
+                              id_user: authData.id,
+                              id_subtopic: subTopic.id,
+                            })
+                              .then(() => {
+                                res.json({ Komunikat: 'Poprawnie dodano nowe repetytorium!' });
+                              })
+                              .catch((err) => res.json({ err }));
+                          } else {
+                            res.json({ Komunikat: 'Nie masz odpowiednich uprawnień!' });
+                          }
+                        })
+                        .catch((err) => res.json({ err }));
+                    } else {
+                      res.json({ Komunikat: 'Repetytorium już istnieje!' });
+                    }
+                  })
+                  .catch((err) => res.json({ err }));
+              }
+            })
+            .catch((err) => res.json({ err }));
+        }
+      });
+    }
+  });
+
+router.put('/updateNewRepetitory',
+  [
+    check('oldTitleOfRepetitory')
+      .isLength({ max: 30 })
+      .trim()
+      .exists()
+      .isString(),
+    check('titleOfRepetitory')
+      .isLength({ max: 30 })
+      .trim()
+      .exists()
+      .isString(),
+    check('data')
+      .isLength({ max: 300 })
+      .trim()
+      .exists()
+      .isString(),
+  ],
+  verifyToken, (req, res) => {
+    const error = validationResult(req);
+
+    if (!error.isEmpty()) {
+      res.send({ Error: error });
+    } else {
+      jwt.verify(req.token, process.env.secretKey, (err, authData) => {
+        if (err) {
+          res.sendStatus(403);
+        } else {
+          res.json();
         }
       });
     }

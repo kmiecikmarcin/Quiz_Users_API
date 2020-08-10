@@ -18,7 +18,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-sequelize.sync({ force: true })
+sequelize.sync({ force: false })
   .then(() => {
     fillTypesOfRoles(TypesOfRoles);
     fillSubjects(Subjects);

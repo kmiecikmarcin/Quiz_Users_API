@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 function login(res, userPassword, userpassword, userId, userName, userIdRole) {
   bcrypt.compare(userPassword, userpassword, function (err, result) {
     if (result === true) {
-      jwt.sign({ publicId: userId, name: userName, id_role: userIdRole }, process.env.secretKey, { expiresIn: '36h' }, (err, token) => {
+      jwt.sign({ id: userId, name: userName, id_role: userIdRole }, process.env.secretKey, { expiresIn: '36h' }, (err, token) => {
         res.json({ token });
       });
     } else {
