@@ -66,6 +66,8 @@
         - api/v1/user/login/forgotLogin
     Endpointy nawiązujące do działań użytkownik - repetytorium:
         - api/v1/repetitory/takeListOfSubject
+        - api/v1/repetitory/takeListOfTopics
+        - api/v1/repetitory/takeListOfSubTopics
         - api/v1/repetitory/addNewSubTopic
         - api/v1/repetitory/updateSubTopic
         - api/v1/repetitory/addNewTopic

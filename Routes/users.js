@@ -1,25 +1,18 @@
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable func-names */
 /* eslint-disable no-shadow */
 const express = require('express');
 
 const router = express.Router();
 require('dotenv').config();
 const { check, validationResult } = require('express-validator');
-const jwt = require('jsonwebtoken');
 const Users = require('../Models/Users');
 const register = require('../Function/register');
-const login = require('../Function/login');
-const verifyToken = require('../Function/verifyJwtToken');
+const checkUserName = require('../Function/checkUserName');
+const checkUserEmail = require('../Function/checkUserEmail');
 const TypesOfRoles = require('../Models/TypesOfRoles');
-
-router.get('/loginToken', verifyToken, (req, res) => {
-  jwt.verify(req.token, process.env.secretKey, (err, authData) => {
-    if (err) {
-      res.sendStatus(403);
-    } else {
-      res.json({ Message: 'Create', authData });
-    }
-  });
-});
+const login = require('../Function/login');
+const checkTypeOfRole = require('../Function/checkUserRole');
 
 router.post('/login',
   [
@@ -40,22 +33,14 @@ router.post('/login',
       })
       .trim(),
   ],
-  (req, res) => {
+  async (req, res) => {
     const error = validationResult(req);
-
     if (!error.isEmpty()) {
       res.send({ Error: error });
     } else {
-      Users.findOne({ where: { name: req.body.userName } })
-        .then((users) => {
-          if (users == null) {
-            res.json({ Komunikat: 'Użytkownik nie istnieje!' });
-          } else {
-            login(res, req.body.userPassword, users.password, users.publicId, users.name,
-              users.id_role);
-          }
-        })
-        .catch((err) => res.json({ err }));
+      const user = await checkUserName(Users, req.body.userName);
+      login(res, req.body.userPassword, user.password, user.id,
+        user.name, user.id_role);
     }
   });
 
@@ -86,33 +71,17 @@ router.post('/register',
       .trim()
       .equals('Uczeń'),
   ],
-  (req, res) => {
+  async (req, res) => {
     const error = validationResult(req);
 
     if (!error.isEmpty()) {
       res.send({ Error: error });
     } else {
-      Users.findOne({ where: { name: req.body.userName } })
-        .then((users) => {
-          if (users == null) {
-            Users.findOne({ where: { email: req.body.userEmail } })
-              .then((users) => {
-                if (users == null) {
-                  TypesOfRoles.findOne({ where: { name: req.body.userRole } })
-                    .then((users) => {
-                      register(res, Users, req.body.userName, req.body.userPassword,
-                        req.body.userEmail, users.id);
-                    });
-                } else {
-                  res.json({ Komunikat: 'Podanym e-mail jest już przypisany do użytkownika!' });
-                }
-              })
-              .catch((err) => res.json({ err }));
-          } else {
-            res.json({ Komunikat: 'Użytkownik o podanej nazwie już istnieje!' });
-          }
-        })
-        .catch((err) => res.json({ err }));
+      await checkUserName(Users, req.body.userName);
+      await checkUserEmail(Users, req.body.userEmail);
+      const typeOfRole = await checkTypeOfRole(TypesOfRoles, req.body.userRole);
+      register(res, Users, req.body.userName, req.body.userPassword,
+        req.body.userEmail, typeOfRole.id);
     }
   });
 
