@@ -11,6 +11,7 @@ const SubTopics = require('./Models/SubTopics');
 const Repetitory = require('./Models/Repetitory');
 const Questions = require('./Models/Questions');
 const RoutesUsers = require('./Routes/users');
+const RoutesRepetitory = require('./Routes/repetitory');
 const fillTypesOfRoles = require('./Function/fillUsersRoles');
 const fillSubjects = require('./Function/fillSubjects');
 
@@ -27,7 +28,8 @@ sequelize.sync({ force: false })
 
 const port = process.env.PORT || 3000;
 
-app.use('/api/v1', RoutesUsers);
+app.use('/api/v1/users', RoutesUsers);
+app.use('/api/v1/repetitory', RoutesRepetitory);
 
 app.listen(port);
 
