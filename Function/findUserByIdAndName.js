@@ -1,5 +1,5 @@
-function findUserByIdAndName(Users, authData) {
-  const user = Users.findOne({ where: { id: authData.id, name: authData.name } });
+async function findUserByIdAndName(Users, authData) {
+  const user = await Users.findOne({ where: { id: authData.id, name: authData.name } });
   if (user === null) {
     return 'Użytkownik nie istnieje!';
   }

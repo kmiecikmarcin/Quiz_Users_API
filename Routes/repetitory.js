@@ -17,6 +17,7 @@ const findAllSubTopics = require('../Function/findAllSubTopics');
 const findSubjectByName = require('../Function/findSubjectByName');
 const addNewTopic = require('../Function/addNewTopic');
 const updateTopicName = require('../Function/updateTopicName');
+const addNewSubTopic = require('../Function/addNewSubTopic');
 
 router.get('/takeListOfSubject', verifyToken, (req, res) => {
   jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
@@ -139,34 +140,14 @@ router.post('/addNewSubTopic',
     if (!error.isEmpty()) {
       res.send({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, (err, authData) => {
+      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
-          Users.findOne({ where: { id: authData.id, name: authData.name } })
-            .then((users) => {
-              if (users !== null) {
-                Topics.findOne({ where: { name: req.body.topicName } })
-                  .then((topics) => {
-                    if (topics !== null) {
-                      SubTopics.create({
-                        name: req.body.subTopicName,
-                        id_user: users.id,
-                        id_topic: topics.id,
-                      })
-                        .then(() => {
-                          res.json({ Komunikat: 'Pomyślnie dodano nowy rozdział!' });
-                        })
-                        .catch((catchError) => res.json({ catchError }));
-                    } else {
-                      res.json({ Komunikat: 'Rozdział nie istnieje!' });
-                    }
-                  })
-                  .catch((catchError) => res.json({ catchError }));
-              } else {
-                res.json({ Komunikat: 'Użytkownik nie istnieje!' });
-              }
-            });
+          const user = await findUserByIdAndName(Users, authData);
+          const addSubTopic = await addNewSubTopic(SubTopics, Topics, req.body.topicName,
+            req.body.subTopicName, user.id);
+          res.json({ addSubTopic });
         }
       });
     }
