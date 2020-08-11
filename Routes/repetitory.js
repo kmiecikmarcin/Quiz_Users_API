@@ -10,24 +10,17 @@ const Topics = require('../Models/Topics');
 const SubTopics = require('../Models/SubTopics');
 const Repetitory = require('../Models/Repetitory');
 const verifyToken = require('../Function/verifyJwtToken');
+const findAllSubjects = require('../Function/findAllSubjects');
+const findUserByIdAndName = require('../Function/findUserByIdAndName');
 
 router.get('/takeListOfSubject', verifyToken, (req, res) => {
-  jwt.verify(req.token, process.env.secretKey, (err, authData) => {
+  jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
     if (err) {
       res.sendStatus(403);
     } else {
-      Users.findOne({ where: { publicId: authData.publicId, name: authData.name } })
-        .then((users) => {
-          if (users !== null) {
-            Subjects.findAll({ attributes: ['name'] })
-              .then((subjects) => {
-                res.json(subjects);
-              })
-              .catch((catchError) => res.json({ catchError }));
-          } else {
-            res.json({ Komunikat: 'Użytkownik nie istnieje!' });
-          }
-        });
+      await findUserByIdAndName(Users, authData);
+      const subjects = await findAllSubjects(Subjects);
+      res.json(subjects);
     }
   });
 });
@@ -37,7 +30,7 @@ router.get('/takeListOfTopics', verifyToken, (req, res) => {
     if (err) {
       res.sendStatus(403);
     } else {
-      Users.findOne({ where: { publicId: authData.publicId, name: authData.name } })
+      Users.findOne({ where: { id: authData.id, name: authData.name } })
         .then((users) => {
           if (users !== null) {
             Topics.findAll({ attributes: ['name'] })
@@ -58,7 +51,7 @@ router.get('/takeListOfSubTopics', verifyToken, (req, res) => {
     if (err) {
       res.sendStatus(403);
     } else {
-      Users.findOne({ where: { publicId: authData.publicId, name: authData.name } })
+      Users.findOne({ where: { id: authData.id, name: authData.name } })
         .then((users) => {
           if (users !== null) {
             SubTopics.findAll({ attributes: ['name'] })
