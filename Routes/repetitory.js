@@ -12,6 +12,11 @@ const Repetitory = require('../Models/Repetitory');
 const verifyToken = require('../Function/verifyJwtToken');
 const findAllSubjects = require('../Function/findAllSubjects');
 const findUserByIdAndName = require('../Function/findUserByIdAndName');
+const findAllTopics = require('../Function/findAllTopics');
+const findAllSubTopics = require('../Function/findAllSubTopics');
+const findSubjectByName = require('../Function/findSubjectByName');
+const addNewTopic = require('../Function/addNewTopic');
+const updateTopicName = require('../Function/updateTopicName');
 
 router.get('/takeListOfSubject', verifyToken, (req, res) => {
   jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
@@ -26,43 +31,25 @@ router.get('/takeListOfSubject', verifyToken, (req, res) => {
 });
 
 router.get('/takeListOfTopics', verifyToken, (req, res) => {
-  jwt.verify(req.token, process.env.secretKey, (err, authData) => {
+  jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
     if (err) {
       res.sendStatus(403);
     } else {
-      Users.findOne({ where: { id: authData.id, name: authData.name } })
-        .then((users) => {
-          if (users !== null) {
-            Topics.findAll({ attributes: ['name'] })
-              .then((topics) => {
-                res.json(topics);
-              })
-              .catch((catchError) => res.json({ catchError }));
-          } else {
-            res.json({ Komunikat: 'Użytkownik nie istnieje!' });
-          }
-        });
+      await findUserByIdAndName(Users, authData);
+      const topics = await findAllTopics(Topics);
+      res.json({ topics });
     }
   });
 });
 
 router.get('/takeListOfSubTopics', verifyToken, (req, res) => {
-  jwt.verify(req.token, process.env.secretKey, (err, authData) => {
+  jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
     if (err) {
       res.sendStatus(403);
     } else {
-      Users.findOne({ where: { id: authData.id, name: authData.name } })
-        .then((users) => {
-          if (users !== null) {
-            SubTopics.findAll({ attributes: ['name'] })
-              .then((subTopics) => {
-                res.json(subTopics);
-              })
-              .catch((catchError) => res.json({ catchError }));
-          } else {
-            res.json({ Komunikat: 'Użytkownik nie istnieje!' });
-          }
-        });
+      await findUserByIdAndName(Users, authData);
+      const subTopics = await findAllSubTopics(SubTopics);
+      res.json({ subTopics });
     }
   });
 });
@@ -85,37 +72,14 @@ router.post('/addNewTopic',
     if (!error.isEmpty()) {
       res.send({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, (err, authData) => {
+      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
-          Users.findOne({ where: { id: authData.id, name: authData.name } })
-            .then((users) => {
-              if (users !== null) {
-                Subjects.findOne({ where: { name: req.body.subject } })
-                  .then((subjects) => {
-                    Topics.findOne({ where: { name: req.body.topicName } })
-                      .then((topic) => {
-                        if (topic !== null) {
-                          res.json({ Komunikat: 'Temat już istnieje!' });
-                        } else {
-                          Topics.create({
-                            name: req.body.topicName,
-                            id_subject: subjects.id,
-                          })
-                            .then(() => {
-                              res.json({ Komunikat: 'Pomyślnie dodano nowy temat!' });
-                            })
-                            .catch((catchError) => res.json({ catchError }));
-                        }
-                      })
-                      .catch((catchError) => res.json({ catchError }));
-                  })
-                  .catch((catchError) => res.json({ catchError }));
-              } else {
-                res.json({ Komunikat: 'Użytkownik nie istnieje!' });
-              }
-            });
+          await findUserByIdAndName(Users, authData);
+          const subject = await findSubjectByName(Subjects, req.body.subject);
+          const newTopic = await addNewTopic(Topics, req.body.topicName, subject.id);
+          res.json({ newTopic });
         }
       });
     }
@@ -144,34 +108,14 @@ router.put('/updateTopic',
     if (!error.isEmpty()) {
       res.send({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, (err, authData) => {
+      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
-          Users.findOne({ where: { id: authData.id, name: authData.name } })
-            .then((users) => {
-              if (users !== null) {
-                Topics.findOne({ where: { name: req.body.oldTopicName } })
-                  .then((topic) => {
-                    if (topic !== null) {
-                      Topics.update({
-                        name: req.body.topicName,
-                      }, {
-                        where: { id_topic: topic.id },
-                      })
-                        .then(() => {
-                          res.json({ Komunikat: 'Pomyślnie zaktualizowano dane!' });
-                        })
-                        .catch((catchError) => res.json({ catchError }));
-                    } else {
-                      res.json({ Komunikat: 'Temat nie istnieje!' });
-                    }
-                  })
-                  .catch((catchError) => res.json({ catchError }));
-              } else {
-                res.json({ Komunikat: 'Użytkownik nie istnieje!' });
-              }
-            });
+          await findUserByIdAndName(Users, authData);
+          const updateTopic = await updateTopicName(Topics, req.body.oldTopicName,
+            req.body.topicName);
+          res.json({ updateTopic });
         }
       });
     }
