@@ -18,6 +18,7 @@ const findSubjectByName = require('../Function/findSubjectByName');
 const addNewTopic = require('../Function/addNewTopic');
 const updateTopicName = require('../Function/updateTopicName');
 const addNewSubTopic = require('../Function/addNewSubTopic');
+const updateSubTopicName = require('../Function/updateSubTopicName');
 
 router.get('/takeListOfSubject', verifyToken, (req, res) => {
   jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
@@ -57,16 +58,16 @@ router.get('/takeListOfSubTopics', verifyToken, (req, res) => {
 
 router.post('/addNewTopic',
   [
-    check('subject')
-      .isLength({ min: 4 })
-      .exists()
-      .isString()
-      .trim(),
     check('topicName')
       .isLength({ max: 30 })
       .trim()
       .exists()
       .isString(),
+    check('subject')
+      .isLength({ min: 4 })
+      .exists()
+      .isString()
+      .trim(),
   ],
   verifyToken, (req, res) => {
     const error = validationResult(req);
@@ -98,7 +99,7 @@ router.put('/updateTopic',
       .exists()
       .isString()
       .trim(),
-    check('topicName')
+    check('newTopicName')
       .isLength({ max: 30 })
       .trim()
       .exists()
@@ -176,34 +177,14 @@ router.put('/updateSubTopic',
     if (!error.isEmpty()) {
       res.send({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, (err, authData) => {
+      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
-          Users.findOne({ where: { id: authData.id, name: authData.name } })
-            .then((users) => {
-              if (users !== null) {
-                SubTopics.findOne({ where: { name: req.body.oldSubTopicName } })
-                  .then((subTopics) => {
-                    if (subTopics !== null) {
-                      SubTopics.update({
-                        name: req.body.newSubTopicName,
-                      }, {
-                        where: { id_subtopic: subTopics.id },
-                      })
-                        .then(() => {
-                          res.json({ Komunikat: 'Pomyślnie zaktualizowano dane!' });
-                        })
-                        .catch((catchError) => res.json({ catchError }));
-                    } else {
-                      res.json({ Komunikat: 'Rozdział nie istnieje!' });
-                    }
-                  })
-                  .catch((catchError) => res.json({ catchError }));
-              } else {
-                res.json({ Komunikat: 'Użytkownik nie istnieje!' });
-              }
-            });
+          await findUserByIdAndName(Users, authData);
+          const updateSubTopic = await updateSubTopicName(SubTopics, req.body.oldSubTopicName,
+            req.body.newSubTopicName);
+          res.json({ updateSubTopic });
         }
       });
     }
@@ -268,39 +249,6 @@ router.post('/addNewRepetitory',
               }
             })
             .catch((catchError) => res.json({ catchError }));
-        }
-      });
-    }
-  });
-
-router.put('/updateNewRepetitory',
-  [
-    check('oldTitleOfRepetitory')
-      .isLength({ max: 30 })
-      .trim()
-      .exists()
-      .isString(),
-    check('titleOfRepetitory')
-      .isLength({ max: 30 })
-      .trim()
-      .exists()
-      .isString(),
-    check('data')
-      .isLength({ max: 300 })
-      .trim()
-      .exists()
-      .isString(),
-  ],
-  verifyToken, (req, res) => {
-    const error = validationResult(req);
-    if (!error.isEmpty()) {
-      res.send({ Error: error });
-    } else {
-      jwt.verify(req.token, process.env.secretKey, (err, authData) => {
-        if (err) {
-          res.sendStatus(403);
-        } else {
-          res.json();
         }
       });
     }

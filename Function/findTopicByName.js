@@ -3,7 +3,7 @@ async function findTopicByName(Topics, topicName) {
   if (result !== null) {
     return result;
   }
-  return 'Topics doesnt exists';
+  return 'Topic doesnt exists';
 }
 
 module.exports = findTopicByName;
