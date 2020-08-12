@@ -12,7 +12,7 @@ function register(res, Users, userName, userPassword, userEmail, usersId) {
       id_role: usersId,
     })
       .then(() => res.json({ Komunikat: 'Registration successful' }))
-      .catch((err) => res.json({ err }));
+      .catch(() => res.json({ catchError: 'User or email is exists!' }));
   });
 }
 

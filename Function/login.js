@@ -11,7 +11,7 @@ function login(res, userPassword, userpassword, userId, userName, userIdRole) {
         res.json({ token });
       });
     } else {
-      res.json({ Komunikat: 'User name or password is incorrect!' });
+      res.json({ Response: 'User name or password is incorrect!' });
     }
   });
 }

@@ -86,13 +86,15 @@ router.post('/register',
 
     if (!error.isEmpty()) {
       res.send({ Error: error });
-    } else {
-      await checkUserName(Users, req.body.userName);
-      await checkUserEmail(Users, req.body.userEmail);
-      const typeOfRole = await checkTypeOfRole(TypesOfRoles, req.body.userRole);
-      register(res, Users, req.body.userName, req.body.userPassword,
-        req.body.userEmail, typeOfRole.id);
     }
+    const user = await checkUserName(Users, req.body.userName);
+    if (user !== null) { res.json({ Resposne: 'User with this nickname exists!'}); }
+    const email = await checkUserEmail(Users, req.body.userEmail);
+    if (email !== null) { res.json({ Resposne: 'User with this email exists!'}); }
+    const typeOfRole = await checkTypeOfRole(TypesOfRoles, req.body.userRole);
+    const result = await register(res, Users, req.body.userName, req.body.userPassword,
+      req.body.userEmail, typeOfRole.id);
+    res.json(result);
   });
 
 module.exports = router;
