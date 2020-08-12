@@ -8,6 +8,7 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     environment:
+      secretKey: default-secret-key
       DATABASE_USER: postgres
       DATABASE_PASSWORD: 2qazxsw
       DATABASE_NAME: Quiz_Users
