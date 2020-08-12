@@ -17,12 +17,14 @@ const checkTypeOfRole = require('../Function/checkUserRole');
 router.post('/login',
   [
     check('userName')
-      .isString()
+      .exists()
+      .notEmpty()
       .isLength({ min: 4, max: 20 })
       .isAlphanumeric()
       .trim(),
-
     check('userPassword', 'checkUserPassword')
+      .exists()
+      .notEmpty()
       .isLength({ min: 6 })
       .custom((value, { req }) => {
         if (value !== req.body.checkUserPassword) {
@@ -47,10 +49,14 @@ router.post('/login',
 router.post('/register',
   [
     check('userName')
+      .exists()
+      .notEmpty()
       .isLength({ min: 4, max: 20 })
       .trim(),
 
     check('userPassword', 'checkUserPassword')
+      .exists()
+      .notEmpty()
       .isLength({ min: 6 })
       .custom((value, { req }) => {
         if (value !== req.body.checkUserPassword) {
@@ -62,12 +68,16 @@ router.post('/register',
       .trim(),
 
     check('userEmail')
+      .exists()
+      .notEmpty()
       .isEmail()
       .trim()
       .isLength({ min: 4 })
       .isLowercase(),
 
     check('userRole')
+      .exists()
+      .notEmpty()
       .trim()
       .equals('Uczeń'),
   ],

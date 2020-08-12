@@ -16,7 +16,7 @@ async function addNewSubTopic(SubTopics, Topics, topicName, subTopicName, user) 
       }
       return 'Something went wrong!';
     }
-    return checkSubTopic;
+    return 'This subtopic exists!';
   }
   return 'This topic doesnt exists!';
 }

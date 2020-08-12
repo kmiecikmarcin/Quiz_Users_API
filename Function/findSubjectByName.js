@@ -3,7 +3,7 @@ async function findSubjectByName(Subjects, subject) {
   if (result !== null) {
     return result;
   }
-  return 'This subject doesnt exists!';
+  return null;
 }
 
 module.exports = findSubjectByName;

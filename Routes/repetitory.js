@@ -1,3 +1,4 @@
+/* eslint-disable newline-per-chained-call */
 const express = require('express');
 
 const router = express.Router();
@@ -25,7 +26,9 @@ router.get('/takeListOfSubject', verifyToken, (req, res) => {
     if (err) {
       res.sendStatus(403);
     } else {
-      await findUserByIdAndName(Users, authData);
+      const user = await findUserByIdAndName(Users, authData);
+      if (user === null) { res.json({ Error: 'User doesnt exists!' }); }
+
       const subjects = await findAllSubjects(Subjects);
       res.json(subjects);
     }
@@ -37,7 +40,9 @@ router.get('/takeListOfTopics', verifyToken, (req, res) => {
     if (err) {
       res.sendStatus(403);
     } else {
-      await findUserByIdAndName(Users, authData);
+      const user = await findUserByIdAndName(Users, authData);
+      if (user === null) { res.json({ Error: 'User doesnt exists!' }); }
+
       const topics = await findAllTopics(Topics);
       res.json({ topics });
     }
@@ -49,7 +54,9 @@ router.get('/takeListOfSubTopics', verifyToken, (req, res) => {
     if (err) {
       res.sendStatus(403);
     } else {
-      await findUserByIdAndName(Users, authData);
+      const user = await findUserByIdAndName(Users, authData);
+      if (user === null) { res.json({ Error: 'User doesnt exists!' }); }
+
       const subTopics = await findAllSubTopics(SubTopics);
       res.json({ subTopics });
     }
@@ -58,83 +65,18 @@ router.get('/takeListOfSubTopics', verifyToken, (req, res) => {
 
 router.post('/addNewTopic',
   [
-    check('topicName')
-      .isLength({ max: 30 })
-      .trim()
-      .exists()
-      .isString(),
     check('subject')
-      .isLength({ min: 4 })
       .exists()
-      .isString()
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
       .trim(),
-  ],
-  verifyToken, (req, res) => {
-    const error = validationResult(req);
-    if (!error.isEmpty()) {
-      res.send({ Error: error });
-    } else {
-      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
-        if (err) {
-          res.sendStatus(403);
-        } else {
-          await findUserByIdAndName(Users, authData);
-          const subject = await findSubjectByName(Subjects, req.body.subject);
-          const newTopic = await addNewTopic(Topics, req.body.topicName, subject.id);
-          res.json({ newTopic });
-        }
-      });
-    }
-  });
-
-router.put('/updateTopic',
-  [
-    check('subject')
-      .isLength({ min: 4 })
-      .exists()
-      .isString()
-      .trim(),
-    check('oldTopicName')
-      .isLength({ min: 4 })
-      .exists()
-      .isString()
-      .trim(),
-    check('newTopicName')
-      .isLength({ max: 30 })
-      .trim()
-      .exists()
-      .isString(),
-  ],
-  verifyToken, (req, res) => {
-    const error = validationResult(req);
-    if (!error.isEmpty()) {
-      res.send({ Error: error });
-    } else {
-      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
-        if (err) {
-          res.sendStatus(403);
-        } else {
-          await findUserByIdAndName(Users, authData);
-          const updateTopic = await updateTopicName(Topics, req.body.oldTopicName,
-            req.body.topicName);
-          res.json({ updateTopic });
-        }
-      });
-    }
-  });
-
-router.post('/addNewSubTopic',
-  [
     check('topicName')
-      .isLength({ max: 30 })
-      .trim()
       .exists()
-      .isString(),
-    check('subTopicName')
-      .isLength({ max: 30 })
-      .trim()
-      .exists()
-      .isString(),
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
   ],
   verifyToken, (req, res) => {
     const error = validationResult(req);
@@ -146,6 +88,86 @@ router.post('/addNewSubTopic',
           res.sendStatus(403);
         } else {
           const user = await findUserByIdAndName(Users, authData);
+          if (user === null) { res.json({ Error: 'User doesnt exists!' }); }
+
+          const subject = await findSubjectByName(Subjects, req.body.subject);
+          if (subject === null) { res.json({ Error: 'Subject doesnt exists!' }); }
+
+          const newTopic = await addNewTopic(Topics, req.body.topicName, user.id, subject.id);
+          res.json({ newTopic });
+        }
+      });
+    }
+  });
+
+router.put('/updateTopic',
+  [
+    check('subject')
+      .exists()
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
+    check('oldTopicName')
+      .exists()
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
+    check('newTopicName')
+      .exists()
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
+  ],
+  verifyToken, (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.send({ Error: error });
+    } else {
+      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+        if (err) {
+          res.sendStatus(403);
+        } else {
+          const user = await findUserByIdAndName(Users, authData);
+          if (user === null) { res.json({ Error: 'User doesnt exists!' }); }
+
+          const updateTopic = await updateTopicName(Topics, req.body.oldTopicName,
+            req.body.newTopicName, user.id);
+          res.json({ updateTopic });
+        }
+      });
+    }
+  });
+
+router.post('/addNewSubTopic',
+  [
+    check('topicName')
+      .exists()
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
+    check('subTopicName')
+      .exists()
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
+  ],
+  verifyToken, (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.send({ Error: error });
+    } else {
+      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+        if (err) {
+          res.sendStatus(403);
+        } else {
+          const user = await findUserByIdAndName(Users, authData);
+          if (user === null) { res.json({ Error: 'User doesnt exists!' }); }
+
           const addSubTopic = await addNewSubTopic(SubTopics, Topics, req.body.topicName,
             req.body.subTopicName, user.id);
           res.json({ addSubTopic });
@@ -157,20 +179,23 @@ router.post('/addNewSubTopic',
 router.put('/updateSubTopic',
   [
     check('topicName')
-      .isLength({ max: 30 })
-      .trim()
       .exists()
-      .isString(),
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
     check('oldSubTopicName')
-      .isLength({ max: 30 })
-      .trim()
       .exists()
-      .isString(),
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
     check('newSubTopicName')
-      .isLength({ max: 30 })
-      .trim()
       .exists()
-      .isString(),
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
   ],
   verifyToken, (req, res) => {
     const error = validationResult(req);
@@ -193,20 +218,22 @@ router.put('/updateSubTopic',
 router.post('/addNewRepetitory',
   [
     check('subTopicName')
-      .isLength({ max: 30 })
-      .trim()
       .exists()
-      .isString(),
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
     check('titleOfRepetitory')
-      .isLength({ max: 30 })
-      .trim()
       .exists()
-      .isString(),
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
     check('data')
-      .isLength({ max: 300 })
-      .trim()
       .exists()
-      .isString(),
+      .notEmpty()
+      .isLength({ min: 1, max: 300 })
+      .trim(),
   ],
   verifyToken, (req, res) => {
     const error = validationResult(req);

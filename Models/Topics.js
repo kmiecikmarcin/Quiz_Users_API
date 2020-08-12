@@ -1,6 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const Subjects = require('./Subjects');
+const Users = require('./Users');
 
 const Topics = sequelize.define('Topics', {
   id: {
@@ -21,6 +22,12 @@ const Topics = sequelize.define('Topics', {
   timestamps: true,
 });
 
+Users.hasMany(Topics, {
+  foreignKey: {
+    allowNull: false,
+    name: 'id_user',
+  },
+});
 Subjects.hasMany(Topics, {
   foreignKey: {
     allowNull: false,

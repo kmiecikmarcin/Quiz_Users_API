@@ -1,10 +1,11 @@
 const findTopicByName = require('./findTopicByName');
 
-async function updateTopicName(Topics, oldTopicName, topicName) {
+async function updateTopicName(Topics, oldTopicName, newTopicName, user) {
   const findTopic = await findTopicByName(Topics, oldTopicName);
   if (findTopic !== null) {
     const result = await Topics.update({
-      name: topicName,
+      name: newTopicName,
+      id_user: user,
     }, {
       where: { id_topic: findTopic.id },
     });
@@ -13,7 +14,7 @@ async function updateTopicName(Topics, oldTopicName, topicName) {
     }
     return 'Something went wrong!';
   }
-  return findTopic;
+  return 'Old topic name doesnt exists!';
 }
 
 module.exports = updateTopicName;

@@ -1,9 +1,9 @@
 async function checkSubTopicByName(SubTopics, subTopicName) {
-  const topic = await SubTopics.findOne({ where: { name: subTopicName } });
-  if (topic !== null) {
-    return 'This subtopic exists!';
+  const subTopic = await SubTopics.findOne({ where: { name: subTopicName } });
+  if (subTopic !== null) {
+    return subTopic;
   }
-  return topic;
+  return null;
 }
 
 module.exports = checkSubTopicByName;
