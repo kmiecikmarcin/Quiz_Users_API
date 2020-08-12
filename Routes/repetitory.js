@@ -1,75 +1,65 @@
+/* eslint-disable newline-per-chained-call */
 const express = require('express');
 
 const router = express.Router();
 const { check, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const Users = require('../Models/Users');
-const TypesOfRoles = require('../Models/TypesOfRoles');
 const Subjects = require('../Models/Subjects');
 const Topics = require('../Models/Topics');
 const SubTopics = require('../Models/SubTopics');
 const Repetitory = require('../Models/Repetitory');
 const verifyToken = require('../Function/verifyJwtToken');
+const findAllSubjects = require('../Function/findAllSubjects');
+const findUserByIdAndName = require('../Function/findUserByIdAndName');
+const findAllTopics = require('../Function/findAllTopics');
+const findAllSubTopics = require('../Function/findAllSubTopics');
+const findSubjectByName = require('../Function/findSubjectByName');
+const addNewTopic = require('../Function/addNewTopic');
+const updateTopicName = require('../Function/updateTopicName');
+const addNewSubTopic = require('../Function/addNewSubTopic');
+const updateSubTopicName = require('../Function/updateSubTopicName');
+const findSubTopicByName = require('../Function/findSubTopicByName');
+const addNewRepetitory = require('../Function/addNewRepetitory');
 
 router.get('/takeListOfSubject', verifyToken, (req, res) => {
-  jwt.verify(req.token, process.env.secretKey, (err, authData) => {
+  jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
     if (err) {
       res.sendStatus(403);
     } else {
-      Users.findOne({ where: { publicId: authData.publicId, name: authData.name } })
-        .then((users) => {
-          if (users !== null) {
-            Subjects.findAll({ attributes: ['name'] })
-              .then((subjects) => {
-                res.json(subjects);
-              })
-              .catch((catchError) => res.json({ catchError }));
-          } else {
-            res.json({ Komunikat: 'Użytkownik nie istnieje!' });
-          }
-        });
+      const user = await findUserByIdAndName(Users, authData);
+      if (user === null) { res.json({ Error: 'User doesnt exists!' }); }
+
+      const subjects = await findAllSubjects(Subjects);
+      res.json(subjects);
     }
   });
 });
 
 router.get('/takeListOfTopics', verifyToken, (req, res) => {
-  jwt.verify(req.token, process.env.secretKey, (err, authData) => {
+  jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
     if (err) {
       res.sendStatus(403);
     } else {
-      Users.findOne({ where: { publicId: authData.publicId, name: authData.name } })
-        .then((users) => {
-          if (users !== null) {
-            Topics.findAll({ attributes: ['name'] })
-              .then((topics) => {
-                res.json(topics);
-              })
-              .catch((catchError) => res.json({ catchError }));
-          } else {
-            res.json({ Komunikat: 'Użytkownik nie istnieje!' });
-          }
-        });
+      const user = await findUserByIdAndName(Users, authData);
+      if (user === null) { res.json({ Error: 'User doesnt exists!' }); }
+
+      const topics = await findAllTopics(Topics);
+      res.json({ topics });
     }
   });
 });
 
 router.get('/takeListOfSubTopics', verifyToken, (req, res) => {
-  jwt.verify(req.token, process.env.secretKey, (err, authData) => {
+  jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
     if (err) {
       res.sendStatus(403);
     } else {
-      Users.findOne({ where: { publicId: authData.publicId, name: authData.name } })
-        .then((users) => {
-          if (users !== null) {
-            SubTopics.findAll({ attributes: ['name'] })
-              .then((subTopics) => {
-                res.json(subTopics);
-              })
-              .catch((catchError) => res.json({ catchError }));
-          } else {
-            res.json({ Komunikat: 'Użytkownik nie istnieje!' });
-          }
-        });
+      const user = await findUserByIdAndName(Users, authData);
+      if (user === null) { res.json({ Error: 'User doesnt exists!' }); }
+
+      const subTopics = await findAllSubTopics(SubTopics);
+      res.json({ subTopics });
     }
   });
 });
@@ -77,52 +67,35 @@ router.get('/takeListOfSubTopics', verifyToken, (req, res) => {
 router.post('/addNewTopic',
   [
     check('subject')
-      .isLength({ min: 4 })
       .exists()
-      .isString()
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
       .trim(),
     check('topicName')
-      .isLength({ max: 30 })
-      .trim()
       .exists()
-      .isString(),
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
   ],
   verifyToken, (req, res) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
       res.send({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, (err, authData) => {
+      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
-          Users.findOne({ where: { id: authData.id, name: authData.name } })
-            .then((users) => {
-              if (users !== null) {
-                Subjects.findOne({ where: { name: req.body.subject } })
-                  .then((subjects) => {
-                    Topics.findOne({ where: { name: req.body.topicName } })
-                      .then((topic) => {
-                        if (topic !== null) {
-                          res.json({ Komunikat: 'Temat już istnieje!' });
-                        } else {
-                          Topics.create({
-                            name: req.body.topicName,
-                            id_subject: subjects.id,
-                          })
-                            .then(() => {
-                              res.json({ Komunikat: 'Pomyślnie dodano nowy temat!' });
-                            })
-                            .catch((catchError) => res.json({ catchError }));
-                        }
-                      })
-                      .catch((catchError) => res.json({ catchError }));
-                  })
-                  .catch((catchError) => res.json({ catchError }));
-              } else {
-                res.json({ Komunikat: 'Użytkownik nie istnieje!' });
-              }
-            });
+          const user = await findUserByIdAndName(Users, authData);
+          if (user === null) { res.json({ Error: 'User doesnt exists!' }); }
+
+          const subject = await findSubjectByName(Subjects, req.body.subject);
+          if (subject === null) { res.json({ Error: 'Subject doesnt exists!' }); }
+
+          const newTopic = await addNewTopic(Topics, req.body.topicName, user.id, subject.id);
+          res.json({ newTopic });
         }
       });
     }
@@ -131,54 +104,39 @@ router.post('/addNewTopic',
 router.put('/updateTopic',
   [
     check('subject')
-      .isLength({ min: 4 })
       .exists()
-      .isString()
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
       .trim(),
     check('oldTopicName')
-      .isLength({ min: 4 })
       .exists()
-      .isString()
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
       .trim(),
-    check('topicName')
-      .isLength({ max: 30 })
-      .trim()
+    check('newTopicName')
       .exists()
-      .isString(),
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
   ],
   verifyToken, (req, res) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
       res.send({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, (err, authData) => {
+      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
-          Users.findOne({ where: { id: authData.id, name: authData.name } })
-            .then((users) => {
-              if (users !== null) {
-                Topics.findOne({ where: { name: req.body.oldTopicName } })
-                  .then((topic) => {
-                    if (topic !== null) {
-                      Topics.update({
-                        name: req.body.topicName,
-                      }, {
-                        where: { id_topic: topic.id },
-                      })
-                        .then(() => {
-                          res.json({ Komunikat: 'Pomyślnie zaktualizowano dane!' });
-                        })
-                        .catch((catchError) => res.json({ catchError }));
-                    } else {
-                      res.json({ Komunikat: 'Temat nie istnieje!' });
-                    }
-                  })
-                  .catch((catchError) => res.json({ catchError }));
-              } else {
-                res.json({ Komunikat: 'Użytkownik nie istnieje!' });
-              }
-            });
+          const user = await findUserByIdAndName(Users, authData);
+          if (user === null) { res.json({ Error: 'User doesnt exists!' }); }
+
+          const updateTopic = await updateTopicName(Topics, req.body.oldTopicName,
+            req.body.newTopicName, user.id);
+          res.json({ updateTopic });
         }
       });
     }
@@ -187,49 +145,33 @@ router.put('/updateTopic',
 router.post('/addNewSubTopic',
   [
     check('topicName')
-      .isLength({ max: 30 })
-      .trim()
       .exists()
-      .isString(),
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
     check('subTopicName')
-      .isLength({ max: 30 })
-      .trim()
       .exists()
-      .isString(),
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
   ],
   verifyToken, (req, res) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
       res.send({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, (err, authData) => {
+      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
-          Users.findOne({ where: { id: authData.id, name: authData.name } })
-            .then((users) => {
-              if (users !== null) {
-                Topics.findOne({ where: { name: req.body.topicName } })
-                  .then((topics) => {
-                    if (topics !== null) {
-                      SubTopics.create({
-                        name: req.body.subTopicName,
-                        id_user: users.id,
-                        id_topic: topics.id,
-                      })
-                        .then(() => {
-                          res.json({ Komunikat: 'Pomyślnie dodano nowy rozdział!' });
-                        })
-                        .catch((catchError) => res.json({ catchError }));
-                    } else {
-                      res.json({ Komunikat: 'Rozdział nie istnieje!' });
-                    }
-                  })
-                  .catch((catchError) => res.json({ catchError }));
-              } else {
-                res.json({ Komunikat: 'Użytkownik nie istnieje!' });
-              }
-            });
+          const user = await findUserByIdAndName(Users, authData);
+          if (user === null) { res.json({ Error: 'User doesnt exists!' }); }
+
+          const addSubTopic = await addNewSubTopic(SubTopics, Topics, req.body.topicName,
+            req.body.subTopicName, user.id);
+          res.json({ addSubTopic });
         }
       });
     }
@@ -238,54 +180,39 @@ router.post('/addNewSubTopic',
 router.put('/updateSubTopic',
   [
     check('topicName')
-      .isLength({ max: 30 })
-      .trim()
       .exists()
-      .isString(),
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
     check('oldSubTopicName')
-      .isLength({ max: 30 })
-      .trim()
       .exists()
-      .isString(),
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
     check('newSubTopicName')
-      .isLength({ max: 30 })
-      .trim()
       .exists()
-      .isString(),
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
   ],
   verifyToken, (req, res) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
       res.send({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, (err, authData) => {
+      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
-          Users.findOne({ where: { id: authData.id, name: authData.name } })
-            .then((users) => {
-              if (users !== null) {
-                SubTopics.findOne({ where: { name: req.body.oldSubTopicName } })
-                  .then((subTopics) => {
-                    if (subTopics !== null) {
-                      SubTopics.update({
-                        name: req.body.newSubTopicName,
-                      }, {
-                        where: { id_subtopic: subTopics.id },
-                      })
-                        .then(() => {
-                          res.json({ Komunikat: 'Pomyślnie zaktualizowano dane!' });
-                        })
-                        .catch((catchError) => res.json({ catchError }));
-                    } else {
-                      res.json({ Komunikat: 'Rozdział nie istnieje!' });
-                    }
-                  })
-                  .catch((catchError) => res.json({ catchError }));
-              } else {
-                res.json({ Komunikat: 'Użytkownik nie istnieje!' });
-              }
-            });
+          const user = await findUserByIdAndName(Users, authData);
+          if (user === null) { res.json({ Error: 'User doesnt exists!' }); }
+
+          const updateSubTopic = await updateSubTopicName(SubTopics, req.body.oldSubTopicName,
+            req.body.newSubTopicName, user.id);
+          res.json({ Response: updateSubTopic });
         }
       });
     }
@@ -294,95 +221,40 @@ router.put('/updateSubTopic',
 router.post('/addNewRepetitory',
   [
     check('subTopicName')
-      .isLength({ max: 30 })
-      .trim()
       .exists()
-      .isString(),
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
     check('titleOfRepetitory')
-      .isLength({ max: 30 })
-      .trim()
       .exists()
-      .isString(),
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
     check('data')
-      .isLength({ max: 300 })
-      .trim()
       .exists()
-      .isString(),
+      .notEmpty()
+      .isLength({ min: 1, max: 300 })
+      .trim(),
   ],
   verifyToken, (req, res) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
       res.send({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, (err, authData) => {
+      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
-          SubTopics.findOne({ where: { name: req.body.subTopicName } })
-            .then((subTopic) => {
-              if (subTopic !== null) {
-                Repetitory.findOne({ where: { title: req.body.titleOfRepetitory } })
-                  .then((title) => {
-                    if (title === null) {
-                      TypesOfRoles.findOne({ where: { id: authData.id_role } })
-                        .then((roles) => {
-                          if (roles.name === 'Nauczyciel') {
-                            Repetitory.create({
-                              title: req.body.titleOfRepetitory,
-                              data: req.body.data,
-                              id_user: authData.id,
-                              id_subtopic: subTopic.id,
-                            })
-                              .then(() => {
-                                res.json({ Komunikat: 'Poprawnie dodano nowe repetytorium!' });
-                              })
-                              .catch((catchError) => res.json({ catchError }));
-                          } else {
-                            res.json({ Komunikat: 'Nie masz odpowiednich uprawnień!' });
-                          }
-                        })
-                        .catch((catchError) => res.json({ catchError }));
-                    } else {
-                      res.json({ Komunikat: 'Repetytorium już istnieje!' });
-                    }
-                  })
-                  .catch((catchError) => res.json({ catchError }));
-              }
-            })
-            .catch((catchError) => res.json({ catchError }));
-        }
-      });
-    }
-  });
+          const user = await findUserByIdAndName(Users, authData);
+          if (user === null) { res.json({ Error: 'User doesnt exists!' }); }
+          const subTopic = await findSubTopicByName(SubTopics, req.body.subTopicName);
+          if (subTopic === null) { res.json({ Error: 'Subtopic doesnt exists!' }); }
 
-router.put('/updateNewRepetitory',
-  [
-    check('oldTitleOfRepetitory')
-      .isLength({ max: 30 })
-      .trim()
-      .exists()
-      .isString(),
-    check('titleOfRepetitory')
-      .isLength({ max: 30 })
-      .trim()
-      .exists()
-      .isString(),
-    check('data')
-      .isLength({ max: 300 })
-      .trim()
-      .exists()
-      .isString(),
-  ],
-  verifyToken, (req, res) => {
-    const error = validationResult(req);
-    if (!error.isEmpty()) {
-      res.send({ Error: error });
-    } else {
-      jwt.verify(req.token, process.env.secretKey, (err, authData) => {
-        if (err) {
-          res.sendStatus(403);
-        } else {
-          res.json();
+          const addRepetitory = await addNewRepetitory(Repetitory, req.body.titleOfRepetitory,
+            req.body.data, user, subTopic.id);
+          res.json({ Resposne: addRepetitory });
         }
       });
     }

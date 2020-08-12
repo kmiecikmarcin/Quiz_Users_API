@@ -3,7 +3,7 @@
 async function checkUsersByName(Users, userName) {
   const users = await Users.findOne({ where: { name: userName } });
   if (users == null) {
-    return 'Użytkownik nie istnieje!';
+    return 'User doesnt exists!';
   }
   return users;
 }
