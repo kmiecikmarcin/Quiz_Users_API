@@ -81,20 +81,20 @@ router.post('/register',
       .trim()
       .equals('Uczeń'),
   ],
-  async (req, res) => {
+  async function (req, res) {
     const error = validationResult(req);
 
     if (!error.isEmpty()) {
       res.send({ Error: error });
     }
     const user = await checkUserName(Users, req.body.userName);
-    if (user !== null) { res.json({ Resposne: 'User with this nickname exists!'}); }
+    if (user !== null) { res.json({ Error: 'Users with this nickname exists!' }); return; }
     const email = await checkUserEmail(Users, req.body.userEmail);
-    if (email !== null) { res.json({ Resposne: 'User with this email exists!'}); }
+    if (email !== null) { res.json({ Error: 'Users with this email exists!' }); return; }
     const typeOfRole = await checkTypeOfRole(TypesOfRoles, req.body.userRole);
     const result = await register(res, Users, req.body.userName, req.body.userPassword,
       req.body.userEmail, typeOfRole.id);
-    res.json(result);
+    res.json({ result });
   });
 
 module.exports = router;
