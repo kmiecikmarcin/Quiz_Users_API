@@ -5,7 +5,6 @@ const router = express.Router();
 const { check, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const Users = require('../Models/Users');
-const TypesOfRoles = require('../Models/TypesOfRoles');
 const Subjects = require('../Models/Subjects');
 const Topics = require('../Models/Topics');
 const SubTopics = require('../Models/SubTopics');
@@ -20,6 +19,8 @@ const addNewTopic = require('../Function/addNewTopic');
 const updateTopicName = require('../Function/updateTopicName');
 const addNewSubTopic = require('../Function/addNewSubTopic');
 const updateSubTopicName = require('../Function/updateSubTopicName');
+const findSubTopicByName = require('../Function/findSubTopicByName');
+const addNewRepetitory = require('../Function/addNewRepetitory');
 
 router.get('/takeListOfSubject', verifyToken, (req, res) => {
   jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
@@ -206,10 +207,12 @@ router.put('/updateSubTopic',
         if (err) {
           res.sendStatus(403);
         } else {
-          await findUserByIdAndName(Users, authData);
+          const user = await findUserByIdAndName(Users, authData);
+          if (user === null) { res.json({ Error: 'User doesnt exists!' }); }
+
           const updateSubTopic = await updateSubTopicName(SubTopics, req.body.oldSubTopicName,
-            req.body.newSubTopicName);
-          res.json({ updateSubTopic });
+            req.body.newSubTopicName, user.id);
+          res.json({ Response: updateSubTopic });
         }
       });
     }
@@ -240,42 +243,18 @@ router.post('/addNewRepetitory',
     if (!error.isEmpty()) {
       res.send({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, (err, authData) => {
+      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
-          SubTopics.findOne({ where: { name: req.body.subTopicName } })
-            .then((subTopic) => {
-              if (subTopic !== null) {
-                Repetitory.findOne({ where: { title: req.body.titleOfRepetitory } })
-                  .then((title) => {
-                    if (title === null) {
-                      TypesOfRoles.findOne({ where: { id: authData.id_role } })
-                        .then((roles) => {
-                          if (roles.name === 'Nauczyciel') {
-                            Repetitory.create({
-                              title: req.body.titleOfRepetitory,
-                              data: req.body.data,
-                              id_user: authData.id,
-                              id_subtopic: subTopic.id,
-                            })
-                              .then(() => {
-                                res.json({ Komunikat: 'Poprawnie dodano nowe repetytorium!' });
-                              })
-                              .catch((catchError) => res.json({ catchError }));
-                          } else {
-                            res.json({ Komunikat: 'Nie masz odpowiednich uprawnień!' });
-                          }
-                        })
-                        .catch((catchError) => res.json({ catchError }));
-                    } else {
-                      res.json({ Komunikat: 'Repetytorium już istnieje!' });
-                    }
-                  })
-                  .catch((catchError) => res.json({ catchError }));
-              }
-            })
-            .catch((catchError) => res.json({ catchError }));
+          const user = await findUserByIdAndName(Users, authData);
+          if (user === null) { res.json({ Error: 'User doesnt exists!' }); }
+          const subTopic = await findSubTopicByName(SubTopics, req.body.subTopicName);
+          if (subTopic === null) { res.json({ Error: 'Subtopic doesnt exists!' }); }
+
+          const addRepetitory = await addNewRepetitory(Repetitory, req.body.titleOfRepetitory,
+            req.body.data, user, subTopic.id);
+          res.json({ Resposne: addRepetitory });
         }
       });
     }
