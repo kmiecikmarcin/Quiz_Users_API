@@ -1,21 +1,20 @@
 const findSubTopicByName = require('./findSubTopicByName');
-const Users = require('../Models/Users');
 
-async function updateSubTopicName(SubTopics, oldSubTopicName, newSubTopicName) {
+async function updateSubTopicName(SubTopics, oldSubTopicName, newSubTopicName, user) {
   const findSubTopic = await findSubTopicByName(SubTopics, oldSubTopicName);
   if (findSubTopic !== null) {
     const result = await SubTopics.update({
       name: newSubTopicName,
-      id_user: Users,
+      id_user: user,
     }, {
       where: { id_subtopic: findSubTopic.id },
     });
     if (result !== null) {
-      return 'Subtopic updated!';
+      return result;
     }
-    return 'Something went wrong!';
+    return null;
   }
-  return 'Subtopic doesnt exists!';
+  return null;
 }
 
 module.exports = updateSubTopicName;

@@ -12,13 +12,13 @@ async function addNewSubTopic(SubTopics, Topics, topicName, subTopicName, user) 
         id_topic: checkTopic.id,
       });
       if (result !== null) {
-        return 'New subtopic successfully added!';
+        return result;
       }
-      return 'Something went wrong!';
+      return null;
     }
-    return 'This subtopic exists!';
+    return null;
   }
-  return 'This topic doesnt exists!';
+  return null;
 }
 
 module.exports = addNewSubTopic;

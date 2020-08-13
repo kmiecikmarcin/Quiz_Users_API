@@ -9,9 +9,9 @@ async function addNewTopic(Topics, topicName, user, subjects) {
       id_subject: subjects,
     });
     if (result !== null) {
-      return 'New topic successfully added!';
+      return result;
     }
-    return 'Something went wrong!';
+    return null;
   }
   return null;
 }

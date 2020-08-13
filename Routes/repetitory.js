@@ -152,7 +152,11 @@ router.put('/updateTopic',
 
           const updateTopic = await updateTopicName(Topics, req.body.oldTopicName,
             req.body.newTopicName, user.id);
-          res.status(201).json({ updateTopic });
+          if (updateTopic) {
+            res.status(201).json({ Message: 'Topic updated!' });
+          } else {
+            res.status(400).json({ Message: 'Something went wrong!' });
+          }
         }
       });
     }
@@ -187,7 +191,11 @@ router.post('/addNewSubTopic',
 
           const addSubTopic = await addNewSubTopic(SubTopics, Topics, req.body.topicName,
             req.body.subTopicName, user.id);
-          res.status(201).json({ addSubTopic });
+          if (addSubTopic) {
+            res.status(201).json({ Message: 'New subtopic created!' });
+          } else {
+            res.status(400).json({ Message: 'Something went wrong!' });
+          }
         }
       });
     }
@@ -228,7 +236,11 @@ router.put('/updateSubTopic',
 
           const updateSubTopic = await updateSubTopicName(SubTopics, req.body.oldSubTopicName,
             req.body.newSubTopicName, user.id);
-          res.status(201).json({ Response: updateSubTopic });
+          if (updateSubTopic) {
+            res.status(201).json({ Message: 'Subtopic updated!' });
+          } else {
+            res.status(400).json({ Message: 'Something went wrong!' });
+          }
         }
       });
     }
@@ -270,7 +282,11 @@ router.post('/addNewRepetitory',
 
           const addRepetitory = await addNewRepetitory(Repetitory, req.body.titleOfRepetitory,
             req.body.data, user, subTopic.id);
-          res.status(201).json({ Resposne: addRepetitory });
+          if (addRepetitory) {
+            res.status(201).json({ Message: 'Repetitory added!' });
+          } else {
+            res.status(400).json({ Message: 'Something went wrong!' });
+          }
         }
       });
     }
