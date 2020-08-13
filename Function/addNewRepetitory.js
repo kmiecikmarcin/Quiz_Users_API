@@ -6,7 +6,6 @@ async function addNewRepetitory(Repetitory, titleOfRepetitory, repetitoryData, u
   const findRepetitory = await findRepetitoryByName(Repetitory, titleOfRepetitory);
   if (findRepetitory === null) {
     const userRole = await findUserRoleById(TypesOfRoles, user.id_role);
-    console.log(userRole);
     if (userRole === 'Nauczyciel') {
       const result = await Repetitory.create({
         title: titleOfRepetitory,
