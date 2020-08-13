@@ -1,0 +1,271 @@
+{
+	"info": {
+		"_postman_id": "9ad2ce43-4c73-4129-8198-feeae9fad1d8",
+		"name": "Repetitory - tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Take list of subjects",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA1ZDBlODM4LTJhNzctNGFmZS05ZmU0LTk3MTAyNjdiYjAxMyIsIm5hbWUiOiJrb3B5dGtvIiwiaWRfcm9sZSI6ImY5NmQ2YTJmLTM2ZjktNDQ0MC1iYzgwLTA2ODQxYTVhNGYzZSIsImlhdCI6MTU5NzMxMDcyNiwiZXhwIjoxNTk3NDQwMzI2fQ.5NkB4xrMgVCOjnW8MJ_OiZTv56Ui5ow7TgZIBe1-mcQ",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api/v1/repetitory/takeListOfSubject",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"repetitory",
+						"takeListOfSubject"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Take list of topics",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA1ZDBlODM4LTJhNzctNGFmZS05ZmU0LTk3MTAyNjdiYjAxMyIsIm5hbWUiOiJrb3B5dGtvIiwiaWRfcm9sZSI6ImY5NmQ2YTJmLTM2ZjktNDQ0MC1iYzgwLTA2ODQxYTVhNGYzZSIsImlhdCI6MTU5NzMxNDA2MCwiZXhwIjoxNTk3NDQzNjYwfQ.73MrdfPl0M2_RFNVPDZIPKYxSWJhT3zr6kHAq2o2LAo",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api/v1/repetitory/takeListOfTopics",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"repetitory",
+						"takeListOfTopics"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Take list of subtopics",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA1ZDBlODM4LTJhNzctNGFmZS05ZmU0LTk3MTAyNjdiYjAxMyIsIm5hbWUiOiJrb3B5dGtvIiwiaWRfcm9sZSI6ImY5NmQ2YTJmLTM2ZjktNDQ0MC1iYzgwLTA2ODQxYTVhNGYzZSIsImlhdCI6MTU5NzMxMDcyNiwiZXhwIjoxNTk3NDQwMzI2fQ.5NkB4xrMgVCOjnW8MJ_OiZTv56Ui5ow7TgZIBe1-mcQ",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api/v1/repetitory/takeListOfSubTopics",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"repetitory",
+						"takeListOfSubTopics"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add new topic",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc4NWQ4NzhlLTljMjMtNDllNi1iOTI3LWE1NmU0NjIwZmIyYSIsIm5hbWUiOiJrb3B5dGtvIiwiaWRfcm9sZSI6IjAyYTMzODM2LTExZTYtNDFiMS04NWQ4LTM4NWM1MTgwNzA5MCIsImlhdCI6MTU5NzIyMjA5NCwiZXhwIjoxNTk3MzUxNjk0fQ.A1c-T06K24fLlBHNnoMRED4zr4v-J4Mp4IKUvfwO5L4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"subject\": \"\",\r\n    \"topicName\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/repetitory/addNewTopic",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"repetitory",
+						"addNewTopic"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update topic",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA1ZDBlODM4LTJhNzctNGFmZS05ZmU0LTk3MTAyNjdiYjAxMyIsIm5hbWUiOiJrb3B5dGtvIiwiaWRfcm9sZSI6ImY5NmQ2YTJmLTM2ZjktNDQ0MC1iYzgwLTA2ODQxYTVhNGYzZSIsImlhdCI6MTU5NzMxMDcyNiwiZXhwIjoxNTk3NDQwMzI2fQ.5NkB4xrMgVCOjnW8MJ_OiZTv56Ui5ow7TgZIBe1-mcQ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"subject\": \"Biologia\",\r\n    \"oldTopicName\": \"Zwierzęta\",\r\n    \"newTopicName\": \"Rośliny\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/repetitory/updateTopic",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"repetitory",
+						"updateTopic"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add new subtopic",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc4NWQ4NzhlLTljMjMtNDllNi1iOTI3LWE1NmU0NjIwZmIyYSIsIm5hbWUiOiJrb3B5dGtvIiwiaWRfcm9sZSI6IjAyYTMzODM2LTExZTYtNDFiMS04NWQ4LTM4NWM1MTgwNzA5MCIsImlhdCI6MTU5NzIyMjA5NCwiZXhwIjoxNTk3MzUxNjk0fQ.A1c-T06K24fLlBHNnoMRED4zr4v-J4Mp4IKUvfwO5L4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"topicName\": \"Rośliny\",\r\n    \"subTopicName\": \"Kwiaty\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/repetitory/addNewSubTopic",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"repetitory",
+						"addNewSubTopic"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update subtopic",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc4NWQ4NzhlLTljMjMtNDllNi1iOTI3LWE1NmU0NjIwZmIyYSIsIm5hbWUiOiJrb3B5dGtvIiwiaWRfcm9sZSI6IjAyYTMzODM2LTExZTYtNDFiMS04NWQ4LTM4NWM1MTgwNzA5MCIsImlhdCI6MTU5NzIyMjA5NCwiZXhwIjoxNTk3MzUxNjk0fQ.A1c-T06K24fLlBHNnoMRED4zr4v-J4Mp4IKUvfwO5L4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"topicName\": \"Rośliny\",\r\n    \"oldSubTopicName\": \"Kwiaty\",\r\n    \"newSubTopicName\": \"Drzewa\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/repetitory/updateSubTopic",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"repetitory",
+						"updateSubTopic"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add new repetitory",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc4NWQ4NzhlLTljMjMtNDllNi1iOTI3LWE1NmU0NjIwZmIyYSIsIm5hbWUiOiJrb3B5dGtvIiwiaWRfcm9sZSI6IjAyYTMzODM2LTExZTYtNDFiMS04NWQ4LTM4NWM1MTgwNzA5MCIsImlhdCI6MTU5NzIyMjA5NCwiZXhwIjoxNTk3MzUxNjk0fQ.A1c-T06K24fLlBHNnoMRED4zr4v-J4Mp4IKUvfwO5L4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"subTopicName\": \"Drzewa\",\r\n    \"titleOfRepetitory\": \"Liściaste\",\r\n    \"data\": \"Drzewo liściaste nie ma igieł. Ale akcja!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/repetitory/addNewRepetitory",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"repetitory",
+						"addNewRepetitory"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

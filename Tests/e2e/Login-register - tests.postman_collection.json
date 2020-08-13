@@ -18,10 +18,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"userName\": \"kopytko\",\r\n    \"userPassword\": \"456789\",\r\n    \"checkUserPassword\": \"456789\",\r\n    \"userEmail\": \"akmiecik@gmail.com\"\r\n    \"userRole\": \"Uczeń\"\r\n}"
+					"raw": "{\r\n    \"userName\": \"kopytko2\",\r\n    \"userPassword\": \"456789\",\r\n    \"checkUserPassword\": \"456789\",\r\n    \"userEmail\": \"akmiecik@gmail.com\",\r\n    \"userRole\": \"Uczeń\"\r\n}"
 				},
 				"url": {
-					"raw": "localhost:3000/api/v1/register",
+					"raw": "localhost:3000/api/v1/users/register",
 					"host": [
 						"localhost"
 					],
@@ -29,6 +29,7 @@
 					"path": [
 						"api",
 						"v1",
+						"users",
 						"register"
 					]
 				}
@@ -65,32 +66,6 @@
 						"api",
 						"v1",
 						"login"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Check JWT Token",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwdWJsaWNJZCI6IjhiNWVhZWViLWI2ODgtNDBhNS1iY2M0LWNiYWE0Y2UyNzRmZCIsIm5hbWUiOiJrb3B5dGtvIiwiaWRfcm9sZSI6ImZlMjU2Y2ZiLThlZmYtNDhkNS04NWIxLTFiMWM3N2VmYjA4NSIsImlhdCI6MTU5NjQ2NDA2NiwiZXhwIjoxNTk2NDY0MDk2fQ.ZNuLDK2vaJ1KHckOUtAXNrvTFKrQQtY1nZuxjsEtOw0",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "localhost:3000/api/v1/loginToken",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"api",
-						"v1",
-						"loginToken"
 					]
 				}
 			},
