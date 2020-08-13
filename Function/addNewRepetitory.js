@@ -19,7 +19,8 @@ async function addNewRepetitory(Repetitory, titleOfRepetitory, repetitoryData, u
       }
       return null;
     }
-    return null;
+    const response = false;
+    return response;
   }
   return null;
 }

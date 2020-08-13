@@ -282,8 +282,11 @@ router.post('/addNewRepetitory',
 
           const addRepetitory = await addNewRepetitory(Repetitory, req.body.titleOfRepetitory,
             req.body.data, user, subTopic.id);
+          console.log(addRepetitory);
           if (addRepetitory) {
             res.status(201).json({ Message: 'Repetitory added!' });
+          } if (addRepetitory === false) {
+            res.status(400).json({ Message: 'You dont have permission!' });
           } else {
             res.status(400).json({ Message: 'Something went wrong!' });
           }
