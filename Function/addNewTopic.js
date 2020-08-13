@@ -1,7 +1,7 @@
 const checkTopicByName = require('./checkTopicByName');
 
 async function addNewTopic(Topics, topicName, user, subjects) {
-  const checkTopic = await checkTopicByName(Topics, topicName, false);
+  const checkTopic = await checkTopicByName(Topics, topicName);
   if (checkTopic === null) {
     const result = await Topics.create({
       name: topicName,
@@ -9,11 +9,11 @@ async function addNewTopic(Topics, topicName, user, subjects) {
       id_subject: subjects,
     });
     if (result !== null) {
-      return 'New topic successfully added!';
+      return result;
     }
-    return 'Something went wrong!';
+    return null;
   }
-  return checkTopic;
+  return null;
 }
 
 module.exports = addNewTopic;

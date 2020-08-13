@@ -3,17 +3,17 @@
 /* eslint-disable func-names */
 const bcrypt = require('bcrypt');
 
-function register(res, Users, userName, userPassword, userEmail, usersId) {
-  bcrypt.hash(userPassword, 8, function (err, hash) {
-    Users.create({
-      name: userName,
-      password: hash,
-      email: userEmail,
-      id_role: usersId,
-    })
-      .then(() => res.json({ Komunikat: 'Registration successful' }))
-      .catch((err) => res.json({ err }));
+async function register(res, Users, userName, userPassword, userEmail, usersId) {
+  const hash = await bcrypt.hash(userPassword, 8);
+
+  const user = await Users.create({
+    name: userName,
+    password: hash,
+    email: userEmail,
+    id_role: usersId,
   });
+
+  return user;
 }
 
 module.exports = register;

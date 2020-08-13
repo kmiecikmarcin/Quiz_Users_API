@@ -8,10 +8,10 @@ function login(res, userPassword, userpassword, userId, userName, userIdRole) {
   bcrypt.compare(userPassword, userpassword, function (err, result) {
     if (result === true) {
       jwt.sign({ id: userId, name: userName, id_role: userIdRole }, process.env.secretKey, { expiresIn: '36h' }, (err, token) => {
-        res.json({ token });
+        res.status(200).json({ token });
       });
     } else {
-      res.json({ Komunikat: 'User name or password is incorrect!' });
+      res.status(400).json({ Response: 'User name or password is incorrect!' });
     }
   });
 }

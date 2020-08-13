@@ -6,19 +6,23 @@ async function addNewRepetitory(Repetitory, titleOfRepetitory, repetitoryData, u
   const findRepetitory = await findRepetitoryByName(Repetitory, titleOfRepetitory);
   if (findRepetitory === null) {
     const userRole = await findUserRoleById(TypesOfRoles, user.id_role);
+    console.log(userRole);
     if (userRole === 'Nauczyciel') {
-      Repetitory.create({
+      const result = await Repetitory.create({
         title: titleOfRepetitory,
         data: repetitoryData,
         id_user: user.id,
         id_subtopic: subTopic,
       });
-      return 'Repetitory has been added!';
-    } if (userRole !== 'Nauczyciel') {
-      return 'You dont have perrmission for that operation!';
+      if (result !== null) {
+        return result;
+      }
+      return null;
     }
+    const response = false;
+    return response;
   }
-  return 'Repetitory exists!';
+  return null;
 }
 
 module.exports = addNewRepetitory;

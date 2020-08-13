@@ -28,10 +28,14 @@ router.get('/takeListOfSubject', verifyToken, (req, res) => {
       res.sendStatus(403);
     } else {
       const user = await findUserByIdAndName(Users, authData);
-      if (user === null) { res.json({ Error: 'User doesnt exists!' }); }
+      if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); }
 
       const subjects = await findAllSubjects(Subjects);
-      res.json(subjects);
+      if (subjects) {
+        res.status(200).json(subjects);
+      } else {
+        res.status(400).json({ Message: 'Something went wrong!' });
+      }
     }
   });
 });
@@ -42,10 +46,14 @@ router.get('/takeListOfTopics', verifyToken, (req, res) => {
       res.sendStatus(403);
     } else {
       const user = await findUserByIdAndName(Users, authData);
-      if (user === null) { res.json({ Error: 'User doesnt exists!' }); }
+      if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); }
 
       const topics = await findAllTopics(Topics);
-      res.json({ topics });
+      if (topics) {
+        res.status(200).json(topics);
+      } else {
+        res.status(400).json({ Message: 'Something went wrong!' });
+      }
     }
   });
 });
@@ -56,10 +64,14 @@ router.get('/takeListOfSubTopics', verifyToken, (req, res) => {
       res.sendStatus(403);
     } else {
       const user = await findUserByIdAndName(Users, authData);
-      if (user === null) { res.json({ Error: 'User doesnt exists!' }); }
+      if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); }
 
       const subTopics = await findAllSubTopics(SubTopics);
-      res.json({ subTopics });
+      if (subTopics) {
+        res.status(200).json(subTopics);
+      } else {
+        res.status(400).json({ Message: 'Something went wrong!' });
+      }
     }
   });
 });
@@ -82,20 +94,24 @@ router.post('/addNewTopic',
   verifyToken, (req, res) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
-      res.send({ Error: error });
+      res.status(400).json({ Error: error });
     } else {
       jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
           const user = await findUserByIdAndName(Users, authData);
-          if (user === null) { res.json({ Error: 'User doesnt exists!' }); }
+          if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); }
 
           const subject = await findSubjectByName(Subjects, req.body.subject);
-          if (subject === null) { res.json({ Error: 'Subject doesnt exists!' }); }
+          if (subject === null) { res.status(400).json({ Error: 'Subject doesnt exists!' }); }
 
           const newTopic = await addNewTopic(Topics, req.body.topicName, user.id, subject.id);
-          res.json({ newTopic });
+          if (newTopic) {
+            res.status(201).json({ Message: 'New topic created!' });
+          } else {
+            res.status(400).json({ Message: 'Something went wrong!' });
+          }
         }
       });
     }
@@ -125,18 +141,22 @@ router.put('/updateTopic',
   verifyToken, (req, res) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
-      res.send({ Error: error });
+      res.status(400).json({ Error: error });
     } else {
       jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
           const user = await findUserByIdAndName(Users, authData);
-          if (user === null) { res.json({ Error: 'User doesnt exists!' }); }
+          if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); }
 
           const updateTopic = await updateTopicName(Topics, req.body.oldTopicName,
             req.body.newTopicName, user.id);
-          res.json({ updateTopic });
+          if (updateTopic) {
+            res.status(201).json({ Message: 'Topic updated!' });
+          } else {
+            res.status(400).json({ Message: 'Something went wrong!' });
+          }
         }
       });
     }
@@ -160,18 +180,22 @@ router.post('/addNewSubTopic',
   verifyToken, (req, res) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
-      res.send({ Error: error });
+      res.status(400).json({ Error: error });
     } else {
       jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
           const user = await findUserByIdAndName(Users, authData);
-          if (user === null) { res.json({ Error: 'User doesnt exists!' }); }
+          if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); }
 
           const addSubTopic = await addNewSubTopic(SubTopics, Topics, req.body.topicName,
             req.body.subTopicName, user.id);
-          res.json({ addSubTopic });
+          if (addSubTopic) {
+            res.status(201).json({ Message: 'New subtopic created!' });
+          } else {
+            res.status(400).json({ Message: 'Something went wrong!' });
+          }
         }
       });
     }
@@ -208,11 +232,15 @@ router.put('/updateSubTopic',
           res.sendStatus(403);
         } else {
           const user = await findUserByIdAndName(Users, authData);
-          if (user === null) { res.json({ Error: 'User doesnt exists!' }); }
+          if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); }
 
           const updateSubTopic = await updateSubTopicName(SubTopics, req.body.oldSubTopicName,
             req.body.newSubTopicName, user.id);
-          res.json({ Response: updateSubTopic });
+          if (updateSubTopic) {
+            res.status(201).json({ Message: 'Subtopic updated!' });
+          } else {
+            res.status(400).json({ Message: 'Something went wrong!' });
+          }
         }
       });
     }
@@ -248,13 +276,20 @@ router.post('/addNewRepetitory',
           res.sendStatus(403);
         } else {
           const user = await findUserByIdAndName(Users, authData);
-          if (user === null) { res.json({ Error: 'User doesnt exists!' }); }
+          if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); }
           const subTopic = await findSubTopicByName(SubTopics, req.body.subTopicName);
-          if (subTopic === null) { res.json({ Error: 'Subtopic doesnt exists!' }); }
+          if (subTopic === null) { res.status(404).json({ Error: 'Subtopic doesnt exists!' }); }
 
           const addRepetitory = await addNewRepetitory(Repetitory, req.body.titleOfRepetitory,
             req.body.data, user, subTopic.id);
-          res.json({ Resposne: addRepetitory });
+          console.log(addRepetitory);
+          if (addRepetitory) {
+            res.status(201).json({ Message: 'Repetitory added!' });
+          } if (addRepetitory === false) {
+            res.status(400).json({ Message: 'You dont have permission!' });
+          } else {
+            res.status(400).json({ Message: 'Something went wrong!' });
+          }
         }
       });
     }

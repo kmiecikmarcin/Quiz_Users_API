@@ -1,9 +1,9 @@
 async function findAllSubjects(Subjects) {
   const subjects = await Subjects.findAll({ attributes: ['name'] });
-  if (subjects !== null) {
+  if (subjects.length !== 0) {
     return subjects;
   }
-  return 'Subjects doesnt exists!';
+  return null;
 }
 
 module.exports = findAllSubjects;

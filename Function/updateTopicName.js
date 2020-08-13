@@ -10,11 +10,11 @@ async function updateTopicName(Topics, oldTopicName, newTopicName, user) {
       where: { id_topic: findTopic.id },
     });
     if (result !== null) {
-      return 'Topic updated!';
+      return result;
     }
-    return 'Something went wrong!';
+    return null;
   }
-  return 'Old topic name doesnt exists!';
+  return null;
 }
 
 module.exports = updateTopicName;

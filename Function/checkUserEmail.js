@@ -1,9 +1,9 @@
 async function checkUserEmail(Users, userEmail) {
-  const user = await Users.findOne({ where: { email: userEmail } });
-  if (user !== null) {
-    return 'Email is already assigned to the other account!';
+  const email = await Users.findOne({ where: { email: userEmail } });
+  if (email !== null) {
+    return email;
   }
-  return user;
+  return null;
 }
 
 module.exports = checkUserEmail;
