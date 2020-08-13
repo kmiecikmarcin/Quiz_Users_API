@@ -12,7 +12,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA1ZDBlODM4LTJhNzctNGFmZS05ZmU0LTk3MTAyNjdiYjAxMyIsIm5hbWUiOiJrb3B5dGtvIiwiaWRfcm9sZSI6ImY5NmQ2YTJmLTM2ZjktNDQ0MC1iYzgwLTA2ODQxYTVhNGYzZSIsImlhdCI6MTU5NzMxMDcyNiwiZXhwIjoxNTk3NDQwMzI2fQ.5NkB4xrMgVCOjnW8MJ_OiZTv56Ui5ow7TgZIBe1-mcQ",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZWQwNzA2LWM3YmQtNDI3ZS1hYjY2LTA3NDcwYWY0ZGY1YyIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6ImVlZDgyYThmLTZmYWItNGFlNi1iNmI3LTIzNGYyZDYzN2UxZiIsImlhdCI6MTU5NzMyODI0NiwiZXhwIjoxNTk3NDU3ODQ2fQ.evcxL26kHIyY9tVwF0RL11UVkwOKIk7NEBQvhKoiX2Y",
 						"type": "text"
 					}
 				],
@@ -39,7 +39,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA1ZDBlODM4LTJhNzctNGFmZS05ZmU0LTk3MTAyNjdiYjAxMyIsIm5hbWUiOiJrb3B5dGtvIiwiaWRfcm9sZSI6ImY5NmQ2YTJmLTM2ZjktNDQ0MC1iYzgwLTA2ODQxYTVhNGYzZSIsImlhdCI6MTU5NzMxNDA2MCwiZXhwIjoxNTk3NDQzNjYwfQ.73MrdfPl0M2_RFNVPDZIPKYxSWJhT3zr6kHAq2o2LAo",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZWQwNzA2LWM3YmQtNDI3ZS1hYjY2LTA3NDcwYWY0ZGY1YyIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6ImVlZDgyYThmLTZmYWItNGFlNi1iNmI3LTIzNGYyZDYzN2UxZiIsImlhdCI6MTU5NzMyODI0NiwiZXhwIjoxNTk3NDU3ODQ2fQ.evcxL26kHIyY9tVwF0RL11UVkwOKIk7NEBQvhKoiX2Y",
 						"type": "text"
 					}
 				],
@@ -66,7 +66,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA1ZDBlODM4LTJhNzctNGFmZS05ZmU0LTk3MTAyNjdiYjAxMyIsIm5hbWUiOiJrb3B5dGtvIiwiaWRfcm9sZSI6ImY5NmQ2YTJmLTM2ZjktNDQ0MC1iYzgwLTA2ODQxYTVhNGYzZSIsImlhdCI6MTU5NzMxMDcyNiwiZXhwIjoxNTk3NDQwMzI2fQ.5NkB4xrMgVCOjnW8MJ_OiZTv56Ui5ow7TgZIBe1-mcQ",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZWQwNzA2LWM3YmQtNDI3ZS1hYjY2LTA3NDcwYWY0ZGY1YyIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6ImVlZDgyYThmLTZmYWItNGFlNi1iNmI3LTIzNGYyZDYzN2UxZiIsImlhdCI6MTU5NzMyODI0NiwiZXhwIjoxNTk3NDU3ODQ2fQ.evcxL26kHIyY9tVwF0RL11UVkwOKIk7NEBQvhKoiX2Y",
 						"type": "text"
 					}
 				],
@@ -93,13 +93,13 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc4NWQ4NzhlLTljMjMtNDllNi1iOTI3LWE1NmU0NjIwZmIyYSIsIm5hbWUiOiJrb3B5dGtvIiwiaWRfcm9sZSI6IjAyYTMzODM2LTExZTYtNDFiMS04NWQ4LTM4NWM1MTgwNzA5MCIsImlhdCI6MTU5NzIyMjA5NCwiZXhwIjoxNTk3MzUxNjk0fQ.A1c-T06K24fLlBHNnoMRED4zr4v-J4Mp4IKUvfwO5L4",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZWQwNzA2LWM3YmQtNDI3ZS1hYjY2LTA3NDcwYWY0ZGY1YyIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6ImVlZDgyYThmLTZmYWItNGFlNi1iNmI3LTIzNGYyZDYzN2UxZiIsImlhdCI6MTU5NzMyODI0NiwiZXhwIjoxNTk3NDU3ODQ2fQ.evcxL26kHIyY9tVwF0RL11UVkwOKIk7NEBQvhKoiX2Y",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"subject\": \"\",\r\n    \"topicName\": \"\"\r\n}",
+					"raw": "{\r\n    \"subject\": \"Biologia\",\r\n    \"topicName\": \"Rośliny\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -129,13 +129,13 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA1ZDBlODM4LTJhNzctNGFmZS05ZmU0LTk3MTAyNjdiYjAxMyIsIm5hbWUiOiJrb3B5dGtvIiwiaWRfcm9sZSI6ImY5NmQ2YTJmLTM2ZjktNDQ0MC1iYzgwLTA2ODQxYTVhNGYzZSIsImlhdCI6MTU5NzMxMDcyNiwiZXhwIjoxNTk3NDQwMzI2fQ.5NkB4xrMgVCOjnW8MJ_OiZTv56Ui5ow7TgZIBe1-mcQ",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZWQwNzA2LWM3YmQtNDI3ZS1hYjY2LTA3NDcwYWY0ZGY1YyIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6ImVlZDgyYThmLTZmYWItNGFlNi1iNmI3LTIzNGYyZDYzN2UxZiIsImlhdCI6MTU5NzMyODI0NiwiZXhwIjoxNTk3NDU3ODQ2fQ.evcxL26kHIyY9tVwF0RL11UVkwOKIk7NEBQvhKoiX2Y",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"subject\": \"Biologia\",\r\n    \"oldTopicName\": \"Zwierzęta\",\r\n    \"newTopicName\": \"Rośliny\"\r\n}",
+					"raw": "{\r\n    \"subject\": \"Biologia\",\r\n    \"oldTopicName\": \"Rośliny\",\r\n    \"newTopicName\": \"Zwierzęta\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -165,13 +165,13 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc4NWQ4NzhlLTljMjMtNDllNi1iOTI3LWE1NmU0NjIwZmIyYSIsIm5hbWUiOiJrb3B5dGtvIiwiaWRfcm9sZSI6IjAyYTMzODM2LTExZTYtNDFiMS04NWQ4LTM4NWM1MTgwNzA5MCIsImlhdCI6MTU5NzIyMjA5NCwiZXhwIjoxNTk3MzUxNjk0fQ.A1c-T06K24fLlBHNnoMRED4zr4v-J4Mp4IKUvfwO5L4",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZWQwNzA2LWM3YmQtNDI3ZS1hYjY2LTA3NDcwYWY0ZGY1YyIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6ImVlZDgyYThmLTZmYWItNGFlNi1iNmI3LTIzNGYyZDYzN2UxZiIsImlhdCI6MTU5NzMyODI0NiwiZXhwIjoxNTk3NDU3ODQ2fQ.evcxL26kHIyY9tVwF0RL11UVkwOKIk7NEBQvhKoiX2Y",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"topicName\": \"Rośliny\",\r\n    \"subTopicName\": \"Kwiaty\"\r\n}",
+					"raw": "{\r\n    \"topicName\": \"Zwierzęta\",\r\n    \"subTopicName\": \"Psy\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -201,13 +201,13 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc4NWQ4NzhlLTljMjMtNDllNi1iOTI3LWE1NmU0NjIwZmIyYSIsIm5hbWUiOiJrb3B5dGtvIiwiaWRfcm9sZSI6IjAyYTMzODM2LTExZTYtNDFiMS04NWQ4LTM4NWM1MTgwNzA5MCIsImlhdCI6MTU5NzIyMjA5NCwiZXhwIjoxNTk3MzUxNjk0fQ.A1c-T06K24fLlBHNnoMRED4zr4v-J4Mp4IKUvfwO5L4",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZWQwNzA2LWM3YmQtNDI3ZS1hYjY2LTA3NDcwYWY0ZGY1YyIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6ImVlZDgyYThmLTZmYWItNGFlNi1iNmI3LTIzNGYyZDYzN2UxZiIsImlhdCI6MTU5NzMyODI0NiwiZXhwIjoxNTk3NDU3ODQ2fQ.evcxL26kHIyY9tVwF0RL11UVkwOKIk7NEBQvhKoiX2Y",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"topicName\": \"Rośliny\",\r\n    \"oldSubTopicName\": \"Kwiaty\",\r\n    \"newSubTopicName\": \"Drzewa\"\r\n}",
+					"raw": "{\r\n    \"topicName\": \"Zwierzęta\",\r\n    \"oldSubTopicName\": \"Psy\",\r\n    \"newSubTopicName\": \"Koty\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -237,13 +237,13 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc4NWQ4NzhlLTljMjMtNDllNi1iOTI3LWE1NmU0NjIwZmIyYSIsIm5hbWUiOiJrb3B5dGtvIiwiaWRfcm9sZSI6IjAyYTMzODM2LTExZTYtNDFiMS04NWQ4LTM4NWM1MTgwNzA5MCIsImlhdCI6MTU5NzIyMjA5NCwiZXhwIjoxNTk3MzUxNjk0fQ.A1c-T06K24fLlBHNnoMRED4zr4v-J4Mp4IKUvfwO5L4",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZWQwNzA2LWM3YmQtNDI3ZS1hYjY2LTA3NDcwYWY0ZGY1YyIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6ImVlZDgyYThmLTZmYWItNGFlNi1iNmI3LTIzNGYyZDYzN2UxZiIsImlhdCI6MTU5NzMyODI0NiwiZXhwIjoxNTk3NDU3ODQ2fQ.evcxL26kHIyY9tVwF0RL11UVkwOKIk7NEBQvhKoiX2Y",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"subTopicName\": \"Drzewa\",\r\n    \"titleOfRepetitory\": \"Liściaste\",\r\n    \"data\": \"Drzewo liściaste nie ma igieł. Ale akcja!\"\r\n}",
+					"raw": "{\r\n    \"subTopicName\": \"Koty\",\r\n    \"titleOfRepetitory\": \"Dachowce\",\r\n    \"data\": \"eloeloeloeleoleo\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

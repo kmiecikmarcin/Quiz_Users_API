@@ -18,7 +18,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"userName\": \"kopytko2\",\r\n    \"userPassword\": \"456789\",\r\n    \"checkUserPassword\": \"456789\",\r\n    \"userEmail\": \"akmiecik@gmail.com\",\r\n    \"userRole\": \"Uczeń\"\r\n}"
+					"raw": "{\r\n    \"userEmail\": \"akmiecik@gmail.com\",\r\n    \"userPassword\": \"456789\",\r\n    \"checkUserPassword\": \"456789\",\r\n    \"userRole\": \"Uczeń\"\r\n}"
 				},
 				"url": {
 					"raw": "localhost:3000/api/v1/users/register",
@@ -49,7 +49,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"userName\": \"kopytko\",\r\n    \"userPassword\": \"456789\",\r\n    \"checkUserPassword\": \"456789\"\r\n}",
+					"raw": "{\r\n    \"userEmail\": \"akmiecik@gmail.com\",\r\n    \"userPassword\": \"456789\",\r\n    \"checkUserPassword\": \"456789\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -57,7 +57,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/api/v1/login",
+					"raw": "localhost:3000/api/v1/users/login",
 					"host": [
 						"localhost"
 					],
@@ -65,6 +65,7 @@
 					"path": [
 						"api",
 						"v1",
+						"users",
 						"login"
 					]
 				}
