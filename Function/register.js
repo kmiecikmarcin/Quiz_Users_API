@@ -4,21 +4,16 @@
 const bcrypt = require('bcrypt');
 
 async function register(res, Users, userName, userPassword, userEmail, usersId) {
-    const hash = await bcrypt.hash(userPassword, 8);
+  const hash = await bcrypt.hash(userPassword, 8);
 
-    let user = await Users.create({
-        name: userName,
-        password: hash,
-        email: userEmail,
-        id_role: usersId,
-    });
+  const user = await Users.create({
+    name: userName,
+    password: hash,
+    email: userEmail,
+    id_role: usersId,
+  });
 
-    /*if (user) {
-        res.json({Komunikat: 'Registration successful'})
-    } else {
-        res.json({catchError: 'User or email is exists!'})
-    }*/
-    return user;
+  return user;
 }
 
 module.exports = register;
