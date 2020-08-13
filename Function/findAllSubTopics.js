@@ -1,9 +1,9 @@
 async function findAllSubTopics(SubTopics) {
   const subTopics = await SubTopics.findAll({ attributes: ['name'] });
-  if (subTopics !== null) {
+  if (subTopics.length !== 0) {
     return subTopics;
   }
-  return 'Subtopics doesnt exists!';
+  return null;
 }
 
 module.exports = findAllSubTopics;

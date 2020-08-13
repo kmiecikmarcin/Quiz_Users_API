@@ -38,7 +38,7 @@ router.post('/login',
   async (req, res) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
-      res.send({ Error: error });
+      res.status(400).json({ Error: error });
     } else {
       const user = await checkUserName(Users, req.body.userName);
       login(res, req.body.userPassword, user.password, user.id,
@@ -84,29 +84,21 @@ router.post('/register',
   async function (req, res) {
     const error = validationResult(req);
 
-    try {
-      if (!error.isEmpty()) {
-        res.send({ Error: error });
-      }
-      const user = await checkUserName(Users, req.body.userName);
-      if (user !== null) { res.json({ Error: 'Users with this nickname exists!' }); return; }
-      const email = await checkUserEmail(Users, req.body.userEmail);
-      if (email !== null) { res.json({ Error: 'Users with this email exists!' }); return; }
-    } catch (e) {
-      res.sendStatus(400).json(e);
+    if (!error.isEmpty()) {
+      res.stauts(400).json({ Error: error });
     }
+    const user = await checkUserName(Users, req.body.userName);
+    if (user !== null) { res.status(400).json({ Error: 'Users with this nickname exists!' }); return; }
+    const email = await checkUserEmail(Users, req.body.userEmail);
+    if (email !== null) { res.status(400).json({ Error: 'Users with this email exists!' }); return; }
 
-    try {
-      const typeOfRole = await checkTypeOfRole(TypesOfRoles, req.body.userRole);
-      const result = await register(res, Users, req.body.userName, req.body.userPassword,
-        req.body.userEmail, typeOfRole.id);
-      if (result) {
-        res.json({ Message: 'Registration successful!' });
-      } else {
-        res.json({ Message: 'Registration process failed' });
-      }
-    } catch (e) {
-      res.sendStatus(500);
+    const typeOfRole = await checkTypeOfRole(TypesOfRoles, req.body.userRole);
+    const result = await register(res, Users, req.body.userName, req.body.userPassword,
+      req.body.userEmail, typeOfRole.id);
+    if (result) {
+      res.status(201).json({ Message: 'Registration successful!' });
+    } else {
+      res.status(400).json({ Message: 'Registration process failed' });
     }
   });
 
