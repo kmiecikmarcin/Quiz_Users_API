@@ -11,7 +11,7 @@ const SubTopics = require('../Models/SubTopics');
 const Repetitory = require('../Models/Repetitory');
 const verifyToken = require('../Function/verifyJwtToken');
 const findAllSubjects = require('../Function/findAllSubjects');
-const findUserByIdAndName = require('../Function/findUserByIdAndName');
+const findUserByIdAndEmail = require('../Function/findUserByIdAndEmail');
 const findAllTopics = require('../Function/findAllTopics');
 const findAllSubTopics = require('../Function/findAllSubTopics');
 const findSubjectByName = require('../Function/findSubjectByName');
@@ -27,7 +27,7 @@ router.get('/takeListOfSubject', verifyToken, (req, res) => {
     if (err) {
       res.sendStatus(403);
     } else {
-      const user = await findUserByIdAndName(Users, authData);
+      const user = await findUserByIdAndEmail(Users, authData);
       if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); }
 
       const subjects = await findAllSubjects(Subjects);
@@ -45,7 +45,7 @@ router.get('/takeListOfTopics', verifyToken, (req, res) => {
     if (err) {
       res.sendStatus(403);
     } else {
-      const user = await findUserByIdAndName(Users, authData);
+      const user = await findUserByIdAndEmail(Users, authData);
       if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); }
 
       const topics = await findAllTopics(Topics);
@@ -63,7 +63,7 @@ router.get('/takeListOfSubTopics', verifyToken, (req, res) => {
     if (err) {
       res.sendStatus(403);
     } else {
-      const user = await findUserByIdAndName(Users, authData);
+      const user = await findUserByIdAndEmail(Users, authData);
       if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); }
 
       const subTopics = await findAllSubTopics(SubTopics);
@@ -100,7 +100,7 @@ router.post('/addNewTopic',
         if (err) {
           res.sendStatus(403);
         } else {
-          const user = await findUserByIdAndName(Users, authData);
+          const user = await findUserByIdAndEmail(Users, authData);
           if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); }
 
           const subject = await findSubjectByName(Subjects, req.body.subject);
@@ -147,7 +147,7 @@ router.put('/updateTopic',
         if (err) {
           res.sendStatus(403);
         } else {
-          const user = await findUserByIdAndName(Users, authData);
+          const user = await findUserByIdAndEmail(Users, authData);
           if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); }
 
           const updateTopic = await updateTopicName(Topics, req.body.oldTopicName,
@@ -186,7 +186,7 @@ router.post('/addNewSubTopic',
         if (err) {
           res.sendStatus(403);
         } else {
-          const user = await findUserByIdAndName(Users, authData);
+          const user = await findUserByIdAndEmail(Users, authData);
           if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); }
 
           const addSubTopic = await addNewSubTopic(SubTopics, Topics, req.body.topicName,
@@ -231,7 +231,7 @@ router.put('/updateSubTopic',
         if (err) {
           res.sendStatus(403);
         } else {
-          const user = await findUserByIdAndName(Users, authData);
+          const user = await findUserByIdAndEmail(Users, authData);
           if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); }
 
           const updateSubTopic = await updateSubTopicName(SubTopics, req.body.oldSubTopicName,
@@ -275,14 +275,13 @@ router.post('/addNewRepetitory',
         if (err) {
           res.sendStatus(403);
         } else {
-          const user = await findUserByIdAndName(Users, authData);
+          const user = await findUserByIdAndEmail(Users, authData);
           if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); }
           const subTopic = await findSubTopicByName(SubTopics, req.body.subTopicName);
           if (subTopic === null) { res.status(404).json({ Error: 'Subtopic doesnt exists!' }); }
 
           const addRepetitory = await addNewRepetitory(Repetitory, req.body.titleOfRepetitory,
             req.body.data, user, subTopic.id);
-          console.log(addRepetitory);
           if (addRepetitory) {
             res.status(201).json({ Message: 'Repetitory added!' });
           } if (addRepetitory === false) {
