@@ -11,29 +11,16 @@ const Users = sequelize.define('Users', {
     allowNull: false,
     field: 'id_user',
   },
-  publicId: {
-    type: DataTypes.UUID,
-    defaultValue: Sequelize.UUIDV4,
-    unique: true,
-    allowNull: false,
-    field: 'public_id',
-  },
-  name: {
-    type: DataTypes.STRING(14),
-    unique: true,
-    allowNull: false,
-    field: 'user_name',
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    field: 'user_password',
-  },
   email: {
     type: DataTypes.STRING(100),
     unique: true,
     allowNull: false,
     field: 'email',
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    field: 'user_password',
   },
 }, {
   timestamps: true,

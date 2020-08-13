@@ -8,7 +8,6 @@ require('dotenv').config();
 const { check, validationResult } = require('express-validator');
 const Users = require('../Models/Users');
 const register = require('../Function/register');
-const checkUserName = require('../Function/checkUserName');
 const checkUserEmail = require('../Function/checkUserEmail');
 const TypesOfRoles = require('../Models/TypesOfRoles');
 const login = require('../Function/login');
@@ -16,11 +15,11 @@ const checkTypeOfRole = require('../Function/checkUserRole');
 
 router.post('/login',
   [
-    check('userName')
+    check('userEmail')
       .exists()
       .notEmpty()
-      .isLength({ min: 4, max: 20 })
-      .isAlphanumeric()
+      .isEmail()
+      .isLength({ min: 4 })
       .trim(),
     check('userPassword', 'checkUserPassword')
       .exists()
@@ -40,20 +39,21 @@ router.post('/login',
     if (!error.isEmpty()) {
       res.status(400).json({ Error: error });
     } else {
-      const user = await checkUserName(Users, req.body.userName);
+      const user = await checkUserEmail(Users, req.body.userEmail);
       login(res, req.body.userPassword, user.password, user.id,
-        user.name, user.id_role);
+        user.email, user.id_role);
     }
   });
 
 router.post('/register',
   [
-    check('userName')
+    check('userEmail')
       .exists()
       .notEmpty()
-      .isLength({ min: 4, max: 20 })
-      .trim(),
-
+      .isEmail()
+      .trim()
+      .isLength({ min: 4 })
+      .isLowercase(),
     check('userPassword', 'checkUserPassword')
       .exists()
       .notEmpty()
@@ -66,15 +66,6 @@ router.post('/register',
         }
       })
       .trim(),
-
-    check('userEmail')
-      .exists()
-      .notEmpty()
-      .isEmail()
-      .trim()
-      .isLength({ min: 4 })
-      .isLowercase(),
-
     check('userRole')
       .exists()
       .notEmpty()
@@ -87,14 +78,12 @@ router.post('/register',
     if (!error.isEmpty()) {
       res.stauts(400).json({ Error: error });
     }
-    const user = await checkUserName(Users, req.body.userName);
-    if (user !== null) { res.status(400).json({ Error: 'Users with this nickname exists!' }); return; }
     const email = await checkUserEmail(Users, req.body.userEmail);
     if (email !== null) { res.status(400).json({ Error: 'Users with this email exists!' }); return; }
 
     const typeOfRole = await checkTypeOfRole(TypesOfRoles, req.body.userRole);
-    const result = await register(res, Users, req.body.userName, req.body.userPassword,
-      req.body.userEmail, typeOfRole.id);
+    const result = await register(res, Users, req.body.userEmail, req.body.userPassword,
+      typeOfRole.id);
     if (result) {
       res.status(201).json({ Message: 'Registration successful!' });
     } else {
