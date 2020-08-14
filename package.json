@@ -8,7 +8,7 @@
   },
   "scripts": {
     "nodemon-start": "nodemon app.js",
-    "test": "newman run Tests/e2e/Login-register\\ -\\ tests.postman_collection.json",
+    "test": "newman run Tests/e2e/quiz-tests-collection.postman_collection.json",
     "nodemon-tests": "nodemon --delay 2500ms --watch . --exec 'npm run test || true'",
     "lint": "eslint ./"
   },
