@@ -1,0 +1,433 @@
+{
+	"info": {
+		"_postman_id": "61cb09a7-4841-412b-aee2-3d6d77c07c3d",
+		"name": "quiz-tests-collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "users - scenario 1",
+			"item": [
+				{
+					"name": "register",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1e04f120-26c6-4a8e-8e1c-0283597d2b4f",
+								"exec": [
+									"const random_number = _.random(1000, 9000);",
+									"const email = \"user+\" + random_number + \"@example.com\";",
+									"",
+									"pm.environment.set(\"email\", email);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "8edf1223-910e-411d-8027-03d62f755b5f",
+								"exec": [
+									"pm.test(\"Response is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.Message).to.eql(\"Registration successful!\");",
+									"});",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"checkUserPassword\": \"Test1234!\",\r\n    \"userPassword\": \"Test1234!\",\r\n    \"userRole\": \"Uczeń\",\r\n    \"userEmail\": \"{{email}}\"\r\n}"
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/users/register",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "026ecbd9-712e-4293-ab6e-2efc238069f7",
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d875a4ef-0882-4926-84f9-5587d2bab0c2",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userEmail\": \"{{email}}\",\r\n    \"checkUserPassword\": \"Test1234!\",\r\n    \"userPassword\": \"Test1234!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/users/login",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "04d4edb1-ec3d-42d2-ab15-fa3a6191a713",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "9471af88-9991-484b-addf-d3b4db49b5f8",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});"
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "repetitory",
+			"item": [
+				{
+					"name": "Take list of subjects",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZWQwNzA2LWM3YmQtNDI3ZS1hYjY2LTA3NDcwYWY0ZGY1YyIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6ImVlZDgyYThmLTZmYWItNGFlNi1iNmI3LTIzNGYyZDYzN2UxZiIsImlhdCI6MTU5NzMyODI0NiwiZXhwIjoxNTk3NDU3ODQ2fQ.evcxL26kHIyY9tVwF0RL11UVkwOKIk7NEBQvhKoiX2Y",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/api/v1/repetitory/takeListOfSubject",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"repetitory",
+								"takeListOfSubject"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Take list of topics",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZWQwNzA2LWM3YmQtNDI3ZS1hYjY2LTA3NDcwYWY0ZGY1YyIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6ImVlZDgyYThmLTZmYWItNGFlNi1iNmI3LTIzNGYyZDYzN2UxZiIsImlhdCI6MTU5NzMyODI0NiwiZXhwIjoxNTk3NDU3ODQ2fQ.evcxL26kHIyY9tVwF0RL11UVkwOKIk7NEBQvhKoiX2Y",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/api/v1/repetitory/takeListOfTopics",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"repetitory",
+								"takeListOfTopics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Take list of subtopics",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZWQwNzA2LWM3YmQtNDI3ZS1hYjY2LTA3NDcwYWY0ZGY1YyIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6ImVlZDgyYThmLTZmYWItNGFlNi1iNmI3LTIzNGYyZDYzN2UxZiIsImlhdCI6MTU5NzMyODI0NiwiZXhwIjoxNTk3NDU3ODQ2fQ.evcxL26kHIyY9tVwF0RL11UVkwOKIk7NEBQvhKoiX2Y",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/api/v1/repetitory/takeListOfSubTopics",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"repetitory",
+								"takeListOfSubTopics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add new topic",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZWQwNzA2LWM3YmQtNDI3ZS1hYjY2LTA3NDcwYWY0ZGY1YyIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6ImVlZDgyYThmLTZmYWItNGFlNi1iNmI3LTIzNGYyZDYzN2UxZiIsImlhdCI6MTU5NzMyODI0NiwiZXhwIjoxNTk3NDU3ODQ2fQ.evcxL26kHIyY9tVwF0RL11UVkwOKIk7NEBQvhKoiX2Y",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"subject\": \"Biologia\",\r\n    \"topicName\": \"Rośliny\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/repetitory/addNewTopic",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"repetitory",
+								"addNewTopic"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update topic",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZWQwNzA2LWM3YmQtNDI3ZS1hYjY2LTA3NDcwYWY0ZGY1YyIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6ImVlZDgyYThmLTZmYWItNGFlNi1iNmI3LTIzNGYyZDYzN2UxZiIsImlhdCI6MTU5NzMyODI0NiwiZXhwIjoxNTk3NDU3ODQ2fQ.evcxL26kHIyY9tVwF0RL11UVkwOKIk7NEBQvhKoiX2Y",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"subject\": \"Biologia\",\r\n    \"oldTopicName\": \"Rośliny\",\r\n    \"newTopicName\": \"Zwierzęta\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/repetitory/updateTopic",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"repetitory",
+								"updateTopic"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add new subtopic",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZWQwNzA2LWM3YmQtNDI3ZS1hYjY2LTA3NDcwYWY0ZGY1YyIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6ImVlZDgyYThmLTZmYWItNGFlNi1iNmI3LTIzNGYyZDYzN2UxZiIsImlhdCI6MTU5NzMyODI0NiwiZXhwIjoxNTk3NDU3ODQ2fQ.evcxL26kHIyY9tVwF0RL11UVkwOKIk7NEBQvhKoiX2Y",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"topicName\": \"Zwierzęta\",\r\n    \"subTopicName\": \"Psy\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/repetitory/addNewSubTopic",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"repetitory",
+								"addNewSubTopic"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update subtopic",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZWQwNzA2LWM3YmQtNDI3ZS1hYjY2LTA3NDcwYWY0ZGY1YyIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6ImVlZDgyYThmLTZmYWItNGFlNi1iNmI3LTIzNGYyZDYzN2UxZiIsImlhdCI6MTU5NzMyODI0NiwiZXhwIjoxNTk3NDU3ODQ2fQ.evcxL26kHIyY9tVwF0RL11UVkwOKIk7NEBQvhKoiX2Y",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"topicName\": \"Zwierzęta\",\r\n    \"oldSubTopicName\": \"Psy\",\r\n    \"newSubTopicName\": \"Koty\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/repetitory/updateSubTopic",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"repetitory",
+								"updateSubTopic"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add new repetitory",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZWQwNzA2LWM3YmQtNDI3ZS1hYjY2LTA3NDcwYWY0ZGY1YyIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6ImVlZDgyYThmLTZmYWItNGFlNi1iNmI3LTIzNGYyZDYzN2UxZiIsImlhdCI6MTU5NzMyODI0NiwiZXhwIjoxNTk3NDU3ODQ2fQ.evcxL26kHIyY9tVwF0RL11UVkwOKIk7NEBQvhKoiX2Y",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"subTopicName\": \"Koty\",\r\n    \"titleOfRepetitory\": \"Dachowce\",\r\n    \"data\": \"eloeloeloeleoleo\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/repetitory/addNewRepetitory",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"repetitory",
+								"addNewRepetitory"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
