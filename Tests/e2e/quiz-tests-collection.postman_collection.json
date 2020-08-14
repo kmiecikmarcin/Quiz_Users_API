@@ -6,10 +6,42 @@
 	},
 	"item": [
 		{
-			"name": "users",
+			"name": "users - scenario 1",
 			"item": [
 				{
-					"name": "Registration",
+					"name": "register",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1e04f120-26c6-4a8e-8e1c-0283597d2b4f",
+								"exec": [
+									"const random_number = _.random(1000, 9000);",
+									"const email = \"user+\" + random_number + \"@example.com\";",
+									"",
+									"pm.environment.set(\"email\", email);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "8edf1223-910e-411d-8027-03d62f755b5f",
+								"exec": [
+									"pm.test(\"Response is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.Message).to.eql(\"Registration successful!\");",
+									"});",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -21,7 +53,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userEmail\": \"akmiecik@gmail.com\",\r\n    \"userPassword\": \"456789\",\r\n    \"checkUserPassword\": \"456789\",\r\n    \"userRole\": \"Uczeń\"\r\n}"
+							"raw": "{\r\n    \"checkUserPassword\": \"Test1234!\",\r\n    \"userPassword\": \"Test1234!\",\r\n    \"userRole\": \"Uczeń\",\r\n    \"userEmail\": \"{{email}}\"\r\n}"
 						},
 						"url": {
 							"raw": "localhost:3000/api/v1/users/register",
@@ -40,7 +72,31 @@
 					"response": []
 				},
 				{
-					"name": "Login",
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "026ecbd9-712e-4293-ab6e-2efc238069f7",
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d875a4ef-0882-4926-84f9-5587d2bab0c2",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -52,7 +108,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userEmail\": \"akmiecik@gmail.com\",\r\n    \"userPassword\": \"456789\",\r\n    \"checkUserPassword\": \"456789\"\r\n}",
+							"raw": "{\r\n    \"userEmail\": \"{{email}}\",\r\n    \"checkUserPassword\": \"Test1234!\",\r\n    \"userPassword\": \"Test1234!\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -74,6 +130,33 @@
 						}
 					},
 					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "04d4edb1-ec3d-42d2-ab15-fa3a6191a713",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "9471af88-9991-484b-addf-d3b4db49b5f8",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});"
+						]
+					}
 				}
 			],
 			"protocolProfileBehavior": {}
