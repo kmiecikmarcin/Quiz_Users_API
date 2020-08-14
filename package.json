@@ -8,8 +8,8 @@
   },
   "scripts": {
     "nodemon-start": "nodemon app.js",
-    "test": "newman run Tests/e2e/quiz-tests-collection.postman_collection.json -e Tests/e2e/quiz-localhost.postman_environment.json",
-    "nodemon-tests": "nodemon --delay 2500ms --watch . --exec 'npm run test || true'",
+    "test": "docker-compose up -d db && sleep 1 && docker-compose up -d && newman run Tests/e2e/quiz-tests-collection.postman_collection.json -e Tests/e2e/quiz-localhost.postman_environment.json",
+    "nodemon-tests": "nodemon --delay 500ms --watch . --exec 'npm run test || true'",
     "lint": "eslint ./",
     "pre-commit": "npm run lint",
     "pre-push": "npm run lint && npm run test"
