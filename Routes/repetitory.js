@@ -112,6 +112,9 @@ router.post('/addNewTopic',
           if (newTopic) {
             res.status(201).json({ Message: 'New topic created!' });
             return;
+          } if (newTopic === false) {
+            res.status(400).json({ Message: 'You dont have permission!' });
+            return;
           }
           res.status(400).json({ Message: 'Something went wrong!' });
         }
@@ -157,6 +160,9 @@ router.put('/updateTopic',
           if (updateTopic) {
             res.status(201).json({ Message: 'Topic updated!' });
             return;
+          } if (updateTopic === false) {
+            res.status(400).json({ Message: 'You dont have permission!' });
+            return;
           }
           res.status(400).json({ Message: 'Something went wrong!' });
         }
@@ -195,6 +201,9 @@ router.post('/addNewSubTopic',
             req.body.subTopicName, user.id);
           if (addSubTopic) {
             res.status(201).json({ Message: 'New subtopic created!' });
+            return;
+          } if (addSubTopic === false) {
+            res.status(400).json({ Message: 'You dont have permission!' });
             return;
           }
           res.status(400).json({ Message: 'Something went wrong!' });
@@ -240,6 +249,9 @@ router.put('/updateSubTopic',
             req.body.newSubTopicName, user.id);
           if (updateSubTopic) {
             res.status(201).json({ Message: 'Subtopic updated!' });
+            return;
+          } if (updateSubTopic === false) {
+            res.status(400).json({ Message: 'You dont have permission!' });
             return;
           }
           res.status(400).json({ Message: 'Something went wrong!' });
