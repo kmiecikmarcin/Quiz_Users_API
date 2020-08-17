@@ -12,7 +12,7 @@ async function addNewSubTopic(SubTopics, Topics, topicName, subTopicName, user) 
       if (userRole === 'Nauczyciel') {
         const result = await SubTopics.create({
           name: subTopicName,
-          id_user: user,
+          id_user: user.id,
           id_topic: checkTopic.id,
         });
         if (result !== null) {

@@ -9,7 +9,7 @@ async function updateSubTopicName(SubTopics, oldSubTopicName, newSubTopicName, u
     if (userRole === 'Nauczyciel') {
       const result = await SubTopics.update({
         name: newSubTopicName,
-        id_user: user,
+        id_user: user.id,
       }, {
         where: { id_subtopic: findSubTopic.id },
       });

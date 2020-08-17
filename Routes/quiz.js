@@ -1,0 +1,84 @@
+/* eslint-disable newline-per-chained-call */
+const express = require('express');
+
+const router = express.Router();
+const { check, validationResult } = require('express-validator');
+const jwt = require('jsonwebtoken');
+const verifyToken = require('../Function/verifyJwtToken');
+const findUserByIdAndEmail = require('../Function/findUserByIdAndEmail');
+const addNewQuestion = require('../Function/addNewQuestion');
+const findTopicByName = require('../Function/findTopicByName');
+const Topics = require('../Models/Topics');
+const Users = require('../Models/Users');
+const Questions = require('../Models/Questions');
+
+router.post('/addNewQuestion',
+  [
+    check('topicName')
+      .exists()
+      .notEmpty()
+      .isLength({ min: 1, max: 100 })
+      .not().isNumeric()
+      .trim(),
+    check('question')
+      .exists()
+      .notEmpty()
+      .isLength({ min: 1, max: 100 })
+      .not().isNumeric()
+      .trim(),
+    check('correctAnswer')
+      .exists()
+      .notEmpty()
+      .isLength({ min: 1, max: 50 })
+      .not().isNumeric()
+      .trim(),
+    check('firstAnswer')
+      .exists()
+      .notEmpty()
+      .isLength({ min: 1, max: 50 })
+      .not().isNumeric()
+      .trim(),
+    check('secondAnswer')
+      .exists()
+      .notEmpty()
+      .isLength({ min: 1, max: 50 })
+      .not().isNumeric()
+      .trim(),
+    check('thirdAnswer')
+      .exists()
+      .notEmpty()
+      .isLength({ min: 1, max: 50 })
+      .not().isNumeric()
+      .trim(),
+  ],
+  verifyToken, (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json({ Error: error });
+    } else {
+      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+        if (err) {
+          res.sendStatus(403);
+        } else {
+          const user = await findUserByIdAndEmail(Users, authData);
+          if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
+          const topic = await findTopicByName(Topics, req.body.topicName);
+          if (topic === null) { res.status(400).json({ Error: 'Topic doesnt exists!' }); return; }
+
+          const addQuestion = await addNewQuestion(Questions, req.body.question,
+            req.body.correctAnswer, req.body.firstAnswer, req.body.secondAnswer,
+            req.body.thirdAnswer, user, topic.id);
+          if (addQuestion) {
+            res.status(201).json({ Message: 'New question created!!' });
+            return;
+          } if (addQuestion === false) {
+            res.status(400).json({ Message: 'You dont have permission!' });
+            return;
+          }
+          res.status(400).json({ Message: 'Something went wrong!' });
+        }
+      });
+    }
+  });
+
+module.exports = router;
