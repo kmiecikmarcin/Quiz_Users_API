@@ -4,13 +4,15 @@ RUN apt-get update && apt-get install -y build-essential make automake gcc g++ c
 
 WORKDIR /usr/src/app
 
+RUN npm install -g node-gyp
+RUN npm install -g nodemon
+
 COPY package*.json ./
 
-RUN npm install -g node-gyp
 RUN npm install
 
 COPY . .
 
 EXPOSE 3000
 
-CMD ["node","app.js"]
+CMD ["nodemon","app.js"]

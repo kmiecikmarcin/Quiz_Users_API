@@ -3,8 +3,16 @@
   "version": "1.0.0",
   "description": "Quiz Api",
   "main": "app.js",
+  "nodemonConfig:": {
+    "delay": 1000
+  },
   "scripts": {
-    "start": "node app.js"
+    "nodemon-start": "nodemon app.js",
+    "test": "docker-compose up -d db && sleep 1 && docker-compose up -d && newman run Tests/e2e/quiz-tests-collection.postman_collection.json -e Tests/e2e/quiz-localhost.postman_environment.json",
+    "nodemon-tests": "nodemon --delay 500ms --watch . --exec 'npm run test || true'",
+    "lint": "eslint ./",
+    "pre-commit": "npm run lint",
+    "pre-push": "npm run lint && npm run test"
   },
   "author": "",
   "license": "ISC",
@@ -13,13 +21,28 @@
     "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "express-validator": "^6.6.0",
+    "express-validator": "^6.6.1",
     "install": "^0.13.0",
+    "jsonwebtoken": "^8.5.1",
     "node-pre-gyp": "0.12.0",
-    "nodemailer": "^6.4.10",
+    "nodemailer": "^6.4.11",
+    "nodemon": "^2.0.4",
     "pg": "^8.3.0",
     "router": "^1.3.5",
-    "sequelize": "^6.3.3",
+    "sequelize": "^6.3.4",
+    "sequelize-fixtures": "^1.2.0",
     "speakeasy": "^2.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.6.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "husky": "^4.2.5"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run pre-commit",
+      "pre-push": "npm run pre-push"
+    }
   }
 }
