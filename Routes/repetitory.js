@@ -294,4 +294,31 @@ router.post('/addNewRepetitory',
     }
   });
 
+router.get('/takeRepetitory/:subTopicName',
+  verifyToken, (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.send({ Error: error });
+    } else {
+      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+        if (err) {
+          res.sendStatus(403);
+        } else {
+          const user = await findUserByIdAndEmail(Users, authData);
+          if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); }
+          const subTopic = await findSubTopicByName(SubTopics, req.params.subTopicName);
+          if (subTopic === null) { res.status(404).json({ Error: 'Subtopic doesnt exists!' }); return; }
+
+          const takeRepetitory = findRepetitoryByTitle(Repetitory, subTopic.id);
+          if (takeRepetitory) {
+            res.status(201).json({ takeRepetitory });
+          } if (takeRepetitory === false) {
+            res.status(400).json({ Message: 'You dont have permission!' });
+          } else {
+            res.status(400).json({ Message: 'Something went wrong!' });
+          }
+        }
+      });
+    }
+  });
 module.exports = router;
