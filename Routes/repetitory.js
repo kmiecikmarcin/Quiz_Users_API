@@ -21,6 +21,8 @@ const addNewSubTopic = require('../Function/addNewSubTopic');
 const updateSubTopicName = require('../Function/updateSubTopicName');
 const findSubTopicByName = require('../Function/findSubTopicByName');
 const addNewRepetitory = require('../Function/addNewRepetitory');
+const findRepetitoryBySubtopicId = require('../Function/findRepetitoryBySubtopicId');
+const updateRepetitory = require('../Function/updateRepetitory');
 
 router.get('/takeListOfSubject', verifyToken, (req, res) => {
   jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
@@ -28,14 +30,14 @@ router.get('/takeListOfSubject', verifyToken, (req, res) => {
       res.sendStatus(403);
     } else {
       const user = await findUserByIdAndEmail(Users, authData);
-      if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); }
+      if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); return; }
 
       const subjects = await findAllSubjects(Subjects);
       if (subjects) {
         res.status(200).json(subjects);
-      } else {
-        res.status(400).json({ Message: 'Something went wrong!' });
+        return;
       }
+      res.status(400).json({ Message: 'Something went wrong!' });
     }
   });
 });
@@ -46,14 +48,14 @@ router.get('/takeListOfTopics', verifyToken, (req, res) => {
       res.sendStatus(403);
     } else {
       const user = await findUserByIdAndEmail(Users, authData);
-      if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); }
+      if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); return; }
 
       const topics = await findAllTopics(Topics);
       if (topics) {
         res.status(200).json(topics);
-      } else {
-        res.status(400).json({ Message: 'Something went wrong!' });
+        return;
       }
+      res.status(400).json({ Message: 'Something went wrong!' });
     }
   });
 });
@@ -64,14 +66,14 @@ router.get('/takeListOfSubTopics', verifyToken, (req, res) => {
       res.sendStatus(403);
     } else {
       const user = await findUserByIdAndEmail(Users, authData);
-      if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); }
+      if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); return; }
 
       const subTopics = await findAllSubTopics(SubTopics);
       if (subTopics) {
         res.status(200).json(subTopics);
-      } else {
-        res.status(400).json({ Message: 'Something went wrong!' });
+        return;
       }
+      res.status(400).json({ Message: 'Something went wrong!' });
     }
   });
 });
@@ -101,17 +103,17 @@ router.post('/addNewTopic',
           res.sendStatus(403);
         } else {
           const user = await findUserByIdAndEmail(Users, authData);
-          if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); }
+          if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
 
           const subject = await findSubjectByName(Subjects, req.body.subject);
-          if (subject === null) { res.status(400).json({ Error: 'Subject doesnt exists!' }); }
+          if (subject === null) { res.status(400).json({ Error: 'Subject doesnt exists!' }); return; }
 
           const newTopic = await addNewTopic(Topics, req.body.topicName, user.id, subject.id);
           if (newTopic) {
             res.status(201).json({ Message: 'New topic created!' });
-          } else {
-            res.status(400).json({ Message: 'Something went wrong!' });
+            return;
           }
+          res.status(400).json({ Message: 'Something went wrong!' });
         }
       });
     }
@@ -148,15 +150,15 @@ router.put('/updateTopic',
           res.sendStatus(403);
         } else {
           const user = await findUserByIdAndEmail(Users, authData);
-          if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); }
+          if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); return; }
 
           const updateTopic = await updateTopicName(Topics, req.body.oldTopicName,
             req.body.newTopicName, user.id);
           if (updateTopic) {
             res.status(201).json({ Message: 'Topic updated!' });
-          } else {
-            res.status(400).json({ Message: 'Something went wrong!' });
+            return;
           }
+          res.status(400).json({ Message: 'Something went wrong!' });
         }
       });
     }
@@ -187,15 +189,15 @@ router.post('/addNewSubTopic',
           res.sendStatus(403);
         } else {
           const user = await findUserByIdAndEmail(Users, authData);
-          if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); }
+          if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); return; }
 
           const addSubTopic = await addNewSubTopic(SubTopics, Topics, req.body.topicName,
             req.body.subTopicName, user.id);
           if (addSubTopic) {
             res.status(201).json({ Message: 'New subtopic created!' });
-          } else {
-            res.status(400).json({ Message: 'Something went wrong!' });
+            return;
           }
+          res.status(400).json({ Message: 'Something went wrong!' });
         }
       });
     }
@@ -232,15 +234,15 @@ router.put('/updateSubTopic',
           res.sendStatus(403);
         } else {
           const user = await findUserByIdAndEmail(Users, authData);
-          if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); }
+          if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); return; }
 
           const updateSubTopic = await updateSubTopicName(SubTopics, req.body.oldSubTopicName,
             req.body.newSubTopicName, user.id);
           if (updateSubTopic) {
             res.status(201).json({ Message: 'Subtopic updated!' });
-          } else {
-            res.status(400).json({ Message: 'Something went wrong!' });
+            return;
           }
+          res.status(400).json({ Message: 'Something went wrong!' });
         }
       });
     }
@@ -276,19 +278,75 @@ router.post('/addNewRepetitory',
           res.sendStatus(403);
         } else {
           const user = await findUserByIdAndEmail(Users, authData);
-          if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); }
+          if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); return; }
           const subTopic = await findSubTopicByName(SubTopics, req.body.subTopicName);
-          if (subTopic === null) { res.status(404).json({ Error: 'Subtopic doesnt exists!' }); }
+          if (subTopic === null) { res.status(404).json({ Error: 'Subtopic doesnt exists!' }); return; }
 
           const addRepetitory = await addNewRepetitory(Repetitory, req.body.titleOfRepetitory,
             req.body.data, user, subTopic.id);
           if (addRepetitory) {
             res.status(201).json({ Message: 'Repetitory added!' });
+            return;
           } if (addRepetitory === false) {
             res.status(400).json({ Message: 'You dont have permission!' });
-          } else {
-            res.status(400).json({ Message: 'Something went wrong!' });
+            return;
           }
+          res.status(400).json({ Message: 'Something went wrong!' });
+        }
+      });
+    }
+  });
+
+router.put('/updateRepetitory',
+  [
+    check('subTopicName')
+      .exists()
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
+    check('oldTitleOfRepetitory')
+      .exists()
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
+    check('titleOfRepetitory')
+      .exists()
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
+    check('data')
+      .exists()
+      .notEmpty()
+      .isLength({ min: 1, max: 300 })
+      .trim(),
+  ],
+  verifyToken, (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.send({ Error: error });
+    } else {
+      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+        if (err) {
+          res.sendStatus(403);
+        } else {
+          const user = await findUserByIdAndEmail(Users, authData);
+          if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); return; }
+          const subTopic = await findSubTopicByName(SubTopics, req.body.subTopicName);
+          if (subTopic === null) { res.status(404).json({ Error: 'Subtopic doesnt exists!' }); return; }
+
+          const update = await updateRepetitory(Repetitory, req.body.oldTitleOfRepetitory,
+            req.body.titleOfRepetitory, req.body.data, user);
+          if (update) {
+            res.status(201).json({ Message: 'Repetitory updated!' });
+            return;
+          } if (update === false) {
+            res.status(400).json({ Message: 'You dont have permission!' });
+            return;
+          }
+          res.status(400).json({ Message: 'Something went wrong!' });
         }
       });
     }
@@ -309,16 +367,17 @@ router.get('/takeRepetitory/:subTopicName',
           const subTopic = await findSubTopicByName(SubTopics, req.params.subTopicName);
           if (subTopic === null) { res.status(404).json({ Error: 'Subtopic doesnt exists!' }); return; }
 
-          const takeRepetitory = findRepetitoryByTitle(Repetitory, subTopic.id);
+          const takeRepetitory = findRepetitoryBySubtopicId(Repetitory, subTopic.id);
           if (takeRepetitory) {
             res.status(201).json({ takeRepetitory });
           } if (takeRepetitory === false) {
             res.status(400).json({ Message: 'You dont have permission!' });
-          } else {
-            res.status(400).json({ Message: 'Something went wrong!' });
+            return;
           }
+          res.status(400).json({ Message: 'Something went wrong!' });
         }
       });
     }
   });
+
 module.exports = router;
