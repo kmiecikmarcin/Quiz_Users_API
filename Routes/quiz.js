@@ -9,6 +9,7 @@ const findUserByIdAndEmail = require('../Function/findUserByIdAndEmail');
 const addNewQuestion = require('../Function/addNewQuestion');
 const findTopicByName = require('../Function/findTopicByName');
 const updateQuestion = require('../Function/updateQuestion');
+const findQuestionsByTopicId = require('../Function/findQuestionsByTopicId');
 const Topics = require('../Models/Topics');
 const Users = require('../Models/Users');
 const Questions = require('../Models/Questions');
@@ -148,6 +149,35 @@ router.put('/updateQuestion',
             res.status(201).json({ Message: 'Question updated!' });
             return;
           } if (update === false) {
+            res.status(400).json({ Message: 'You dont have permission!' });
+            return;
+          }
+          res.status(400).json({ Message: 'Something went wrong!' });
+        }
+      });
+    }
+  });
+
+router.get('/takeQuestions/:topicName',
+  verifyToken, (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.send({ Error: error });
+    } else {
+      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+        if (err) {
+          res.sendStatus(403);
+        } else {
+          const user = await findUserByIdAndEmail(Users, authData);
+          if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); return; }
+          const topic = await findTopicByName(Topics, req.params.topicName);
+          if (topic === null) { res.status(404).json({ Error: 'Topic doesnt exists!' }); return; }
+
+          const takeQuestions = await findQuestionsByTopicId(Questions, topic.id);
+          if (takeQuestions) {
+            res.status(201).json({ Data: takeQuestions });
+            return;
+          } if (takeQuestions === false) {
             res.status(400).json({ Message: 'You dont have permission!' });
             return;
           }
