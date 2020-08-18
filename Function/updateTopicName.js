@@ -9,7 +9,7 @@ async function updateTopicName(Topics, oldTopicName, newTopicName, user) {
     if (userRole === 'Nauczyciel') {
       const result = await Topics.update({
         name: newTopicName,
-        id_user: user,
+        id_user: user.id,
       }, {
         where: { id_topic: findTopic.id },
       });

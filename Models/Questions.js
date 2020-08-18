@@ -18,25 +18,25 @@ const Questions = sequelize.define('Questions', {
     allowNull: false,
     field: 'question',
   },
-  firstAnswer: {
+  correctAnswer: {
     type: DataTypes.STRING(50),
     unique: true,
     allowNull: false,
     field: 'right_answer',
   },
-  secondAnswer: {
+  firstAnswer: {
     type: DataTypes.STRING(50),
     unique: true,
     allowNull: false,
     field: 'first_wrong_answer',
   },
-  thirdAnswer: {
+  secondAnswer: {
     type: DataTypes.STRING(50),
     unique: true,
     allowNull: false,
     field: 'second_wrong_answer',
   },
-  fourthAnswer: {
+  thirdAnswer: {
     type: DataTypes.STRING(50),
     unique: true,
     allowNull: false,

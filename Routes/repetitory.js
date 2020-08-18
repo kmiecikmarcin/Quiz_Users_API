@@ -108,7 +108,7 @@ router.post('/addNewTopic',
           const subject = await findSubjectByName(Subjects, req.body.subject);
           if (subject === null) { res.status(400).json({ Error: 'Subject doesnt exists!' }); return; }
 
-          const newTopic = await addNewTopic(Topics, req.body.topicName, user.id, subject.id);
+          const newTopic = await addNewTopic(Topics, req.body.topicName, user, subject.id);
           if (newTopic) {
             res.status(201).json({ Message: 'New topic created!' });
             return;
@@ -156,7 +156,7 @@ router.put('/updateTopic',
           if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); return; }
 
           const updateTopic = await updateTopicName(Topics, req.body.oldTopicName,
-            req.body.newTopicName, user.id);
+            req.body.newTopicName, user);
           if (updateTopic) {
             res.status(201).json({ Message: 'Topic updated!' });
             return;
@@ -198,7 +198,7 @@ router.post('/addNewSubTopic',
           if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); return; }
 
           const addSubTopic = await addNewSubTopic(SubTopics, Topics, req.body.topicName,
-            req.body.subTopicName, user.id);
+            req.body.subTopicName, user);
           if (addSubTopic) {
             res.status(201).json({ Message: 'New subtopic created!' });
             return;
@@ -246,7 +246,7 @@ router.put('/updateSubTopic',
           if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); return; }
 
           const updateSubTopic = await updateSubTopicName(SubTopics, req.body.oldSubTopicName,
-            req.body.newSubTopicName, user.id);
+            req.body.newSubTopicName, user);
           if (updateSubTopic) {
             res.status(201).json({ Message: 'Subtopic updated!' });
             return;
@@ -375,13 +375,14 @@ router.get('/takeRepetitory/:subTopicName',
           res.sendStatus(403);
         } else {
           const user = await findUserByIdAndEmail(Users, authData);
-          if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); }
+          if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); return; }
           const subTopic = await findSubTopicByName(SubTopics, req.params.subTopicName);
           if (subTopic === null) { res.status(404).json({ Error: 'Subtopic doesnt exists!' }); return; }
 
           const takeRepetitory = findRepetitoryBySubtopicId(Repetitory, subTopic.id);
           if (takeRepetitory) {
             res.status(201).json({ takeRepetitory });
+            return;
           } if (takeRepetitory === false) {
             res.status(400).json({ Message: 'You dont have permission!' });
             return;

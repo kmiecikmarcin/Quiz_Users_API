@@ -9,7 +9,7 @@ async function addNewTopic(Topics, topicName, user, subjects) {
     if (userRole === 'Nauczyciel') {
       const result = await Topics.create({
         name: topicName,
-        id_user: user,
+        id_user: user.id,
         id_subject: subjects,
       });
       if (result !== null) {
