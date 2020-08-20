@@ -6,12 +6,16 @@ const express = require('express');
 const router = express.Router();
 require('dotenv').config();
 const { check, validationResult } = require('express-validator');
+const jwt = require('jsonwebtoken');
 const Users = require('../Models/Users');
+const TypesOfRoles = require('../Models/TypesOfRoles');
 const register = require('../Function/register');
 const checkUserEmail = require('../Function/checkUserEmail');
-const TypesOfRoles = require('../Models/TypesOfRoles');
 const login = require('../Function/login');
 const checkTypeOfRole = require('../Function/checkUserRole');
+const verifyToken = require('../Function/verifyJwtToken');
+const findUserByIdAndEmail = require('../Function/findUserByIdAndEmail');
+const deleteUserAccount = require('../Function/deleteUserAccount');
 
 router.post('/login',
   [
@@ -21,17 +25,10 @@ router.post('/login',
       .isEmail()
       .isLength({ min: 4 })
       .trim(),
-    check('userPassword', 'checkUserPassword')
+    check('userPassword')
       .exists()
       .notEmpty()
       .isLength({ min: 6 })
-      .custom((value, { req }) => {
-        if (value !== req.body.checkUserPassword) {
-          throw new Error('Hasła sa różne!');
-        } else {
-          return value;
-        }
-      })
       .trim(),
   ],
   async (req, res) => {
@@ -40,8 +37,9 @@ router.post('/login',
       res.status(400).json({ Error: error });
     } else {
       const user = await checkUserEmail(Users, req.body.userEmail);
+      const nameRole = await TypesOfRoles.findOne({ where: { id_role: user.id_role } });
       login(res, req.body.userPassword, user.password, user.id,
-        user.email, user.id_role);
+        user.email, user.id_role, nameRole.name);
     }
   });
 
@@ -88,6 +86,44 @@ router.post('/register',
       res.status(201).json({ Message: 'Registration successful!' });
     } else {
       res.status(400).json({ Message: 'Registration process failed' });
+    }
+  });
+
+router.delete('/deleteAccount',
+  [
+    check('userPassword', 'checkUserPassword')
+      .exists()
+      .notEmpty()
+      .isLength({ min: 6 })
+      .custom((value, { req }) => {
+        if (value !== req.body.checkUserPassword) {
+          throw new Error('Hasła sa różne!');
+        } else {
+          return value;
+        }
+      })
+      .trim(),
+  ],
+  verifyToken, (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json({ Error: error });
+    } else {
+      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+        if (err) {
+          res.sendStatus(403);
+        } else {
+          const user = await findUserByIdAndEmail(Users, authData);
+          if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
+
+          const deleteAccount = await deleteUserAccount(Users, authData);
+          if (deleteAccount) {
+            res.status(201).json({ Message: 'Account deleted!' });
+            return;
+          }
+          res.status(400).json({ Message: 'Something went wrong!' });
+        }
+      });
     }
   });
 
