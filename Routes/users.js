@@ -37,7 +37,10 @@ router.post('/login',
       res.status(400).json({ Error: error });
     } else {
       const user = await checkUserEmail(Users, req.body.userEmail);
+      if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); return; }
       const nameRole = await TypesOfRoles.findOne({ where: { id_role: user.id_role } });
+      if (nameRole === null) { res.status(404).json({ Error: 'This role doesnt exists!' }); return; }
+
       login(res, req.body.userPassword, user.password, user.id,
         user.email, user.id_role, nameRole.name);
     }
@@ -74,7 +77,7 @@ router.post('/register',
     const error = validationResult(req);
 
     if (!error.isEmpty()) {
-      res.stauts(400).json({ Error: error });
+      res.status(400).json({ Error: error });
     }
     const email = await checkUserEmail(Users, req.body.userEmail);
     if (email !== null) { res.status(400).json({ Error: 'Users with this email exists!' }); return; }

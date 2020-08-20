@@ -56,7 +56,6 @@
     Endpointy związane z połączeniem się użytkownika z aplikacją:
         - api/v1/user/login
         - api/v1/user/register
-        - api/v1/user/logout
     Endpointy związane z edycją danych przez użytkownika:
         - api/v1/user/changeEmail
         - api/v1/user/changePassword

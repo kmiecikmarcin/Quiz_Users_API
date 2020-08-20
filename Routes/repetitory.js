@@ -236,7 +236,7 @@ router.put('/updateSubTopic',
   verifyToken, (req, res) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
-      res.send({ Error: error });
+      res.status(400).json({ Error: error });
     } else {
       jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
         if (err) {
@@ -283,7 +283,7 @@ router.post('/addNewRepetitory',
   verifyToken, (req, res) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
-      res.send({ Error: error });
+      res.status(400).json({ Error: error });
     } else {
       jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
         if (err) {
@@ -338,7 +338,7 @@ router.put('/updateRepetitory',
   verifyToken, (req, res) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
-      res.send({ Error: error });
+      res.status(400).json({ Error: error });
     } else {
       jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
         if (err) {
@@ -368,7 +368,7 @@ router.get('/takeRepetitory/:subTopicName',
   verifyToken, (req, res) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
-      res.send({ Error: error });
+      res.status(400).json({ Error: error });
     } else {
       jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
         if (err) {
