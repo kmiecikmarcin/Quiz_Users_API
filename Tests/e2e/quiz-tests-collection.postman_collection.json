@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "61cb09a7-4841-412b-aee2-3d6d77c07c3d",
+		"_postman_id": "b65c6c2a-b03a-4ce9-b281-a01f7318fab4",
 		"name": "quiz-tests-collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -14,7 +14,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "1e04f120-26c6-4a8e-8e1c-0283597d2b4f",
+								"id": "996e313d-2b7f-40cc-87a4-a095f121c6fa",
 								"exec": [
 									"const random_number = _.random(1000, 9000);",
 									"const email = \"user+\" + random_number + \"@example.com\";",
@@ -27,7 +27,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "8edf1223-910e-411d-8027-03d62f755b5f",
+								"id": "bd6b0da7-bfef-47fd-aadd-9f0f11ccae9f",
 								"exec": [
 									"pm.test(\"Response is correct\", function () {",
 									"    var jsonData = pm.response.json();",
@@ -53,7 +53,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"checkUserPassword\": \"Test1234!\",\r\n    \"userPassword\": \"Test1234!\",\r\n    \"userRole\": \"Uczeń\",\r\n    \"userEmail\": \"{{email}}\"\r\n}"
+							"raw": "{\r\n    \"checkUserPassword\": \"Test1234!\",\r\n    \"userPassword\": \"Test1234!\",\r\n    \"userRole\": \"Uczeń\",\r\n    \"userEmail\": \"akmiecik@gmail.com\"\r\n}"
 						},
 						"url": {
 							"raw": "localhost:3000/api/v1/users/register",
@@ -77,7 +77,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "026ecbd9-712e-4293-ab6e-2efc238069f7",
+								"id": "50e6de0d-384c-48fa-83ee-1aab4504f4a6",
 								"exec": [
 									"pm.test(\"Successful POST request\", function () {",
 									"    pm.expect(pm.response.code).to.be.oneOf([200]);",
@@ -89,7 +89,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "d875a4ef-0882-4926-84f9-5587d2bab0c2",
+								"id": "8675390e-5f89-4abd-88fe-196f37e5c610",
 								"exec": [
 									""
 								],
@@ -108,7 +108,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userEmail\": \"{{email}}\",\r\n    \"checkUserPassword\": \"Test1234!\",\r\n    \"userPassword\": \"Test1234!\"\r\n}",
+							"raw": "{\r\n    \"userEmail\": \"akmiecik@gmail.com\",\r\n    \"checkUserPassword\": \"Test1234!\",\r\n    \"userPassword\": \"Test1234!\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -130,13 +130,49 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Delete user account",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ3Y2IxN2NjLTFjNjctNDc5My1hMGE5LTBlMDEwN2YzMTY4MSIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6IjY2MGFjMDQwLTdkYjYtNDcyYy1hYjU3LWJiOGY4MGY2YjYwMSIsInR5cGVPZlJvbGUiOiJVY3plxYQiLCJpYXQiOjE1OTc5MTU0NzksImV4cCI6MTU5ODA0NTA3OX0.IeY36UgMuSfkzZSTbMIOCrGK_e7Hhqc2wmDrTmPd5DY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userPassword\": \"Test1234!\",\r\n    \"checkUserPassword\": \"Test1234!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/users/deleteAccount",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"deleteAccount"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"event": [
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "04d4edb1-ec3d-42d2-ab15-fa3a6191a713",
+						"id": "8713c925-5549-4991-87f9-9c5d1cb15842",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -146,7 +182,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "9471af88-9991-484b-addf-d3b4db49b5f8",
+						"id": "2b9a559a-6157-4269-a74e-dfe16ee1819b",
 						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"Response time is less than 200ms\", function () {",
@@ -171,7 +207,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZWQwNzA2LWM3YmQtNDI3ZS1hYjY2LTA3NDcwYWY0ZGY1YyIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6ImVlZDgyYThmLTZmYWItNGFlNi1iNmI3LTIzNGYyZDYzN2UxZiIsImlhdCI6MTU5NzMyODI0NiwiZXhwIjoxNTk3NDU3ODQ2fQ.evcxL26kHIyY9tVwF0RL11UVkwOKIk7NEBQvhKoiX2Y",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImMyNDlkMzRjLTM4MzEtNDZiZi1iN2IzLTRlMTUyY2JjNTcxYiIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6IjY2MGFjMDQwLTdkYjYtNDcyYy1hYjU3LWJiOGY4MGY2YjYwMSIsInR5cGVPZlJvbGUiOiJVY3plxYQiLCJpYXQiOjE1OTc5MTQ1OTUsImV4cCI6MTU5ODA0NDE5NX0.he2IDn4RH3NDnvE79Z3MXO8zY-Trk0nEN2qZNTH9XQk",
 								"type": "text"
 							}
 						],
@@ -198,7 +234,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZWQwNzA2LWM3YmQtNDI3ZS1hYjY2LTA3NDcwYWY0ZGY1YyIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6ImVlZDgyYThmLTZmYWItNGFlNi1iNmI3LTIzNGYyZDYzN2UxZiIsImlhdCI6MTU5NzMyODI0NiwiZXhwIjoxNTk3NDU3ODQ2fQ.evcxL26kHIyY9tVwF0RL11UVkwOKIk7NEBQvhKoiX2Y",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImMyNDlkMzRjLTM4MzEtNDZiZi1iN2IzLTRlMTUyY2JjNTcxYiIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6IjY2MGFjMDQwLTdkYjYtNDcyYy1hYjU3LWJiOGY4MGY2YjYwMSIsInR5cGVPZlJvbGUiOiJVY3plxYQiLCJpYXQiOjE1OTc5MTQ1OTUsImV4cCI6MTU5ODA0NDE5NX0.he2IDn4RH3NDnvE79Z3MXO8zY-Trk0nEN2qZNTH9XQk",
 								"type": "text"
 							}
 						],
@@ -225,7 +261,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZWQwNzA2LWM3YmQtNDI3ZS1hYjY2LTA3NDcwYWY0ZGY1YyIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6ImVlZDgyYThmLTZmYWItNGFlNi1iNmI3LTIzNGYyZDYzN2UxZiIsImlhdCI6MTU5NzMyODI0NiwiZXhwIjoxNTk3NDU3ODQ2fQ.evcxL26kHIyY9tVwF0RL11UVkwOKIk7NEBQvhKoiX2Y",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImMyNDlkMzRjLTM4MzEtNDZiZi1iN2IzLTRlMTUyY2JjNTcxYiIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6IjY2MGFjMDQwLTdkYjYtNDcyYy1hYjU3LWJiOGY4MGY2YjYwMSIsInR5cGVPZlJvbGUiOiJVY3plxYQiLCJpYXQiOjE1OTc5MTQ1OTUsImV4cCI6MTU5ODA0NDE5NX0.he2IDn4RH3NDnvE79Z3MXO8zY-Trk0nEN2qZNTH9XQk",
 								"type": "text"
 							}
 						],
@@ -252,7 +288,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZWQwNzA2LWM3YmQtNDI3ZS1hYjY2LTA3NDcwYWY0ZGY1YyIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6ImVlZDgyYThmLTZmYWItNGFlNi1iNmI3LTIzNGYyZDYzN2UxZiIsImlhdCI6MTU5NzMyODI0NiwiZXhwIjoxNTk3NDU3ODQ2fQ.evcxL26kHIyY9tVwF0RL11UVkwOKIk7NEBQvhKoiX2Y",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImMyNDlkMzRjLTM4MzEtNDZiZi1iN2IzLTRlMTUyY2JjNTcxYiIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6IjY2MGFjMDQwLTdkYjYtNDcyYy1hYjU3LWJiOGY4MGY2YjYwMSIsInR5cGVPZlJvbGUiOiJVY3plxYQiLCJpYXQiOjE1OTc5MTQ1OTUsImV4cCI6MTU5ODA0NDE5NX0.he2IDn4RH3NDnvE79Z3MXO8zY-Trk0nEN2qZNTH9XQk",
 								"type": "text"
 							}
 						],
@@ -288,7 +324,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZWQwNzA2LWM3YmQtNDI3ZS1hYjY2LTA3NDcwYWY0ZGY1YyIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6ImVlZDgyYThmLTZmYWItNGFlNi1iNmI3LTIzNGYyZDYzN2UxZiIsImlhdCI6MTU5NzMyODI0NiwiZXhwIjoxNTk3NDU3ODQ2fQ.evcxL26kHIyY9tVwF0RL11UVkwOKIk7NEBQvhKoiX2Y",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImMyNDlkMzRjLTM4MzEtNDZiZi1iN2IzLTRlMTUyY2JjNTcxYiIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6IjY2MGFjMDQwLTdkYjYtNDcyYy1hYjU3LWJiOGY4MGY2YjYwMSIsInR5cGVPZlJvbGUiOiJVY3plxYQiLCJpYXQiOjE1OTc5MTQ1OTUsImV4cCI6MTU5ODA0NDE5NX0.he2IDn4RH3NDnvE79Z3MXO8zY-Trk0nEN2qZNTH9XQk",
 								"type": "text"
 							}
 						],
@@ -324,7 +360,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZWQwNzA2LWM3YmQtNDI3ZS1hYjY2LTA3NDcwYWY0ZGY1YyIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6ImVlZDgyYThmLTZmYWItNGFlNi1iNmI3LTIzNGYyZDYzN2UxZiIsImlhdCI6MTU5NzMyODI0NiwiZXhwIjoxNTk3NDU3ODQ2fQ.evcxL26kHIyY9tVwF0RL11UVkwOKIk7NEBQvhKoiX2Y",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImMyNDlkMzRjLTM4MzEtNDZiZi1iN2IzLTRlMTUyY2JjNTcxYiIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6IjY2MGFjMDQwLTdkYjYtNDcyYy1hYjU3LWJiOGY4MGY2YjYwMSIsInR5cGVPZlJvbGUiOiJVY3plxYQiLCJpYXQiOjE1OTc5MTQ1OTUsImV4cCI6MTU5ODA0NDE5NX0.he2IDn4RH3NDnvE79Z3MXO8zY-Trk0nEN2qZNTH9XQk",
 								"type": "text"
 							}
 						],
@@ -360,7 +396,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZWQwNzA2LWM3YmQtNDI3ZS1hYjY2LTA3NDcwYWY0ZGY1YyIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6ImVlZDgyYThmLTZmYWItNGFlNi1iNmI3LTIzNGYyZDYzN2UxZiIsImlhdCI6MTU5NzMyODI0NiwiZXhwIjoxNTk3NDU3ODQ2fQ.evcxL26kHIyY9tVwF0RL11UVkwOKIk7NEBQvhKoiX2Y",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImMyNDlkMzRjLTM4MzEtNDZiZi1iN2IzLTRlMTUyY2JjNTcxYiIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6IjY2MGFjMDQwLTdkYjYtNDcyYy1hYjU3LWJiOGY4MGY2YjYwMSIsInR5cGVPZlJvbGUiOiJVY3plxYQiLCJpYXQiOjE1OTc5MTQ1OTUsImV4cCI6MTU5ODA0NDE5NX0.he2IDn4RH3NDnvE79Z3MXO8zY-Trk0nEN2qZNTH9XQk",
 								"type": "text"
 							}
 						],
@@ -396,7 +432,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVjZWQwNzA2LWM3YmQtNDI3ZS1hYjY2LTA3NDcwYWY0ZGY1YyIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6ImVlZDgyYThmLTZmYWItNGFlNi1iNmI3LTIzNGYyZDYzN2UxZiIsImlhdCI6MTU5NzMyODI0NiwiZXhwIjoxNTk3NDU3ODQ2fQ.evcxL26kHIyY9tVwF0RL11UVkwOKIk7NEBQvhKoiX2Y",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImMyNDlkMzRjLTM4MzEtNDZiZi1iN2IzLTRlMTUyY2JjNTcxYiIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6IjY2MGFjMDQwLTdkYjYtNDcyYy1hYjU3LWJiOGY4MGY2YjYwMSIsInR5cGVPZlJvbGUiOiJVY3plxYQiLCJpYXQiOjE1OTc5MTQ1OTUsImV4cCI6MTU5ODA0NDE5NX0.he2IDn4RH3NDnvE79Z3MXO8zY-Trk0nEN2qZNTH9XQk",
 								"type": "text"
 							}
 						],
@@ -420,6 +456,70 @@
 								"v1",
 								"repetitory",
 								"addNewRepetitory"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update repetitory",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImMyNDlkMzRjLTM4MzEtNDZiZi1iN2IzLTRlMTUyY2JjNTcxYiIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6IjY2MGFjMDQwLTdkYjYtNDcyYy1hYjU3LWJiOGY4MGY2YjYwMSIsInR5cGVPZlJvbGUiOiJVY3plxYQiLCJpYXQiOjE1OTc5MTQ1OTUsImV4cCI6MTU5ODA0NDE5NX0.he2IDn4RH3NDnvE79Z3MXO8zY-Trk0nEN2qZNTH9XQk",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"subTopicName\": \"Koty\",\r\n    \"oldTitleOfRepetitory\": \"Dachowce\",\r\n    \"newTitleOfRepetitory\": \"Dzikie\",\r\n    \"data\": \"eloeloeloeleoleo\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/api/v1/repetitory/updateRepetitory",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"repetitory",
+								"updateRepetitory"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Take repetitory by subtopic name",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImMyNDlkMzRjLTM4MzEtNDZiZi1iN2IzLTRlMTUyY2JjNTcxYiIsImVtYWlsIjoiYWttaWVjaWtAZ21haWwuY29tIiwiaWRfcm9sZSI6IjY2MGFjMDQwLTdkYjYtNDcyYy1hYjU3LWJiOGY4MGY2YjYwMSIsInR5cGVPZlJvbGUiOiJVY3plxYQiLCJpYXQiOjE1OTc5MTQ1OTUsImV4cCI6MTU5ODA0NDE5NX0.he2IDn4RH3NDnvE79Z3MXO8zY-Trk0nEN2qZNTH9XQk",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/api/v1/repetitory/takeRepetitory/Dzikie",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"repetitory",
+								"takeRepetitory",
+								"Dzikie"
 							]
 						}
 					},

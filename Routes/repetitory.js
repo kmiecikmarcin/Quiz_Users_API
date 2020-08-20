@@ -323,7 +323,7 @@ router.put('/updateRepetitory',
       .isLength({ min: 1, max: 30 })
       .not().isNumeric()
       .trim(),
-    check('titleOfRepetitory')
+    check('newTitleOfRepetitory')
       .exists()
       .notEmpty()
       .isLength({ min: 1, max: 30 })
@@ -350,7 +350,7 @@ router.put('/updateRepetitory',
           if (subTopic === null) { res.status(404).json({ Error: 'Subtopic doesnt exists!' }); return; }
 
           const update = await updateRepetitory(Repetitory, req.body.oldTitleOfRepetitory,
-            req.body.titleOfRepetitory, req.body.data, user);
+            req.body.newTitleOfRepetitory, req.body.data, user);
           if (update) {
             res.status(201).json({ Message: 'Repetitory updated!' });
             return;
