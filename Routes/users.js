@@ -21,17 +21,10 @@ router.post('/login',
       .isEmail()
       .isLength({ min: 4 })
       .trim(),
-    check('userPassword', 'checkUserPassword')
+    check('userPassword')
       .exists()
       .notEmpty()
       .isLength({ min: 6 })
-      .custom((value, { req }) => {
-        if (value !== req.body.checkUserPassword) {
-          throw new Error('Hasła sa różne!');
-        } else {
-          return value;
-        }
-      })
       .trim(),
   ],
   async (req, res) => {
@@ -40,8 +33,9 @@ router.post('/login',
       res.status(400).json({ Error: error });
     } else {
       const user = await checkUserEmail(Users, req.body.userEmail);
+      const nameRole = await TypesOfRoles.findOne({ where: { id_role: user.id_role } });
       login(res, req.body.userPassword, user.password, user.id,
-        user.email, user.id_role);
+        user.email, user.id_role, nameRole.name);
     }
   });
 
