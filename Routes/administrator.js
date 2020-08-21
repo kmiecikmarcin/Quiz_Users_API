@@ -10,6 +10,7 @@ const TypesOfRoles = require('../Models/TypesOfRoles');
 const SubTopics = require('../Models/SubTopics');
 const Repetitory = require('../Models/Repetitory');
 const Topics = require('../Models/Topics');
+const Questions = require('../Models/Questions');
 const verifyToken = require('../Function/verifyJwtToken');
 const findUserByIdAndEmail = require('../Function/findUserByIdAndEmail');
 const addNewTypeOfUserRole = require('../Function/addNewTypeOfUserRole');
@@ -18,6 +19,7 @@ const deleteRepetitory = require('../Function/deleteRepetitory');
 const deleteSubTopic = require('../Function/deleteSubTopic');
 const checkTopicByName = require('../Function/checkTopicByName');
 const deleteTopic = require('../Function/deleteTopic');
+const deleteQuestion = require('../Function/deleteQuestion');
 
 router.post('/addNewTypeOfRole',
   [
@@ -198,6 +200,19 @@ router.delete('/deleteQuestion',
         } else {
           const user = await findUserByIdAndEmail(Users, authData);
           if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
+          const topic = await checkTopicByName(Topics, req.body.topicName);
+          if (topic === null) { res.status(400).json({ Error: 'Topic doesnt exists!' }); return; }
+
+          const result = await deleteQuestion(Questions, req.body.topicName, req.body.question,
+            user);
+          if (result) {
+            res.status(201).json({ Message: 'Question deleted!' });
+            return;
+          } if (result === false) {
+            res.status(400).json({ Message: 'You dont have permission!' });
+            return;
+          }
+          res.status(400).json({ Message: 'Something went wrong!' });
         }
       });
     }
