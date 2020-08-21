@@ -48,7 +48,18 @@ router.post('/addNewTypeOfRole',
 
 router.delete('/deleteRepetitory',
   [
-
+    check('subTopicName')
+      .exists()
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
+    check('titleOfRepetitory')
+      .exists()
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
   ],
   verifyToken, (req, res) => {
     const error = validationResult(req);
@@ -68,7 +79,12 @@ router.delete('/deleteRepetitory',
 
 router.delete('/deleteSubtopic',
   [
-
+    check('subTopicName')
+      .exists()
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
   ],
   verifyToken, (req, res) => {
     const error = validationResult(req);
@@ -88,7 +104,12 @@ router.delete('/deleteSubtopic',
 
 router.delete('/deleteTopic',
   [
-
+    check('topicName')
+      .exists()
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
   ],
   verifyToken, (req, res) => {
     const error = validationResult(req);
@@ -108,7 +129,18 @@ router.delete('/deleteTopic',
 
 router.delete('/deleteQuestion',
   [
-
+    check('topicName')
+      .exists()
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
+    check('question')
+      .exists()
+      .notEmpty()
+      .isLength({ min: 1, max: 30 })
+      .not().isNumeric()
+      .trim(),
   ],
   verifyToken, (req, res) => {
     const error = validationResult(req);
