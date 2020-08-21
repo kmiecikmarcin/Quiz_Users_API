@@ -9,11 +9,15 @@ const Users = require('../Models/Users');
 const TypesOfRoles = require('../Models/TypesOfRoles');
 const SubTopics = require('../Models/SubTopics');
 const Repetitory = require('../Models/Repetitory');
+const Topics = require('../Models/Topics');
 const verifyToken = require('../Function/verifyJwtToken');
 const findUserByIdAndEmail = require('../Function/findUserByIdAndEmail');
 const addNewTypeOfUserRole = require('../Function/addNewTypeOfUserRole');
 const findSubTopicByName = require('../Function/findSubTopicByName');
 const deleteRepetitory = require('../Function/deleteRepetitory');
+const deleteSubTopic = require('../Function/deleteSubTopic');
+const checkTopicByName = require('../Function/checkTopicByName');
+const deleteTopic = require('../Function/deleteTopic');
 
 router.post('/addNewTypeOfRole',
   [
@@ -116,6 +120,16 @@ router.delete('/deleteSubtopic',
           if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
           const subTopic = await findSubTopicByName(SubTopics, req.body.subTopicName);
           if (subTopic === null) { res.status(404).json({ Error: 'Subtopic doesnt exists!' }); return; }
+
+          const result = await deleteSubTopic(SubTopics, req.body.subTopicName, user);
+          if (result) {
+            res.status(201).json({ Message: 'Subtopic deleted!' });
+            return;
+          } if (result === false) {
+            res.status(400).json({ Message: 'You dont have permission!' });
+            return;
+          }
+          res.status(400).json({ Message: 'Something went wrong!' });
         }
       });
     }
@@ -141,6 +155,18 @@ router.delete('/deleteTopic',
         } else {
           const user = await findUserByIdAndEmail(Users, authData);
           if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
+          const topic = await checkTopicByName(Topics, req.body.topicName);
+          if (topic === null) { res.status(400).json({ Error: 'Topic doesnt exists!' }); return; }
+
+          const result = await deleteTopic(Topics, req.body.topicName, user);
+          if (result) {
+            res.status(201).json({ Message: 'Topic deleted!' });
+            return;
+          } if (result === false) {
+            res.status(400).json({ Message: 'You dont have permission!' });
+            return;
+          }
+          res.status(400).json({ Message: 'Something went wrong!' });
         }
       });
     }
