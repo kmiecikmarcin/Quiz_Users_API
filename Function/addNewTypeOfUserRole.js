@@ -2,7 +2,7 @@ const findUserRoleByName = require('./findUserRoleByName');
 const findUserRoleById = require('./findUserRoleById');
 
 async function addNewTypeOfUserRole(TypesOfRoles, typeOfRole, user) {
-  const checkRole = findUserRoleByName(TypesOfRoles, typeOfRole);
+  const checkRole = await findUserRoleByName(TypesOfRoles, typeOfRole);
   if (checkRole === null) {
     const userRole = await findUserRoleById(TypesOfRoles, user.id_role);
     if (userRole === 'Administrator') {

@@ -6,10 +6,14 @@ const router = express.Router();
 const { check, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const Users = require('../Models/Users');
+const TypesOfRoles = require('../Models/TypesOfRoles');
+const SubTopics = require('../Models/SubTopics');
+const Repetitory = require('../Models/Repetitory');
 const verifyToken = require('../Function/verifyJwtToken');
 const findUserByIdAndEmail = require('../Function/findUserByIdAndEmail');
 const addNewTypeOfUserRole = require('../Function/addNewTypeOfUserRole');
-const TypesOfRoles = require('../Models/TypesOfRoles');
+const findSubTopicByName = require('../Function/findSubTopicByName');
+const deleteRepetitory = require('../Function/deleteRepetitory');
 
 router.post('/addNewTypeOfRole',
   [
@@ -72,6 +76,19 @@ router.delete('/deleteRepetitory',
         } else {
           const user = await findUserByIdAndEmail(Users, authData);
           if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
+          const subTopic = await findSubTopicByName(SubTopics, req.body.subTopicName);
+          if (subTopic === null) { res.status(404).json({ Error: 'Subtopic doesnt exists!' }); return; }
+
+          const result = await deleteRepetitory(Repetitory, req.body.titleOfRepetitory,
+            user, subTopic);
+          if (result) {
+            res.status(201).json({ Message: 'Repetitory deleted!' });
+            return;
+          } if (result === false) {
+            res.status(400).json({ Message: 'You dont have permission!' });
+            return;
+          }
+          res.status(400).json({ Message: 'Something went wrong!' });
         }
       });
     }
@@ -97,6 +114,8 @@ router.delete('/deleteSubtopic',
         } else {
           const user = await findUserByIdAndEmail(Users, authData);
           if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
+          const subTopic = await findSubTopicByName(SubTopics, req.body.subTopicName);
+          if (subTopic === null) { res.status(404).json({ Error: 'Subtopic doesnt exists!' }); return; }
         }
       });
     }
