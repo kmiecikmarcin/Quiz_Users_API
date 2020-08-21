@@ -8,6 +8,8 @@ const jwt = require('jsonwebtoken');
 const Users = require('../Models/Users');
 const verifyToken = require('../Function/verifyJwtToken');
 const findUserByIdAndEmail = require('../Function/findUserByIdAndEmail');
+const addNewTypeOfUserRole = require('../Function/addNewTypeOfUserRole');
+const TypesOfRoles = require('../Models/TypesOfRoles');
 
 router.post('/addNewTypeOfRole',
   [
@@ -29,6 +31,16 @@ router.post('/addNewTypeOfRole',
         } else {
           const user = await findUserByIdAndEmail(Users, authData);
           if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
+
+          const addRole = await addNewTypeOfUserRole(TypesOfRoles, req.body.typeOfRole, user);
+          if (addRole) {
+            res.status(201).json({ Message: 'New type of user role created!' });
+            return;
+          } if (addRole === false) {
+            res.status(400).json({ Message: 'You dont have permission!' });
+            return;
+          }
+          res.status(400).json({ Message: 'Something went wrong!' });
         }
       });
     }
