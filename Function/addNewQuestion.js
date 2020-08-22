@@ -7,7 +7,7 @@ async function addNewQuestion(Questions, questionData, correctAnswerData,
   const checkQuestion = await findQuestionByName(Questions, questionData);
   if (checkQuestion === null) {
     const userRole = await findUserRoleById(TypesOfRoles, user.id_role);
-    if (userRole === 'Nauczyciel') {
+    if (userRole !== 'Uczeń') {
       const result = await Questions.create({
         question: questionData,
         correctAnswer: correctAnswerData,
