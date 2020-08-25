@@ -9,10 +9,11 @@ services:
       - /usr/src/app/node_modules
     environment:
       secretKey: default-secret-key
-      DATABASE_USER: postgres
-      DATABASE_PASSWORD: 2qazxsw
-      DATABASE_NAME: Quiz_Users
-      DATABASE_HOST: db
+      DATABASE_USER: vamfrgtfvrgtwy
+      DATABASE_PASSWORD: 5ae9d04520ac6dca059bef14215cfee4f94a36c87714af91c05840793d1bbbaa
+      DATABASE_NAME: ddf3s6s3rio39c
+      PORT: 5432
+      DATABASE_HOST: ec2-54-247-103-43.eu-west-1.compute.amazonaws.com
     command: ["nodemon", "app.js"]
     ports:
       - 3000:3000
@@ -25,9 +26,9 @@ services:
     volumes:
       - db-storage:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_DB: Quiz_Users
-      POSTGRES_PASSWORD: 2qazxsw
+      POSTGRES_USER: vamfrgtfvrgtwy
+      POSTGRES_DB: ddf3s6s3rio39c
+      POSTGRES_PASSWORD: 5ae9d04520ac6dca059bef14215cfee4f94a36c87714af91c05840793d1bbbaa
     networks:
       - tools
       - backend
