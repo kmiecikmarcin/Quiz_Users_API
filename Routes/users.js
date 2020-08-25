@@ -16,6 +16,7 @@ const checkTypeOfRole = require('../Function/checkUserRole');
 const verifyToken = require('../Function/verifyJwtToken');
 const findUserByIdAndEmail = require('../Function/findUserByIdAndEmail');
 const deleteUserAccount = require('../Function/deleteUserAccount');
+const changeUserPassword = require('../Function/changeUserPassword');
 
 router.post('/login',
   [
@@ -61,7 +62,7 @@ router.post('/register',
       .isLength({ min: 6 })
       .custom((value, { req }) => {
         if (value !== req.body.checkUserPassword) {
-          throw new Error('Hasła sa różne!');
+          throw new Error('Passwords are different');
         } else {
           return value;
         }
@@ -122,6 +123,53 @@ router.delete('/deleteAccount',
           const deleteAccount = await deleteUserAccount(Users, authData);
           if (deleteAccount) {
             res.status(201).json({ Message: 'Account deleted!' });
+            return;
+          }
+          res.status(400).json({ Message: 'Something went wrong!' });
+        }
+      });
+    }
+  });
+
+router.put('/changePassword',
+  [
+    check('oldUserPassword')
+      .exists()
+      .notEmpty()
+      .isLength({ min: 6 })
+      .trim(),
+    check('newUserPassword', 'checkNewUserPassword')
+      .exists()
+      .notEmpty()
+      .isLength({ min: 6 })
+      .custom((value, { req }) => {
+        if (value !== req.body.checkNewUserPassword) {
+          throw new Error('Passwords are different!');
+        } else {
+          return value;
+        }
+      })
+      .trim(),
+  ],
+  verifyToken, (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json({ Error: error });
+    } else {
+      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+        if (err) {
+          res.sendStatus(403);
+        } else {
+          const user = await findUserByIdAndEmail(Users, authData);
+          if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
+
+          const changePassword = await changeUserPassword(Users, user, req.body.oldUserPassword,
+            req.body.newUserPassword);
+          if (changePassword) {
+            res.status(201).json({ Message: 'Password changed!' });
+            return;
+          } if (changePassword === false) {
+            res.status(400).json({ Message: 'Old password is incorrect' });
             return;
           }
           res.status(400).json({ Message: 'Something went wrong!' });
