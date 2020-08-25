@@ -1,5 +1,5 @@
 async function findAllSubjects(Subjects) {
-  const subjects = await Subjects.findAll({ attributes: ['name'] });
+  const subjects = await Subjects.findAll({ attributes: ['id', 'name'] });
   if (subjects.length !== 0) {
     return subjects;
   }
