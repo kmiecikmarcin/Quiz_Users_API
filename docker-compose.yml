@@ -12,7 +12,8 @@ services:
       DATABASE_USER: postgres
       DATABASE_PASSWORD: 2qazxsw
       DATABASE_NAME: Quiz_Users
-      DATABASE_HOST: db
+      PORT: 5432
+      DATABSE_URL: postgres://postgres:2qazxsw@db:5432/Quiz_Users
     command: ["nodemon", "app.js"]
     ports:
       - 3000:3000
