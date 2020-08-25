@@ -1,5 +1,5 @@
 async function findAllSubjects(Subjects) {
-  const subjects = await Subjects.findAll({ attributes: { exclude: ['id', 'createdAt', 'updatedAt', 'id_user', 'id_topic'] } });
+  const subjects = await Subjects.findAll({ where: { name: { $ne: 0 } } });
   if (subjects.length !== 0) {
     return subjects;
   }
