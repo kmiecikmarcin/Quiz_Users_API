@@ -56,14 +56,11 @@
     Endpointy związane z połączeniem się użytkownika z aplikacją:
         - api/v1/user/login
         - api/v1/user/register
-        - api/v1/user/logout
-        - api/v1/user/deleteAccount
     Endpointy związane z edycją danych przez użytkownika:
-        - api/v1/user/editData/login
-        - api/v1/user/editData/changeEmail
-        - api/v1/user/editData/changePassword
-        - api/v1/user/login/forgotPassword
-        - api/v1/user/login/forgotLogin
+        - api/v1/user/changeEmail
+        - api/v1/user/changePassword
+        - api/v1/user/forgotPassword
+        - api/v1/user/deleteAccount
     Endpointy nawiązujące do działań użytkownik - repetytorium:
         - api/v1/repetitory/takeListOfSubject
         - api/v1/repetitory/takeListOfTopics
@@ -76,12 +73,14 @@
         - api/v1/repetitory/updateRepetitory
     Endpointy nazwiązujące do działań z quizem:
         - api/v1/quiz/addNewQuestion
-        - api/v1/quiz/takeQuestionsForQuiz
+        - api/v1/quiz/updateQuestion
+        - api/v1/quiz/takeQuestions
     Endpointy związane z zarządzaniem administracyjnym:
-        - api/v1/administrator/acceptDeletedAccounts
         - api/v1/administrator/addNewTypeOfRole
         - api/v1/administrator/deleteRepetitory
-        - api/v1/administrator/addNewSubject
+        - api/v1/administrator/deleteSubtopic
+        - api/v1/administrator/deleteTopic
+        - api/v1/administrator/deleteQuestion
 
 
 
