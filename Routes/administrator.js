@@ -35,7 +35,7 @@ router.post('/addNewTypeOfRole',
     if (!error.isEmpty()) {
       res.status(400).json({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+      jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
@@ -76,7 +76,7 @@ router.delete('/deleteRepetitory',
     if (!error.isEmpty()) {
       res.status(400).json({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+      jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
@@ -114,7 +114,7 @@ router.delete('/deleteSubtopic',
     if (!error.isEmpty()) {
       res.status(400).json({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+      jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
@@ -151,7 +151,7 @@ router.delete('/deleteTopic',
     if (!error.isEmpty()) {
       res.status(400).json({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+      jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
@@ -194,7 +194,7 @@ router.delete('/deleteQuestion',
     if (!error.isEmpty()) {
       res.status(400).json({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+      jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
