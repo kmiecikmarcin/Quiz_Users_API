@@ -15,7 +15,7 @@ services:
       DATABASE_HOST: db
     command: ["nodemon", "app.js"]
     ports:
-      - 3000:3000
+      - 3000:300
     networks:
       - frontend
       - backend
@@ -36,7 +36,7 @@ services:
     image: adminer
     restart: on-failure
     ports: 
-      - 8080:8080
+      - 8080:80
     networks:
       - tools
       - backend

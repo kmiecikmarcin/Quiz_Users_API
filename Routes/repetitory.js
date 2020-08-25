@@ -24,7 +24,7 @@ const addNewRepetitory = require('../Function/addNewRepetitory');
 const findRepetitoryBySubtopicId = require('../Function/findRepetitoryBySubtopicId');
 const updateRepetitory = require('../Function/updateRepetitory');
 
-router.get('/takeListOfSubject', verifyToken, (req, res) => {
+router.get('/takeListOfSubjects', verifyToken, (req, res) => {
   jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
     if (err) {
       res.sendStatus(403);
