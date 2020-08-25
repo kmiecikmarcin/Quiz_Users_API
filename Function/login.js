@@ -13,7 +13,7 @@ function login(res, userPassword, userpassword, userId, userEmail, userIdRole, n
         res.status(200).json({ token });
       });
     } else {
-      res.status(400).json({ Response: 'User name or password is incorrect!' });
+      res.status(400).json({ Error: 'User name or password is incorrect!' });
     }
   });
 }
