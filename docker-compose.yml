@@ -9,13 +9,14 @@ services:
       - /usr/src/app/node_modules
     environment:
       secretKey: default-secret-key
+      PORT: default-port
       DATABASE_USER: postgres
       DATABASE_PASSWORD: 2qazxsw
       DATABASE_NAME: Quiz_Users
       DATABASE_HOST: db
     command: ["nodemon", "app.js"]
     ports:
-      - 3000:300
+      - 3000:3000
     networks:
       - frontend
       - backend
@@ -36,7 +37,7 @@ services:
     image: adminer
     restart: on-failure
     ports: 
-      - 8080:80
+      - 8080:8080
     networks:
       - tools
       - backend
