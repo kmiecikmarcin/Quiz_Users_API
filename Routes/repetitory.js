@@ -25,7 +25,7 @@ const findRepetitoryBySubtopicId = require('../Function/findRepetitoryBySubtopic
 const updateRepetitory = require('../Function/updateRepetitory');
 
 router.get('/takeListOfSubjects', verifyToken, (req, res) => {
-  jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
+  jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
     if (err) {
       res.sendStatus(403);
     } else {
@@ -43,7 +43,7 @@ router.get('/takeListOfSubjects', verifyToken, (req, res) => {
 });
 
 router.get('/takeListOfTopics', verifyToken, (req, res) => {
-  jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
+  jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
     if (err) {
       res.sendStatus(403);
     } else {
@@ -61,7 +61,7 @@ router.get('/takeListOfTopics', verifyToken, (req, res) => {
 });
 
 router.get('/takeListOfSubTopics', verifyToken, (req, res) => {
-  jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
+  jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
     if (err) {
       res.sendStatus(403);
     } else {
@@ -98,7 +98,7 @@ router.post('/addNewTopic',
     if (!error.isEmpty()) {
       res.status(400).json({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
+      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
@@ -148,7 +148,7 @@ router.put('/updateTopic',
     if (!error.isEmpty()) {
       res.status(400).json({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
+      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
@@ -190,7 +190,7 @@ router.post('/addNewSubTopic',
     if (!error.isEmpty()) {
       res.status(400).json({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
+      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
@@ -238,7 +238,7 @@ router.put('/updateSubTopic',
     if (!error.isEmpty()) {
       res.status(400).json({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
+      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
@@ -285,7 +285,7 @@ router.post('/addNewRepetitory',
     if (!error.isEmpty()) {
       res.status(400).json({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
+      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
@@ -340,7 +340,7 @@ router.put('/updateRepetitory',
     if (!error.isEmpty()) {
       res.status(400).json({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
+      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
@@ -370,7 +370,7 @@ router.get('/takeRepetitory/:subTopicName',
     if (!error.isEmpty()) {
       res.status(400).json({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
+      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {

@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 
-module.exports = new Sequelize(process.env.S3_DATABASE_NAME,
-  process.env.S3_DATABASE_USER, process.env.S3_DATABASE_PASSWORD, {
-    host: process.env.S3_DATABASE_HOST,
+module.exports = new Sequelize(process.env.DATABASE_NAME,
+  process.env.DATABASE_USER, process.env.DATABASE_PASSWORD, {
+    host: process.env.DATABASE_HOST,
     dialect: 'postgres',
   });
