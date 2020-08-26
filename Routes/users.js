@@ -89,7 +89,7 @@ router.post('/register',
     if (result) {
       res.status(201).json({ Message: 'Registration successful!' });
     } else {
-      res.status(400).json({ Message: 'Registration process failed' });
+      res.status(400).json({ Error: 'Registration process failed' });
     }
   });
 
@@ -125,7 +125,7 @@ router.delete('/deleteAccount',
             res.status(201).json({ Message: 'Account deleted!' });
             return;
           }
-          res.status(400).json({ Message: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Something went wrong!' });
         }
       });
     }
@@ -169,10 +169,10 @@ router.put('/changePassword',
             res.status(201).json({ Message: 'Password changed!' });
             return;
           } if (changePassword === false) {
-            res.status(400).json({ Message: 'Old password is incorrect' });
+            res.status(400).json({ Error: 'Old password is incorrect' });
             return;
           }
-          res.status(400).json({ Message: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Something went wrong!' });
         }
       });
     }

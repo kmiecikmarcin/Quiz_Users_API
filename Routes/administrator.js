@@ -47,10 +47,10 @@ router.post('/addNewTypeOfRole',
             res.status(201).json({ Message: 'New type of user role created!' });
             return;
           } if (addRole === false) {
-            res.status(400).json({ Message: 'You dont have permission!' });
+            res.status(400).json({ Error: 'You dont have permission!' });
             return;
           }
-          res.status(400).json({ Message: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Something went wrong!' });
         }
       });
     }
@@ -91,10 +91,10 @@ router.delete('/deleteRepetitory',
             res.status(201).json({ Message: 'Repetitory deleted!' });
             return;
           } if (result === false) {
-            res.status(400).json({ Message: 'You dont have permission!' });
+            res.status(400).json({ Error: 'You dont have permission!' });
             return;
           }
-          res.status(400).json({ Message: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Something went wrong!' });
         }
       });
     }
@@ -128,10 +128,10 @@ router.delete('/deleteSubtopic',
             res.status(201).json({ Message: 'Subtopic deleted!' });
             return;
           } if (result === false) {
-            res.status(400).json({ Message: 'You dont have permission!' });
+            res.status(400).json({ Error: 'You dont have permission!' });
             return;
           }
-          res.status(400).json({ Message: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Something went wrong!' });
         }
       });
     }
@@ -165,10 +165,10 @@ router.delete('/deleteTopic',
             res.status(201).json({ Message: 'Topic deleted!' });
             return;
           } if (result === false) {
-            res.status(400).json({ Message: 'You dont have permission!' });
+            res.status(400).json({ Error: 'You dont have permission!' });
             return;
           }
-          res.status(400).json({ Message: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Something went wrong!' });
         }
       });
     }
@@ -209,10 +209,10 @@ router.delete('/deleteQuestion',
             res.status(201).json({ Message: 'Question deleted!' });
             return;
           } if (result === false) {
-            res.status(400).json({ Message: 'You dont have permission!' });
+            res.status(400).json({ Error: 'You dont have permission!' });
             return;
           }
-          res.status(400).json({ Message: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Something went wrong!' });
         }
       });
     }

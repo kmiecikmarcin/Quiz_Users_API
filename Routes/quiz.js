@@ -74,10 +74,10 @@ router.post('/addNewQuestion',
             res.status(201).json({ Message: 'New question created!' });
             return;
           } if (addQuestion === false) {
-            res.status(400).json({ Message: 'You dont have permission!' });
+            res.status(400).json({ Error: 'You dont have permission!' });
             return;
           }
-          res.status(400).json({ Message: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Something went wrong!' });
         }
       });
     }
@@ -149,10 +149,10 @@ router.put('/updateQuestion',
             res.status(201).json({ Message: 'Question updated!' });
             return;
           } if (update === false) {
-            res.status(400).json({ Message: 'You dont have permission!' });
+            res.status(400).json({ Error: 'You dont have permission!' });
             return;
           }
-          res.status(400).json({ Message: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Something went wrong!' });
         }
       });
     }
@@ -178,10 +178,10 @@ router.get('/takeQuestions/:topicName',
             res.status(201).json({ Data: takeQuestions });
             return;
           } if (takeQuestions === false) {
-            res.status(400).json({ Message: 'You dont have permission!' });
+            res.status(400).json({ Error: 'You dont have permission!' });
             return;
           }
-          res.status(400).json({ Message: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Something went wrong!' });
         }
       });
     }
