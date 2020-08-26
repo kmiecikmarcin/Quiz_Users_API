@@ -1,5 +1,5 @@
 async function findAllTopics(Topics) {
-  const topics = await Topics.findAll({ attributes: ['name'] });
+  const topics = await Topics.findAll({ attributes: ['id', 'name', 'id_subject'] });
   if (topics.length !== 0) {
     return topics;
   }
