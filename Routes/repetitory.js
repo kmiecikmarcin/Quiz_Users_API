@@ -379,9 +379,9 @@ router.get('/takeRepetitory/:subTopicName',
           const subTopic = await findSubTopicByName(SubTopics, req.params.subTopicName);
           if (subTopic === null) { res.status(404).json({ Error: 'Subtopic doesnt exists!' }); return; }
 
-          const takeRepetitory = findRepetitoryBySubtopicId(Repetitory, subTopic.id);
+          const takeRepetitory = await findRepetitoryBySubtopicId(Repetitory, subTopic.id);
           if (takeRepetitory) {
-            res.status(201).json({ takeRepetitory });
+            res.status(201).json({ Repetitory: takeRepetitory });
             return;
           } if (takeRepetitory === false) {
             res.status(400).json({ Error: 'You dont have permission!' });
