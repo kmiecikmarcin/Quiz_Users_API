@@ -25,7 +25,7 @@ const findRepetitoryBySubtopicId = require('../Function/findRepetitoryBySubtopic
 const updateRepetitory = require('../Function/updateRepetitory');
 
 router.get('/takeListOfSubjects', verifyToken, (req, res) => {
-  jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+  jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
     if (err) {
       res.sendStatus(403);
     } else {
@@ -37,13 +37,13 @@ router.get('/takeListOfSubjects', verifyToken, (req, res) => {
         res.status(200).json(subjects);
         return;
       }
-      res.status(400).json({ Message: 'Something went wrong!' });
+      res.status(400).json({ Error: 'Something went wrong!' });
     }
   });
 });
 
 router.get('/takeListOfTopics', verifyToken, (req, res) => {
-  jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+  jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
     if (err) {
       res.sendStatus(403);
     } else {
@@ -55,13 +55,13 @@ router.get('/takeListOfTopics', verifyToken, (req, res) => {
         res.status(200).json(topics);
         return;
       }
-      res.status(400).json({ Message: 'Something went wrong!' });
+      res.status(400).json({ Error: 'Something went wrong!' });
     }
   });
 });
 
 router.get('/takeListOfSubTopics', verifyToken, (req, res) => {
-  jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+  jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
     if (err) {
       res.sendStatus(403);
     } else {
@@ -73,7 +73,7 @@ router.get('/takeListOfSubTopics', verifyToken, (req, res) => {
         res.status(200).json(subTopics);
         return;
       }
-      res.status(400).json({ Message: 'Something went wrong!' });
+      res.status(400).json({ Error: 'Something went wrong!' });
     }
   });
 });
@@ -98,7 +98,7 @@ router.post('/addNewTopic',
     if (!error.isEmpty()) {
       res.status(400).json({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+      jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
@@ -113,10 +113,10 @@ router.post('/addNewTopic',
             res.status(201).json({ Message: 'New topic created!' });
             return;
           } if (newTopic === false) {
-            res.status(400).json({ Message: 'You dont have permission!' });
+            res.status(400).json({ Error: 'You dont have permission!' });
             return;
           }
-          res.status(400).json({ Message: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Something went wrong!' });
         }
       });
     }
@@ -148,7 +148,7 @@ router.put('/updateTopic',
     if (!error.isEmpty()) {
       res.status(400).json({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+      jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
@@ -161,10 +161,10 @@ router.put('/updateTopic',
             res.status(201).json({ Message: 'Topic updated!' });
             return;
           } if (updateTopic === false) {
-            res.status(400).json({ Message: 'You dont have permission!' });
+            res.status(400).json({ Error: 'You dont have permission!' });
             return;
           }
-          res.status(400).json({ Message: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Something went wrong!' });
         }
       });
     }
@@ -190,7 +190,7 @@ router.post('/addNewSubTopic',
     if (!error.isEmpty()) {
       res.status(400).json({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+      jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
@@ -203,10 +203,10 @@ router.post('/addNewSubTopic',
             res.status(201).json({ Message: 'New subtopic created!' });
             return;
           } if (addSubTopic === false) {
-            res.status(400).json({ Message: 'You dont have permission!' });
+            res.status(400).json({ Error: 'You dont have permission!' });
             return;
           }
-          res.status(400).json({ Message: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Something went wrong!' });
         }
       });
     }
@@ -238,7 +238,7 @@ router.put('/updateSubTopic',
     if (!error.isEmpty()) {
       res.status(400).json({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+      jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
@@ -251,10 +251,10 @@ router.put('/updateSubTopic',
             res.status(201).json({ Message: 'Subtopic updated!' });
             return;
           } if (updateSubTopic === false) {
-            res.status(400).json({ Message: 'You dont have permission!' });
+            res.status(400).json({ Error: 'You dont have permission!' });
             return;
           }
-          res.status(400).json({ Message: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Something went wrong!' });
         }
       });
     }
@@ -285,7 +285,7 @@ router.post('/addNewRepetitory',
     if (!error.isEmpty()) {
       res.status(400).json({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+      jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
@@ -300,10 +300,10 @@ router.post('/addNewRepetitory',
             res.status(201).json({ Message: 'Repetitory added!' });
             return;
           } if (addRepetitory === false) {
-            res.status(400).json({ Message: 'You dont have permission!' });
+            res.status(400).json({ Error: 'You dont have permission!' });
             return;
           }
-          res.status(400).json({ Message: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Something went wrong!' });
         }
       });
     }
@@ -340,7 +340,7 @@ router.put('/updateRepetitory',
     if (!error.isEmpty()) {
       res.status(400).json({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+      jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
@@ -355,10 +355,10 @@ router.put('/updateRepetitory',
             res.status(201).json({ Message: 'Repetitory updated!' });
             return;
           } if (update === false) {
-            res.status(400).json({ Message: 'You dont have permission!' });
+            res.status(400).json({ Error: 'You dont have permission!' });
             return;
           }
-          res.status(400).json({ Message: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Something went wrong!' });
         }
       });
     }
@@ -381,13 +381,13 @@ router.get('/takeRepetitory/:subTopicName',
 
           const takeRepetitory = await findRepetitoryBySubtopicId(Repetitory, subTopic.id);
           if (takeRepetitory) {
-            res.status(201).json({ Repetitory: takeRepetitory });
+            res.status(201).json(takeRepetitory);
             return;
           } if (takeRepetitory === false) {
-            res.status(400).json({ Message: 'You dont have permission!' });
+            res.status(400).json({ Error: 'You dont have permission!' });
             return;
           }
-          res.status(400).json({ Message: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Something went wrong!' });
         }
       });
     }
