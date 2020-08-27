@@ -175,7 +175,7 @@ router.get('/takeQuestions/:topicName',
 
           const takeQuestions = await findQuestionsByTopicId(Questions, topic.id);
           if (takeQuestions) {
-            res.status(201).json({ Data: takeQuestions });
+            res.status(201).json(takeQuestions);
             return;
           } if (takeQuestions === false) {
             res.status(400).json({ Error: 'You dont have permission!' });
