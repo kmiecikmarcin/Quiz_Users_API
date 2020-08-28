@@ -17,6 +17,7 @@ const verifyToken = require('../Function/verifyJwtToken');
 const findUserByIdAndEmail = require('../Function/findUserByIdAndEmail');
 const deleteUserAccount = require('../Function/deleteUserAccount');
 const changeUserPassword = require('../Function/changeUserPassword');
+const changeUserEmailAdress = require('../Function/changeUserEmailAdress');
 
 router.post('/login',
   [
@@ -173,6 +174,57 @@ router.put('/changePassword',
             return;
           }
           res.status(400).json({ Message: 'Something went wrong!' });
+        }
+      });
+    }
+  });
+
+router.put('/changeEmailAdress',
+  [
+    check('oldUserEmailAdress')
+      .exists()
+      .notEmpty()
+      .isEmail()
+      .trim()
+      .isLength({ min: 4 })
+      .isLowercase(),
+    check('newUserEmailAdress')
+      .exists()
+      .notEmpty()
+      .isEmail()
+      .trim()
+      .isLength({ min: 4 })
+      .isLowercase(),
+    check('userPassword', 'checkUserPassword')
+      .exists()
+      .notEmpty()
+      .isLength({ min: 6 })
+      .custom((value, { req }) => {
+        if (value !== req.body.checkUserPassword) {
+          throw new Error('Passwords are different');
+        } else {
+          return value;
+        }
+      })
+      .trim(),
+  ],
+  verifyToken, (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json({ Error: error });
+    } else {
+      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+        if (err) {
+          res.sendStatus(403);
+        } else {
+          const user = await findUserByIdAndEmail(Users, authData);
+          if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
+
+          const changeEmail = await changeUserEmailAdress(Users, user);
+          if (changeEmail) {
+            res.json();
+          }
+          res.json();
         }
       });
     }
