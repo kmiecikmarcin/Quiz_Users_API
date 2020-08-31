@@ -17,6 +17,8 @@ const verifyToken = require('../Function/verifyJwtToken');
 const findUserByIdAndEmail = require('../Function/findUserByIdAndEmail');
 const deleteUserAccount = require('../Function/deleteUserAccount');
 const changeUserPassword = require('../Function/changeUserPassword');
+const changeUserEmailAdress = require('../Function/changeUserEmailAdress');
+const sendEmailToUserWithPassword = require('../Function/sendEmailToUserWithPassword');
 
 router.post('/login',
   [
@@ -113,7 +115,7 @@ router.delete('/deleteAccount',
     if (!error.isEmpty()) {
       res.status(400).json({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+      jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
@@ -156,7 +158,7 @@ router.put('/changePassword',
     if (!error.isEmpty()) {
       res.status(400).json({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+      jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
@@ -175,6 +177,89 @@ router.put('/changePassword',
           res.status(400).json({ Error: 'Something went wrong!' });
         }
       });
+    }
+  });
+
+router.put('/changeEmailAdress',
+  [
+    check('oldUserEmailAdress')
+      .exists()
+      .notEmpty()
+      .isEmail()
+      .trim()
+      .isLength({ min: 4 })
+      .isLowercase(),
+    check('newUserEmailAdress')
+      .exists()
+      .notEmpty()
+      .isEmail()
+      .trim()
+      .isLength({ min: 4 })
+      .isLowercase(),
+    check('userPassword', 'checkUserPassword')
+      .exists()
+      .notEmpty()
+      .isLength({ min: 6 })
+      .custom((value, { req }) => {
+        if (value !== req.body.checkUserPassword) {
+          throw new Error('Passwords are different');
+        } else {
+          return value;
+        }
+      })
+      .trim(),
+  ],
+  verifyToken, (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json({ Error: error });
+    } else {
+      jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
+        if (err) {
+          res.sendStatus(403);
+        } else {
+          const user = await findUserByIdAndEmail(Users, authData);
+          if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
+
+          const changeEmail = await changeUserEmailAdress(Users, user, req.body.newUserEmailAdress,
+            req.body.userPassword);
+          if (changeEmail) {
+            res.status(201).json({ Message: 'Email changed!' });
+            return;
+          } if (changeEmail === false) {
+            res.status(400).json({ Error: 'Password is incorrect!' });
+            return;
+          }
+          res.status(400).json({ Error: 'Something went wrong!' });
+        }
+      });
+    }
+  });
+
+router.post('/forgotPassword',
+  [
+    check('userEmail')
+      .exists()
+      .notEmpty()
+      .isEmail()
+      .trim()
+      .isLength({ min: 4 })
+      .isLowercase(),
+  ],
+  async (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json({ Error: error });
+    } else {
+      const sendEmail = await sendEmailToUserWithPassword(Users, req.body.userEmail);
+      if (sendEmail == null) {
+        res.status(400).json({ Error: 'User doesnt exists!' });
+        return;
+      } if (sendEmail === true) {
+        res.status(200).json({ Message: 'Email sent!' });
+        return;
+      }
+      res.status(404).json({ Error: 'Something went wrong!' });
     }
   });
 
