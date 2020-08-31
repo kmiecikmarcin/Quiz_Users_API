@@ -9,7 +9,7 @@ function login(res, userPassword, userpassword, userId, userEmail, userIdRole, n
     if (result === true) {
       jwt.sign({
         id: userId, email: userEmail, id_role: userIdRole, typeOfRole: nameRole,
-      }, process.env.secretKey, { expiresIn: '36h' }, (err, token) => {
+      }, process.env.S3_SECRETKEY, { expiresIn: '36h' }, (err, token) => {
         res.status(200).json({ token });
       });
     } else {
