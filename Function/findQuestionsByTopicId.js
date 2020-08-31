@@ -1,12 +1,7 @@
-/* eslint-disable no-plusplus */
 async function findQuestionsByTopicId(Questions, topic) {
-  const questions = await Questions.findAll({ where: { id_topic: topic } });
+  const questions = await Questions.findAll({ where: { id_topic: topic }, attributes: { exclude: ['id', 'createdAt', 'updatedAt', 'id_user'] } });
   if (questions.length !== 0) {
-    let response = {};
-    for (let i = 1; i < 6; ++i) {
-      response = questions[i];
-    }
-    return response;
+    return questions;
   }
   return null;
 }
