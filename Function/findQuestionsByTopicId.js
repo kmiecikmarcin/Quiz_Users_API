@@ -1,12 +1,12 @@
+/* eslint-disable no-plusplus */
 async function findQuestionsByTopicId(Questions, topic) {
   const questions = await Questions.findAll({ where: { id_topic: topic } });
   if (questions.length !== 0) {
-    questions.array.forEach((index) => {
-      if (index > 0 && index < 6) {
-        return questions;
-      }
-      return null;
-    });
+    let response = {};
+    for (let i = 1; i < 6; ++i) {
+      response = questions[i];
+    }
+    return response;
   }
   return null;
 }
