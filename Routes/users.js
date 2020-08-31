@@ -220,11 +220,16 @@ router.put('/changeEmailAdress',
           const user = await findUserByIdAndEmail(Users, authData);
           if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
 
-          const changeEmail = await changeUserEmailAdress(Users, user);
+          const changeEmail = await changeUserEmailAdress(Users, user, req.body.newUserEmailAdress,
+            req.body.userPassword);
           if (changeEmail) {
-            res.json();
+            res.status(201).json({ Message: 'Email changed!' });
+            return;
+          } if (changeEmail === false) {
+            res.status(400).json({ Message: 'Password is incorrect!' });
+            return;
           }
-          res.json();
+          res.status(400).json({ Message: 'Something went wrong!' });
         }
       });
     }
