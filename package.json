@@ -7,7 +7,7 @@
     "delay": 1000
   },
   "scripts": {
-    "start" : "node app.js",
+    "start": "node app.js",
     "nodemon-start": "nodemon app.js",
     "test": "docker-compose up -d db && sleep 1 && docker-compose up -d && newman run Tests/e2e/quiz-tests-collection.postman_collection.json -e Tests/e2e/quiz-localhost.postman_environment.json",
     "nodemon-tests": "nodemon --delay 500ms --watch . --exec 'npm run test || true'",
@@ -23,6 +23,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-validator": "^6.6.1",
+    "generate-password": "^1.5.1",
     "install": "^0.13.0",
     "jsonwebtoken": "^8.5.1",
     "node-pre-gyp": "0.12.0",

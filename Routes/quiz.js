@@ -58,7 +58,7 @@ router.post('/addNewQuestion',
     if (!error.isEmpty()) {
       res.status(400).json({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+      jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
@@ -133,7 +133,7 @@ router.put('/updateQuestion',
     if (!error.isEmpty()) {
       res.status(400).json({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+      jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
@@ -164,7 +164,7 @@ router.get('/takeQuestions/:topicName',
     if (!error.isEmpty()) {
       res.send({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+      jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {

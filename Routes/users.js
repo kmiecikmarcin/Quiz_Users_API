@@ -18,6 +18,7 @@ const findUserByIdAndEmail = require('../Function/findUserByIdAndEmail');
 const deleteUserAccount = require('../Function/deleteUserAccount');
 const changeUserPassword = require('../Function/changeUserPassword');
 const changeUserEmailAdress = require('../Function/changeUserEmailAdress');
+const sendEmailToUserWithPassword = require('../Function/sendEmailToUserWithPassword');
 
 router.post('/login',
   [
@@ -90,7 +91,7 @@ router.post('/register',
     if (result) {
       res.status(201).json({ Message: 'Registration successful!' });
     } else {
-      res.status(400).json({ Message: 'Registration process failed' });
+      res.status(400).json({ Error: 'Registration process failed' });
     }
   });
 
@@ -114,7 +115,7 @@ router.delete('/deleteAccount',
     if (!error.isEmpty()) {
       res.status(400).json({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+      jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
@@ -126,7 +127,7 @@ router.delete('/deleteAccount',
             res.status(201).json({ Message: 'Account deleted!' });
             return;
           }
-          res.status(400).json({ Message: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Something went wrong!' });
         }
       });
     }
@@ -157,7 +158,7 @@ router.put('/changePassword',
     if (!error.isEmpty()) {
       res.status(400).json({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+      jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
@@ -170,10 +171,10 @@ router.put('/changePassword',
             res.status(201).json({ Message: 'Password changed!' });
             return;
           } if (changePassword === false) {
-            res.status(400).json({ Message: 'Old password is incorrect' });
+            res.status(400).json({ Error: 'Old password is incorrect' });
             return;
           }
-          res.status(400).json({ Message: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Something went wrong!' });
         }
       });
     }
@@ -213,7 +214,7 @@ router.put('/changeEmailAdress',
     if (!error.isEmpty()) {
       res.status(400).json({ Error: error });
     } else {
-      jwt.verify(req.token, process.env.secretKey, async (err, authData) => {
+      jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
           res.sendStatus(403);
         } else {
@@ -226,12 +227,39 @@ router.put('/changeEmailAdress',
             res.status(201).json({ Message: 'Email changed!' });
             return;
           } if (changeEmail === false) {
-            res.status(400).json({ Message: 'Password is incorrect!' });
+            res.status(400).json({ Error: 'Password is incorrect!' });
             return;
           }
-          res.status(400).json({ Message: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Something went wrong!' });
         }
       });
+    }
+  });
+
+router.post('/forgotPassword',
+  [
+    check('userEmail')
+      .exists()
+      .notEmpty()
+      .isEmail()
+      .trim()
+      .isLength({ min: 4 })
+      .isLowercase(),
+  ],
+  async (req, res) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      res.status(400).json({ Error: error });
+    } else {
+      const sendEmail = await sendEmailToUserWithPassword(Users, req.body.userEmail);
+      if (sendEmail == null) {
+        res.status(400).json({ Error: 'User doesnt exists!' });
+        return;
+      } if (sendEmail === true) {
+        res.status(200).json({ Message: 'Email sent!' });
+        return;
+      }
+      res.status(404).json({ Error: 'Something went wrong!' });
     }
   });
 
