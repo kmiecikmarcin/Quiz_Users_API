@@ -8,7 +8,7 @@ async function changeUserEmailAdress(Users, user, newUserEmailAdress, userPasswo
       const result = await Users.update({
         email: newUserEmailAdress,
       }, {
-        where: { password: userPassword },
+        where: { email: user.email },
       });
       if (result !== null) {
         return result;
