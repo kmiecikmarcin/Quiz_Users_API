@@ -5,7 +5,7 @@ const router = express.Router();
 const { check, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const verifyToken = require('../Function/verifyJwtToken');
-const findUserByIdAndEmail = require('../Function/findUserByIdAndEmail');
+const findUserById = require('../Function/findUserById');
 const addNewQuestion = require('../Function/addNewQuestion');
 const findTopicByName = require('../Function/findTopicByName');
 const updateQuestion = require('../Function/updateQuestion');
@@ -62,7 +62,7 @@ router.post('/addNewQuestion',
         if (err) {
           res.sendStatus(403);
         } else {
-          const user = await findUserByIdAndEmail(Users, authData);
+          const user = await findUserById(Users, authData);
           if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
           const topic = await findTopicByName(Topics, req.body.topicName);
           if (topic === null) { res.status(400).json({ Error: 'Topic doesnt exists!' }); return; }
@@ -137,7 +137,7 @@ router.put('/updateQuestion',
         if (err) {
           res.sendStatus(403);
         } else {
-          const user = await findUserByIdAndEmail(Users, authData);
+          const user = await findUserById(Users, authData);
           if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
           const topic = await findTopicByName(Topics, req.body.topicName);
           if (topic === null) { res.status(400).json({ Error: 'Topic doesnt exists!' }); return; }
@@ -168,7 +168,7 @@ router.get('/takeQuestions/:topicName',
         if (err) {
           res.sendStatus(403);
         } else {
-          const user = await findUserByIdAndEmail(Users, authData);
+          const user = await findUserById(Users, authData);
           if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); return; }
           const topic = await findTopicByName(Topics, req.params.topicName);
           if (topic === null) { res.status(404).json({ Error: 'Topic doesnt exists!' }); return; }

@@ -2,7 +2,7 @@
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable func-names */
 const bcrypt = require('bcrypt');
-const findUserByIdAndEmail = require('./findUserByIdAndEmail');
+const findUserByIdAndEmail = require('./findUserById');
 
 async function changeUserPassword(Users, user, oldUserPassword,
   newUserPassword) {

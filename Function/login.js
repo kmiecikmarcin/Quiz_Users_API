@@ -4,11 +4,11 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-function login(res, userPassword, userpassword, userId, userEmail, userIdRole, nameRole) {
+function login(res, userPassword, userpassword, userId, userIdRole, nameRole) {
   bcrypt.compare(userPassword, userpassword, function (err, result) {
     if (result === true) {
       jwt.sign({
-        id: userId, email: userEmail, id_role: userIdRole, typeOfRole: nameRole,
+        id: userId, id_role: userIdRole, typeOfRole: nameRole,
       }, process.env.S3_SECRETKEY, { expiresIn: '36h' }, (err, token) => {
         res.status(200).json({ token });
       });

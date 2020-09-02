@@ -12,7 +12,7 @@ const Repetitory = require('../Models/Repetitory');
 const Topics = require('../Models/Topics');
 const Questions = require('../Models/Questions');
 const verifyToken = require('../Function/verifyJwtToken');
-const findUserByIdAndEmail = require('../Function/findUserByIdAndEmail');
+const findUserById = require('../Function/findUserById');
 const addNewTypeOfUserRole = require('../Function/addNewTypeOfUserRole');
 const findSubTopicByName = require('../Function/findSubTopicByName');
 const deleteRepetitory = require('../Function/deleteRepetitory');
@@ -39,7 +39,7 @@ router.post('/addNewTypeOfRole',
         if (err) {
           res.sendStatus(403);
         } else {
-          const user = await findUserByIdAndEmail(Users, authData);
+          const user = await findUserById(Users, authData);
           if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
 
           const addRole = await addNewTypeOfUserRole(TypesOfRoles, req.body.typeOfRole, user);
@@ -80,7 +80,7 @@ router.delete('/deleteRepetitory',
         if (err) {
           res.sendStatus(403);
         } else {
-          const user = await findUserByIdAndEmail(Users, authData);
+          const user = await findUserById(Users, authData);
           if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
           const subTopic = await findSubTopicByName(SubTopics, req.body.subTopicName);
           if (subTopic === null) { res.status(404).json({ Error: 'Subtopic doesnt exists!' }); return; }
@@ -118,7 +118,7 @@ router.delete('/deleteSubtopic',
         if (err) {
           res.sendStatus(403);
         } else {
-          const user = await findUserByIdAndEmail(Users, authData);
+          const user = await findUserById(Users, authData);
           if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
           const subTopic = await findSubTopicByName(SubTopics, req.body.subTopicName);
           if (subTopic === null) { res.status(404).json({ Error: 'Subtopic doesnt exists!' }); return; }
@@ -155,7 +155,7 @@ router.delete('/deleteTopic',
         if (err) {
           res.sendStatus(403);
         } else {
-          const user = await findUserByIdAndEmail(Users, authData);
+          const user = await findUserById(Users, authData);
           if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
           const topic = await checkTopicByName(Topics, req.body.topicName);
           if (topic === null) { res.status(400).json({ Error: 'Topic doesnt exists!' }); return; }
@@ -198,7 +198,7 @@ router.delete('/deleteQuestion',
         if (err) {
           res.sendStatus(403);
         } else {
-          const user = await findUserByIdAndEmail(Users, authData);
+          const user = await findUserById(Users, authData);
           if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
           const topic = await checkTopicByName(Topics, req.body.topicName);
           if (topic === null) { res.status(400).json({ Error: 'Topic doesnt exists!' }); return; }

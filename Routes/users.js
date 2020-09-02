@@ -14,7 +14,7 @@ const checkUserEmail = require('../Function/checkUserEmail');
 const login = require('../Function/login');
 const checkTypeOfRole = require('../Function/checkUserRole');
 const verifyToken = require('../Function/verifyJwtToken');
-const findUserByIdAndEmail = require('../Function/findUserByIdAndEmail');
+const findUserById = require('../Function/findUserById');
 const deleteUserAccount = require('../Function/deleteUserAccount');
 const changeUserPassword = require('../Function/changeUserPassword');
 const changeUserEmailAdress = require('../Function/changeUserEmailAdress');
@@ -45,7 +45,7 @@ router.post('/login',
       if (nameRole === null) { res.status(404).json({ Error: 'This role doesnt exists!' }); return; }
 
       login(res, req.body.userPassword, user.password, user.id,
-        user.email, user.id_role, nameRole.name);
+        user.id_role, nameRole.name);
     }
   });
 
@@ -119,7 +119,7 @@ router.delete('/deleteAccount',
         if (err) {
           res.sendStatus(403);
         } else {
-          const user = await findUserByIdAndEmail(Users, authData);
+          const user = await findUserById(Users, authData);
           if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
 
           const deleteAccount = await deleteUserAccount(Users, authData);
@@ -162,7 +162,7 @@ router.put('/changePassword',
         if (err) {
           res.sendStatus(403);
         } else {
-          const user = await findUserByIdAndEmail(Users, authData);
+          const user = await findUserById(Users, authData);
           if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
 
           const changePassword = await changeUserPassword(Users, user, req.body.oldUserPassword,
@@ -218,7 +218,7 @@ router.put('/changeEmailAdress',
         if (err) {
           res.sendStatus(403);
         } else {
-          const user = await findUserByIdAndEmail(Users, authData);
+          const user = await findUserById(Users, authData);
           if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
 
           const changeEmail = await changeUserEmailAdress(Users, user, req.body.newUserEmailAdress,
