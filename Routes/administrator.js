@@ -33,7 +33,7 @@ router.post('/addNewTypeOfRole',
   verifyToken, (req, res) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
-      res.status(400).json({ Error: error });
+      res.status(400).json({ Error: 'Dane zostały wprowadzone niezgodnie z wymyganiami!' });
     } else {
       jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
@@ -74,7 +74,7 @@ router.delete('/deleteRepetitory',
   verifyToken, (req, res) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
-      res.status(400).json({ Error: error });
+      res.status(400).json({ Error: 'Dane zostały wprowadzone niezgodnie z wymyganiami!' });
     } else {
       jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
@@ -112,7 +112,7 @@ router.delete('/deleteSubtopic',
   verifyToken, (req, res) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
-      res.status(400).json({ Error: error });
+      res.status(400).json({ Error: 'Dane zostały wprowadzone niezgodnie z wymyganiami!' });
     } else {
       jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
@@ -149,7 +149,7 @@ router.delete('/deleteTopic',
   verifyToken, (req, res) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
-      res.status(400).json({ Error: error });
+      res.status(400).json({ Error: 'Dane zostały wprowadzone niezgodnie z wymyganiami!' });
     } else {
       jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
@@ -192,7 +192,7 @@ router.delete('/deleteQuestion',
   verifyToken, (req, res) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
-      res.status(400).json({ Error: error });
+      res.status(400).json({ Error: 'Dane zostały wprowadzone niezgodnie z wymyganiami!' });
     } else {
       jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {

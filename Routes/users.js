@@ -37,7 +37,7 @@ router.post('/login',
   async (req, res) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
-      res.status(400).json({ Error: error });
+      res.status(400).json({ Error: 'Dane zostały wprowadzone niezgodnie z wymyganiami!' });
     } else {
       const user = await checkUserEmail(Users, req.body.userEmail);
       if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); return; }
@@ -80,7 +80,7 @@ router.post('/register',
     const error = validationResult(req);
 
     if (!error.isEmpty()) {
-      res.status(400).json({ Error: error });
+      res.status(400).json({ Error: 'Dane zostały wprowadzone niezgodnie z wymyganiami!' });
     }
     const email = await checkUserEmail(Users, req.body.userEmail);
     if (email !== null) { res.status(400).json({ Error: 'Users with this email exists!' }); return; }
@@ -113,7 +113,7 @@ router.delete('/deleteAccount',
   verifyToken, (req, res) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
-      res.status(400).json({ Error: error });
+      res.status(400).json({ Error: 'Dane zostały wprowadzone niezgodnie z wymyganiami!' });
     } else {
       jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
@@ -156,7 +156,7 @@ router.put('/changePassword',
   verifyToken, (req, res) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
-      res.status(400).json({ Error: error });
+      res.status(400).json({ Error: 'Dane zostały wprowadzone niezgodnie z wymyganiami!' });
     } else {
       jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
@@ -212,7 +212,7 @@ router.put('/changeEmailAdress',
   verifyToken, (req, res) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
-      res.status(400).json({ Error: error });
+      res.status(400).json({ Error: 'Dane zostały wprowadzone niezgodnie z wymyganiami!' });
     } else {
       jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
@@ -249,7 +249,7 @@ router.post('/forgotPassword',
   async (req, res) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
-      res.status(400).json({ Error: error });
+      res.status(400).json({ Error: 'Dane zostały wprowadzone niezgodnie z wymyganiami!' });
     } else {
       const sendEmail = await sendEmailToUserWithPassword(Users, req.body.userEmail);
       if (sendEmail == null) {

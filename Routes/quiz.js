@@ -56,7 +56,7 @@ router.post('/addNewQuestion',
   verifyToken, (req, res) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
-      res.status(400).json({ Error: error });
+      res.status(400).json({ Error: 'Dane zostały wprowadzone niezgodnie z wymyganiami!' });
     } else {
       jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
@@ -131,7 +131,7 @@ router.put('/updateQuestion',
   verifyToken, (req, res) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
-      res.status(400).json({ Error: error });
+      res.status(400).json({ Error: 'Dane zostały wprowadzone niezgodnie z wymyganiami!' });
     } else {
       jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
@@ -162,7 +162,7 @@ router.get('/takeQuestions/:topicName',
   verifyToken, (req, res) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
-      res.send({ Error: error });
+      res.send({ Error: 'Dane zostały wprowadzone niezgodnie z wymyganiami!' });
     } else {
       jwt.verify(req.token, process.env.S3_SECRETKEY, async (err, authData) => {
         if (err) {
