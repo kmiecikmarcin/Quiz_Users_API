@@ -30,14 +30,14 @@ router.get('/takeListOfSubjects', verifyToken, (req, res) => {
       res.sendStatus(403);
     } else {
       const user = await findUserById(Users, authData);
-      if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); return; }
+      if (user === null) { res.status(404).json({ Error: 'Użytkownik nie istnieje!' }); return; }
 
       const subjects = await findAllSubjects(Subjects);
       if (subjects) {
         res.status(200).json(subjects);
         return;
       }
-      res.status(400).json({ Error: 'Something went wrong!' });
+      res.status(400).json({ Error: 'Coś poszło nie tak!' });
     }
   });
 });
@@ -48,14 +48,14 @@ router.get('/takeListOfTopics', verifyToken, (req, res) => {
       res.sendStatus(403);
     } else {
       const user = await findUserById(Users, authData);
-      if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); return; }
+      if (user === null) { res.status(404).json({ Error: 'Użytkownik nie istnieje!' }); return; }
 
       const topics = await findAllTopics(Topics);
       if (topics) {
         res.status(200).json(topics);
         return;
       }
-      res.status(400).json({ Error: 'Something went wrong!' });
+      res.status(400).json({ Error: 'Coś poszło nie tak!' });
     }
   });
 });
@@ -66,14 +66,14 @@ router.get('/takeListOfSubTopics', verifyToken, (req, res) => {
       res.sendStatus(403);
     } else {
       const user = await findUserById(Users, authData);
-      if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); return; }
+      if (user === null) { res.status(404).json({ Error: 'Użytkownik nie istnieje!' }); return; }
 
       const subTopics = await findAllSubTopics(SubTopics);
       if (subTopics) {
         res.status(200).json(subTopics);
         return;
       }
-      res.status(400).json({ Error: 'Something went wrong!' });
+      res.status(400).json({ Error: 'Coś poszło nie tak!' });
     }
   });
 });
@@ -103,20 +103,20 @@ router.post('/addNewTopic',
           res.sendStatus(403);
         } else {
           const user = await findUserById(Users, authData);
-          if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
+          if (user === null) { res.status(400).json({ Error: 'Użytkownik nie istnieje!' }); return; }
 
           const subject = await findSubjectByName(Subjects, req.body.subject);
-          if (subject === null) { res.status(400).json({ Error: 'Subject doesnt exists!' }); return; }
+          if (subject === null) { res.status(400).json({ Error: 'Przedmiot nie istnieje' }); return; }
 
           const newTopic = await addNewTopic(Topics, req.body.topicName, user, subject.id);
           if (newTopic) {
-            res.status(201).json({ Message: 'New topic created!' });
+            res.status(201).json({ Message: 'Nowy temat został dodany' });
             return;
           } if (newTopic === false) {
-            res.status(400).json({ Error: 'You dont have permission!' });
+            res.status(400).json({ Error: 'Nie masz uprawnień, by to zrobić!' });
             return;
           }
-          res.status(400).json({ Error: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Coś poszło nie tak!' });
         }
       });
     }
@@ -153,18 +153,18 @@ router.put('/updateTopic',
           res.sendStatus(403);
         } else {
           const user = await findUserById(Users, authData);
-          if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); return; }
+          if (user === null) { res.status(404).json({ Error: 'Użytkownik nie istnieje!' }); return; }
 
           const updateTopic = await updateTopicName(Topics, req.body.oldTopicName,
             req.body.newTopicName, user);
           if (updateTopic) {
-            res.status(201).json({ Message: 'Topic updated!' });
+            res.status(201).json({ Message: 'Temat został zaktualizowany!' });
             return;
           } if (updateTopic === false) {
-            res.status(400).json({ Error: 'You dont have permission!' });
+            res.status(400).json({ Error: 'Nie masz uprawnień, by to zrobić!' });
             return;
           }
-          res.status(400).json({ Error: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Coś poszło nie tak!' });
         }
       });
     }
@@ -195,18 +195,18 @@ router.post('/addNewSubTopic',
           res.sendStatus(403);
         } else {
           const user = await findUserById(Users, authData);
-          if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); return; }
+          if (user === null) { res.status(404).json({ Error: 'Użytkownik nie istnieje!' }); return; }
 
           const addSubTopic = await addNewSubTopic(SubTopics, Topics, req.body.topicName,
             req.body.subTopicName, user);
           if (addSubTopic) {
-            res.status(201).json({ Message: 'New subtopic created!' });
+            res.status(201).json({ Message: 'Nowy rozdział został dodany!' });
             return;
           } if (addSubTopic === false) {
-            res.status(400).json({ Error: 'You dont have permission!' });
+            res.status(400).json({ Error: 'Nie masz uprawnień, by to zrobić!' });
             return;
           }
-          res.status(400).json({ Error: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Coś poszło nie tak!' });
         }
       });
     }
@@ -243,18 +243,18 @@ router.put('/updateSubTopic',
           res.sendStatus(403);
         } else {
           const user = await findUserById(Users, authData);
-          if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); return; }
+          if (user === null) { res.status(404).json({ Error: 'Użytkownik nie istnieje!' }); return; }
 
           const updateSubTopic = await updateSubTopicName(SubTopics, req.body.oldSubTopicName,
             req.body.newSubTopicName, user);
           if (updateSubTopic) {
-            res.status(201).json({ Message: 'Subtopic updated!' });
+            res.status(201).json({ Message: 'Rodzdział został zaktualizowany!' });
             return;
           } if (updateSubTopic === false) {
-            res.status(400).json({ Error: 'You dont have permission!' });
+            res.status(400).json({ Error: 'Nie masz uprawnień, by to zrobić!' });
             return;
           }
-          res.status(400).json({ Error: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Coś poszło nie tak!' });
         }
       });
     }
@@ -290,20 +290,20 @@ router.post('/addNewRepetitory',
           res.sendStatus(403);
         } else {
           const user = await findUserById(Users, authData);
-          if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); return; }
+          if (user === null) { res.status(404).json({ Error: 'Użytkownik nie istnieje!' }); return; }
           const subTopic = await findSubTopicByName(SubTopics, req.body.subTopicName);
-          if (subTopic === null) { res.status(404).json({ Error: 'Subtopic doesnt exists!' }); return; }
+          if (subTopic === null) { res.status(404).json({ Error: 'Rozdział nie istnieje!' }); return; }
 
           const addRepetitory = await addNewRepetitory(Repetitory, req.body.titleOfRepetitory,
             req.body.data, user, subTopic.id);
           if (addRepetitory) {
-            res.status(201).json({ Message: 'Repetitory added!' });
+            res.status(201).json({ Message: 'Repetytorium zostało dodane!' });
             return;
           } if (addRepetitory === false) {
-            res.status(400).json({ Error: 'You dont have permission!' });
+            res.status(400).json({ Error: 'Nie masz uprawnień, by to zrobić!' });
             return;
           }
-          res.status(400).json({ Error: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Coś poszło nie tak!' });
         }
       });
     }
@@ -345,20 +345,20 @@ router.put('/updateRepetitory',
           res.sendStatus(403);
         } else {
           const user = await findUserById(Users, authData);
-          if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); return; }
+          if (user === null) { res.status(404).json({ Error: 'Użytkownik nie istnieje!' }); return; }
           const subTopic = await findSubTopicByName(SubTopics, req.body.subTopicName);
-          if (subTopic === null) { res.status(404).json({ Error: 'Subtopic doesnt exists!' }); return; }
+          if (subTopic === null) { res.status(404).json({ Error: 'Rozdział nie istnieje!' }); return; }
 
           const update = await updateRepetitory(Repetitory, req.body.oldTitleOfRepetitory,
             req.body.newTitleOfRepetitory, req.body.data, user);
           if (update) {
-            res.status(201).json({ Message: 'Repetitory updated!' });
+            res.status(201).json({ Message: 'Repetytorium zostało zaktualizowane!' });
             return;
           } if (update === false) {
-            res.status(400).json({ Error: 'You dont have permission!' });
+            res.status(400).json({ Error: 'Nie masz uprawnień, by to zrobić!' });
             return;
           }
-          res.status(400).json({ Error: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Coś poszło nie tak!' });
         }
       });
     }
@@ -375,19 +375,16 @@ router.get('/takeRepetitory/:subTopicName',
           res.sendStatus(403);
         } else {
           const user = await findUserById(Users, authData);
-          if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); return; }
+          if (user === null) { res.status(404).json({ Error: 'Użytkownik nie istnieje!' }); return; }
           const subTopic = await findSubTopicByName(SubTopics, req.params.subTopicName);
-          if (subTopic === null) { res.status(404).json({ Error: 'Subtopic doesnt exists!' }); return; }
+          if (subTopic === null) { res.status(404).json({ Error: 'Rozdział nie istnieje!' }); return; }
 
           const takeRepetitory = await findRepetitoryBySubtopicId(Repetitory, subTopic.id);
           if (takeRepetitory) {
             res.status(201).json(takeRepetitory);
             return;
-          } if (takeRepetitory === false) {
-            res.status(400).json({ Error: 'You dont have permission!' });
-            return;
           }
-          res.status(400).json({ Error: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Coś poszło nie tak!' });
         }
       });
     }

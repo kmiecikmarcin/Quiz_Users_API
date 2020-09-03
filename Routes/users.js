@@ -40,9 +40,9 @@ router.post('/login',
       res.status(400).json({ Error: 'Dane zostały wprowadzone niezgodnie z wymyganiami!' });
     } else {
       const user = await checkUserEmail(Users, req.body.userEmail);
-      if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); return; }
+      if (user === null) { res.status(404).json({ Error: 'Użytkownik nie istnieje!' }); return; }
       const nameRole = await TypesOfRoles.findOne({ where: { id_role: user.id_role } });
-      if (nameRole === null) { res.status(404).json({ Error: 'This role doesnt exists!' }); return; }
+      if (nameRole === null) { res.status(404).json({ Error: 'Ta role użytkownika nie istnieje!' }); return; }
 
       login(res, req.body.userPassword, user.password, user.id,
         user.id_role, nameRole.name);
@@ -83,15 +83,15 @@ router.post('/register',
       res.status(400).json({ Error: 'Dane zostały wprowadzone niezgodnie z wymyganiami!' });
     }
     const email = await checkUserEmail(Users, req.body.userEmail);
-    if (email !== null) { res.status(400).json({ Error: 'Users with this email exists!' }); return; }
+    if (email !== null) { res.status(400).json({ Error: 'Użytkownik z tym loginem już istnieje!' }); return; }
 
     const typeOfRole = await checkTypeOfRole(TypesOfRoles, req.body.userRole);
     const result = await register(res, Users, req.body.userEmail, req.body.userPassword,
       typeOfRole.id);
     if (result) {
-      res.status(201).json({ Message: 'Registration successful!' });
+      res.status(201).json({ Message: 'Rejestracja przebiegła pomyślnie!' });
     } else {
-      res.status(400).json({ Error: 'Registration process failed' });
+      res.status(400).json({ Error: 'Rejestracja nie powiodła się!' });
     }
   });
 
@@ -120,14 +120,14 @@ router.delete('/deleteAccount',
           res.sendStatus(403);
         } else {
           const user = await findUserById(Users, authData);
-          if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
+          if (user === null) { res.status(400).json({ Error: 'Użytkownik nie istnieje!' }); return; }
 
           const deleteAccount = await deleteUserAccount(Users, authData);
           if (deleteAccount) {
-            res.status(201).json({ Message: 'Account deleted!' });
+            res.status(201).json({ Message: 'Konto zostało usunięte!' });
             return;
           }
-          res.status(400).json({ Error: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Coś poszło nie tak!' });
         }
       });
     }
@@ -163,18 +163,18 @@ router.put('/changePassword',
           res.sendStatus(403);
         } else {
           const user = await findUserById(Users, authData);
-          if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
+          if (user === null) { res.status(400).json({ Error: 'Użytkownik nie istnieje!' }); return; }
 
           const changePassword = await changeUserPassword(Users, user, req.body.oldUserPassword,
             req.body.newUserPassword);
           if (changePassword) {
-            res.status(201).json({ Message: 'Password changed!' });
+            res.status(201).json({ Message: 'Hasło zostało zmienione!' });
             return;
           } if (changePassword === false) {
-            res.status(400).json({ Error: 'Old password is incorrect' });
+            res.status(400).json({ Error: 'Stare hasło jest nieprawidłowe' });
             return;
           }
-          res.status(400).json({ Error: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Coś poszło nie tak!' });
         }
       });
     }
@@ -219,18 +219,18 @@ router.put('/changeEmailAdress',
           res.sendStatus(403);
         } else {
           const user = await findUserById(Users, authData);
-          if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
+          if (user === null) { res.status(400).json({ Error: 'Użytkownik nie istnieje!' }); return; }
 
           const changeEmail = await changeUserEmailAdress(Users, user, req.body.newUserEmailAdress,
             req.body.userPassword);
           if (changeEmail) {
-            res.status(201).json({ Message: 'Email changed!' });
+            res.status(201).json({ Message: 'Email został zmieniony!' });
             return;
           } if (changeEmail === false) {
-            res.status(400).json({ Error: 'Password is incorrect!' });
+            res.status(400).json({ Error: 'Hasło jest nieporpawne!' });
             return;
           }
-          res.status(400).json({ Error: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Coś poszło nie tak!' });
         }
       });
     }
@@ -253,13 +253,13 @@ router.post('/forgotPassword',
     } else {
       const sendEmail = await sendEmailToUserWithPassword(Users, req.body.userEmail);
       if (sendEmail == null) {
-        res.status(400).json({ Error: 'User doesnt exists!' });
+        res.status(400).json({ Error: 'Użytkownik nie istnieje!' });
         return;
       } if (sendEmail === true) {
-        res.status(200).json({ Message: 'Email sent!' });
+        res.status(200).json({ Message: 'Email został wysłany!' });
         return;
       }
-      res.status(404).json({ Error: 'Something went wrong!' });
+      res.status(404).json({ Error: 'Coś poszło nie tak!' });
     }
   });
 

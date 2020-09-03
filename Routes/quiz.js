@@ -63,21 +63,21 @@ router.post('/addNewQuestion',
           res.sendStatus(403);
         } else {
           const user = await findUserById(Users, authData);
-          if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
+          if (user === null) { res.status(400).json({ Error: 'Użytkownik nie istnieje!' }); return; }
           const topic = await findTopicByName(Topics, req.body.topicName);
-          if (topic === null) { res.status(400).json({ Error: 'Topic doesnt exists!' }); return; }
+          if (topic === null) { res.status(400).json({ Error: 'Temat nie istnieje!' }); return; }
 
           const addQuestion = await addNewQuestion(Questions, req.body.question,
             req.body.correctAnswer, req.body.firstAnswer, req.body.secondAnswer,
             req.body.thirdAnswer, user, topic.id);
           if (addQuestion) {
-            res.status(201).json({ Message: 'New question created!' });
+            res.status(201).json({ Message: 'Nowe pytanie zostało dodane!' });
             return;
           } if (addQuestion === false) {
-            res.status(400).json({ Error: 'You dont have permission!' });
+            res.status(400).json({ Error: 'Nie masz uprawnień, by to zrobić!' });
             return;
           }
-          res.status(400).json({ Error: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Coś poszło nie tak!' });
         }
       });
     }
@@ -138,21 +138,21 @@ router.put('/updateQuestion',
           res.sendStatus(403);
         } else {
           const user = await findUserById(Users, authData);
-          if (user === null) { res.status(400).json({ Error: 'User doesnt exists!' }); return; }
+          if (user === null) { res.status(400).json({ Error: 'Użytkownik nie istnieje!' }); return; }
           const topic = await findTopicByName(Topics, req.body.topicName);
-          if (topic === null) { res.status(400).json({ Error: 'Topic doesnt exists!' }); return; }
+          if (topic === null) { res.status(400).json({ Error: 'Temat nie istnieje!' }); return; }
 
           const update = await updateQuestion(Questions, req.body.oldQuestion,
             req.body.newQuestion, req.body.correctAnswer, req.body.firstAnswer,
             req.body.secondAnswer, req.body.thirdAnswer, user, topic.id);
           if (update) {
-            res.status(201).json({ Message: 'Question updated!' });
+            res.status(201).json({ Message: 'Pytanie zostało zaktualizowane!' });
             return;
           } if (update === false) {
-            res.status(400).json({ Error: 'You dont have permission!' });
+            res.status(400).json({ Error: 'Nie masz uprawnień, by to zrobić!' });
             return;
           }
-          res.status(400).json({ Error: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Coś poszło nie tak!' });
         }
       });
     }
@@ -169,19 +169,16 @@ router.get('/takeQuestions/:topicName',
           res.sendStatus(403);
         } else {
           const user = await findUserById(Users, authData);
-          if (user === null) { res.status(404).json({ Error: 'User doesnt exists!' }); return; }
+          if (user === null) { res.status(404).json({ Error: 'Użytkownik nie istnieje!' }); return; }
           const topic = await findTopicByName(Topics, req.params.topicName);
-          if (topic === null) { res.status(404).json({ Error: 'Topic doesnt exists!' }); return; }
+          if (topic === null) { res.status(404).json({ Error: 'Temat nie istnieje!' }); return; }
 
           const takeQuestions = await findQuestionsByTopicId(Questions, topic.id);
           if (takeQuestions) {
             res.status(201).json(takeQuestions);
             return;
-          } if (takeQuestions === false) {
-            res.status(400).json({ Error: 'You dont have permission!' });
-            return;
           }
-          res.status(400).json({ Error: 'Something went wrong!' });
+          res.status(400).json({ Error: 'Coś poszło nie tak!' });
         }
       });
     }
