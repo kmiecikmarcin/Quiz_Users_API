@@ -61,7 +61,7 @@ router.post('/register',
     check('userPassword', 'checkUserPassword')
       .exists()
       .notEmpty()
-      .isLength({ min: 6 })
+      .isLength({ min: 6, max: 16 })
       .custom((value, { req }) => {
         if (value !== req.body.checkUserPassword) {
           throw new Error('Passwords are different');
