@@ -1,7 +1,8 @@
 const bcrypt = require('bcrypt');
 
-async function changeUserEmailAdress(Users, user, newUserEmailAdress, userPassword) {
-  const findUser = await Users.findOne({ where: { id: user.id } });
+async function changeUserEmailAdress(Users, user, oldUserEmailAdress, newUserEmailAdress,
+  userPassword) {
+  const findUser = await Users.findOne({ where: { id: user.id, email: oldUserEmailAdress } });
   if (findUser !== null) {
     const checkPassword = await bcrypt.compare(userPassword, findUser.password);
     if (checkPassword === true) {
