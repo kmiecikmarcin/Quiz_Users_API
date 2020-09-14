@@ -146,7 +146,7 @@ router.put('/changePassword',
       .isLength({ min: 6 })
       .custom((value, { req }) => {
         if (value !== req.body.checkNewUserPassword) {
-          throw new Error('Passwords are different!');
+          throw new Error('Hasła są różne!');
         } else {
           return value;
         }
@@ -227,7 +227,7 @@ router.put('/changeEmailAdress',
             res.status(201).json({ Message: 'Email został zmieniony!' });
             return;
           } if (changeEmail === false) {
-            res.status(400).json({ Error: 'Hasło jest nieporpawne!' });
+            res.status(400).json({ Error: 'Hasło jest niepoprawne!' });
             return;
           }
           res.status(400).json({ Error: 'Coś poszło nie tak!' });

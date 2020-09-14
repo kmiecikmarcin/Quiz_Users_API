@@ -36,8 +36,9 @@ async function sendEmailToUserWithPassword(Users, userEmail) {
           html: `
             <body>
             <h4>Witaj ${checkEmail.email}!</h4>
-            <p>Dostaliśmy zapytanie o przypomnienie hasła do twojego konta w aplikacji Quiz. W odpowiedzi na twoje zapytanie wysłaliśmy hasło.</p>
+            <p>Dostaliśmy zapytanie o przypomnienie hasła do twojego konta w aplikacji Quiz. W odpowiedzi na twoje zapytanie zresetowaliśmy twoje hasło.</p>
             <p>Hasło: ${newPasswordForUser}</p>
+            <p>Zapamiętaj wygenerowane hasło lub zmień je od razu po zalogowaniu!</p>
             <p>To jest automatyczna wiadomość, nie odpowiadaj na nią!</p>
             </body>`,
         };
